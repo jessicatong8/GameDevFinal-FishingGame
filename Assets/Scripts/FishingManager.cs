@@ -16,15 +16,21 @@ public class FishingManager : MonoBehaviour
     public static event Action OnReturnToIdle;
 
     //maybe change getters at bottom to events like this 
-    public static event Action<float> OnProgressUpdated; 
+    public static event Action<float> OnProgressUpdated;
     public static event Action<float> OnTensionUpdated;
 
-    public FishSpawner spawner; 
+    public FishSpawner spawner;
     private Fish activeFish;
     public float hookTimer;
     // 
-    public enum FishingState {Idle, Waiting, HookWindow, Reeling}
-    
+    public enum FishingState
+    {
+        Idle,
+        Waiting,
+        HookWindow,
+        Reeling
+    }
+
     private FishingState currentState = FishingState.Idle;
     private float progress;
     private float tension;
@@ -66,8 +72,8 @@ public class FishingManager : MonoBehaviour
     //
     void StartWaiting()
     {
-        OnCast?.Invoke(); 
-        activeFish = spawner.GetRandomFish(); 
+        OnCast?.Invoke();
+        activeFish = spawner.GetRandomFish();
         //call event to trigger casting ui and sound 
         //does this go here or in update
         //do i want seperate event for after casting for an idle bobbing wait
@@ -132,9 +138,9 @@ public class FishingManager : MonoBehaviour
         else
         {
             // tension drops when you aren't pulling
-            tension -= activeFish.tensionDropRate  * Time.deltaTime;
+            tension -= activeFish.tensionDropRate * Time.deltaTime;
             tension = Mathf.Max(tension, 0); //we dont want our tension to drop below 0 
-        
+
             OnTensionUpdated?.Invoke(tension);
         }
 
@@ -144,30 +150,30 @@ public class FishingManager : MonoBehaviour
             OnCaught?.Invoke();
             AbortFishing();
             //go back to idle
-        } 
+        }
         if (tension >= activeFish.maxTension)
         {
             OnLineBreak?.Invoke();
             AbortFishing();
             //go back to idle
         }
-            
+
     }
 
     void HandleWiggleTimer()
     {
         timer -= Time.deltaTime;
-        
+
         if (timer <= 0)
         {
             isWiggling = !isWiggling; //flip wiggling state to new one
             //now if it is supposed to start wiggling
-            if (isWiggling == true) 
+            if (isWiggling == true)
             {
                 OnWiggle?.Invoke();
                 timer = activeFish.wiggleOnTimer; //maybe set based on fish
             }
-            else 
+            else
             {
                 OffWiggle?.Invoke();
                 timer = activeFish.wiggleOffTimer; //is this done right
