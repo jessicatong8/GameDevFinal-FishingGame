@@ -9,6 +9,8 @@ public class FishingManager : MonoBehaviour
     public static event Action OnCast;
     public static event Action OnBite;
     public static event Action OnReel;
+    public static event Action OnReelingActive;
+    public static event Action OnReelingInactive;
     public static event Action OnWiggle; //should this be an event?
     public static event Action OffWiggle; //should this be an event too
     public static event Action OnCaught;
@@ -74,6 +76,7 @@ public class FishingManager : MonoBehaviour
     {
         OnCast?.Invoke();
         activeFish = spawner.GetRandomFish();
+        Debug.Log(activeFish.fishName);
         //call event to trigger casting ui and sound 
         //does this go here or in update
         //do i want seperate event for after casting for an idle bobbing wait
@@ -124,6 +127,7 @@ public class FishingManager : MonoBehaviour
 
         if (Keyboard.current.spaceKey.isPressed)
         {
+            OnReelingActive?.Invoke();
             if (isWiggling)
             {
                 tension += activeFish.wiggleStrength * Time.deltaTime;
@@ -137,6 +141,7 @@ public class FishingManager : MonoBehaviour
         }
         else
         {
+            OnReelingInactive?.Invoke();
             // tension drops when you aren't pulling
             tension -= activeFish.tensionDropRate * Time.deltaTime;
             tension = Mathf.Max(tension, 0); //we dont want our tension to drop below 0 
