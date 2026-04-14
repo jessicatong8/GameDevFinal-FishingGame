@@ -10,4 +10,8 @@ public class Fish : MonoBehaviour
     public float tensionDropRate;
     public int rarityWeight;
     public float maxTension; //make sure matches ui bar for now
+
+    public float rarity;
+    public float dripThreshold;
+    public float swimmingSpeed;
 }
