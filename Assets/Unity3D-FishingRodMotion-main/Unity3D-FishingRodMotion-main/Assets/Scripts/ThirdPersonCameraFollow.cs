@@ -16,6 +16,7 @@ public class ThirdPersonCameraFollow : MonoBehaviour
     [SerializeField] private float lookSensitivity = 180f;
     [SerializeField] private float minPitch = -35f;
     [SerializeField] private float maxPitch = 70f;
+    [SerializeField] private bool lockCursor = true;
 
     [Header("Input System Actions")]
     [SerializeField] private InputActionAsset inputActionsAsset;
@@ -38,6 +39,12 @@ public class ThirdPersonCameraFollow : MonoBehaviour
         }
 
         InitializeInputActions();
+
+        if (lockCursor)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
 
         Vector3 initialAngles = transform.eulerAngles;
         yaw = initialAngles.y;
@@ -77,14 +84,15 @@ public class ThirdPersonCameraFollow : MonoBehaviour
 
     private Vector2 GetLookInput()
     {
+        Vector2 actionLook = Vector2.zero;
         if (lookAction != null)
         {
-            return lookAction.ReadValue<Vector2>();
+            actionLook = lookAction.ReadValue<Vector2>();
         }
 
         Vector2 mouseDelta = Mouse.current != null ? Mouse.current.delta.ReadValue() : Vector2.zero;
         Vector2 gamepadLook = Gamepad.current != null ? Gamepad.current.rightStick.ReadValue() * 6f : Vector2.zero;
-        return mouseDelta + gamepadLook;
+        return actionLook.sqrMagnitude > 0.0001f ? actionLook : (mouseDelta + gamepadLook);
     }
 
     private void InitializeInputActions()

@@ -229,8 +229,8 @@ BlendTree:
   m_PrefabAsset: {fileID: 0}
   m_Name: BlendTree
   m_Childs: []
-  m_BlendParameter: velx
-  m_BlendParameterY: velx
+  m_BlendParameter: velX
+  m_BlendParameterY: velX
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
@@ -250,7 +250,7 @@ BlendTree:
     m_Position: {x: 0, y: 0.35}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: velx
+    m_DirectBlendParameter: velX
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 26102bb1421eb44abbd382a68dd93890, type: 3}
@@ -289,7 +289,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: velx
+    m_DirectBlendParameter: velX
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 26102bb1421eb44abbd382a68dd93890, type: 3}
@@ -297,7 +297,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: velx
+    m_DirectBlendParameter: velX
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 12b1c54fc38fb46b48011875bd818bd2, type: 3}
@@ -308,7 +308,7 @@ BlendTree:
     m_DirectBlendParameter: velx
     m_Mirror: 0
   m_BlendParameter: velX
-  m_BlendParameterY: velx
+  m_BlendParameterY: velX
   m_MinThreshold: -1
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
@@ -348,7 +348,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 4
-    m_ConditionEvent: vely
+    m_ConditionEvent: velY
     m_EventTreshold: 0.05
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 0}
@@ -468,7 +468,7 @@ AnimatorStateMachine:
     m_Position: {x: -400, y: 30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8213456182371420994}
-    m_Position: {x: -180, y: 20, z: 0}
+    m_Position: {x: -180, y: 30, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

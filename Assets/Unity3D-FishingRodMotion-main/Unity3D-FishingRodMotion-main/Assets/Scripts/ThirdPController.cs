@@ -17,6 +17,7 @@ public class ThirdPController : MonoBehaviour
     public float moveSpeed = 5f;
     public float sprintSpeed = 8f;
     public float rotationSmoothTime = 0.1f;
+    public bool rotateCharacterToMovement = false;
     public float jumpHeight = 1.2f;
     public float gravity = -20f;
 
@@ -134,15 +135,31 @@ public class ThirdPController : MonoBehaviour
 
         verticalVelocity += gravity * Time.deltaTime;
 
-        if (inputDirection.sqrMagnitude > 0.001f)
-        {
-            float targetAngle = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + cameraTransform.eulerAngles.y;
-            float smoothAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, rotationSmoothTime);
-            transform.rotation = Quaternion.Euler(0f, smoothAngle, 0f);
+        Vector3 cameraForward = cameraTransform.forward;
+        cameraForward.y = 0f;
+        cameraForward.Normalize();
 
-            Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+        Vector3 cameraRight = cameraTransform.right;
+        cameraRight.y = 0f;
+        cameraRight.Normalize();
+
+        Vector3 worldMove = (cameraRight * inputDirection.x + cameraForward * inputDirection.z);
+        if (worldMove.sqrMagnitude > 1f)
+        {
+            worldMove.Normalize();
+        }
+
+        if (worldMove.sqrMagnitude > 0.001f)
+        {
             float speed = sprintHeld ? sprintSpeed : moveSpeed;
-            Vector3 horizontalVelocity = moveDirection.normalized * speed;
+            Vector3 horizontalVelocity = worldMove * speed;
+
+            if (rotateCharacterToMovement)
+            {
+                float targetAngle = Mathf.Atan2(worldMove.x, worldMove.z) * Mathf.Rad2Deg;
+                float smoothAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, rotationSmoothTime);
+                transform.rotation = Quaternion.Euler(0f, smoothAngle, 0f);
+            }
 
             controller.Move((horizontalVelocity + Vector3.up * verticalVelocity) * Time.deltaTime);
         }
@@ -153,8 +170,10 @@ public class ThirdPController : MonoBehaviour
 
         if (animator != null)
         {
-            float animSpeed = new Vector2(moveInput.x, moveInput.y).magnitude;
-            animator.SetFloat("velY", animSpeed);
+            // Drive animation from actual movement direction relative to character facing.
+            Vector3 localMove = transform.InverseTransformDirection(worldMove);
+            animator.SetFloat("velX", localMove.x);
+            animator.SetFloat("velY", localMove.z);
             animator.SetBool("isGrounded", controller.isGrounded);
         }
     }
@@ -180,6 +199,11 @@ public class ThirdPController : MonoBehaviour
                 animator.SetTrigger("cast");
             }
 
+            if (fishingLine != null)
+            {
+                fishingLine.TriggerCast();
+            }
+
             alreadyCast = true;
         }
 
@@ -188,6 +212,11 @@ public class ThirdPController : MonoBehaviour
             if (animator != null)
             {
                 animator.SetTrigger("reel");
+            }
+
+            if (fishingLine != null)
+            {
+                fishingLine.TriggerReel();
             }
 
             isReeling = true;

@@ -1,20 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-
+// Based from this repo: https://github.com/Kevin-Kwan/Unity3D-FishingRodMotion?tab=readme-ov-file
 // Inspiration from https://www.reddit.com/r/Unity3D/comments/1kx1hp/best_way_to_do_fishing_line/
 public class VerletLine : MonoBehaviour
 {
+    [Header("Line Settings")]
     public Transform StartPoint;
     public Transform EndPoint;
-    public int Segments = 10;
     public LineRenderer lineRenderer;
+
+    // The length of the line will be Segments * SegmentLength, so adjust SegmentLength to change the total length of the line. You can also adjust SegmentLength at runtime to simulate casting and reeling in.
+    public int Segments = 10;
     public float SegmentLength = 0.03f;
+
+    // The initial length of the line when cast, and the max length when fully cast. Adjust these to change how far the player can cast the line, and how long the line is when fully cast. You can also adjust these at runtime to change casting distance.
+    [Header("Casting Settings")]
     public float startSegmentLength = 0.03f;
     public float currentTargetLength = 0.03f;
     public float maxSegmentLength = 1f;
+
+    // line gravity and physics settings
+    [Header("Physics Settings")]
     public Vector3 Gravity = new Vector3(0, -9.81f, 0);
     // Num of Physics iterations
     public int Iterations = 6;
@@ -25,23 +33,12 @@ public class VerletLine : MonoBehaviour
     public float Delay = 3f;
     private bool isChangingLength = false;
 
-    [Header("Input System Actions")]
-    [SerializeField] private InputActionAsset inputActionsAsset;
-    [SerializeField] private string playerActionMapName = "Player";
-    [SerializeField] private string castActionName = "Attack";
-    [SerializeField] private string reelActionName = "Next";
-
-    private InputAction castAction;
-    private InputAction reelAction;
-
     [Header("Equip State")]
-    [SerializeField] private ThirdPController playerController;
     [SerializeField] private GameObject hookVisual;
     [SerializeField] private bool hideLineWhenUnequipped = true;
     [SerializeField] private bool hideHookWhenUnequipped = true;
 
     private bool isRodEquipped = true;
-    private bool externalEquipStateOverride = false;
 
     // Represents a segment of the line.
     private class LineParticle
@@ -55,19 +52,11 @@ public class VerletLine : MonoBehaviour
     // Initializes the line.
     void Start()
     {
-        InitializeInputActions();
-
-        if (playerController == null)
-        {
-            playerController = GetComponentInParent<ThirdPController>();
-        }
-
         if (hookVisual == null && EndPoint != null)
         {
             hookVisual = EndPoint.gameObject;
         }
 
-        isRodEquipped = IsRodEquipped();
         ApplyEquipVisualState(isRodEquipped);
 
         particles = new List<LineParticle>();
@@ -76,55 +65,16 @@ public class VerletLine : MonoBehaviour
             Vector3 point = Vector3.Lerp(StartPoint.position, EndPoint.position, i / (float)(Segments - 1));
             particles.Add(new LineParticle { Pos = point, OldPos = point, Acceleration = Gravity });
         }
+        // The particles are simulated in world-space positions.
+        lineRenderer.useWorldSpace = true;
         lineRenderer.positionCount = particles.Count;
-    }
-
-    private void OnEnable()
-    {
-        EnableInputActions();
-    }
-
-    private void OnDisable()
-    {
-        DisableInputActions();
     }
 
     void Update()
     {
-        bool equippedNow = IsRodEquipped();
-        if (equippedNow != isRodEquipped)
-        {
-            isRodEquipped = equippedNow;
-            ApplyEquipVisualState(isRodEquipped);
-
-            if (!isRodEquipped)
-            {
-                // Stop pending delayed casts and retract line immediately when unequipped.
-                StopAllCoroutines();
-                currentTargetLength = startSegmentLength;
-                SegmentLength = startSegmentLength;
-                isChangingLength = false;
-            }
-        }
-
         if (!isRodEquipped)
         {
             return;
-        }
-
-        if (CastPressed())
-        {   
-            // Cast out the line
-            // A generic delay because I don't know the timing of casting out a fishing line and when that line comes out
-            // I'm assuming at the peak of the cast, idk
-            StartCoroutine(IncreaseLengthAfterDelay(Delay));
-
-        }
-        else if (ReelPressed())
-        {
-            // Reel In
-            currentTargetLength = startSegmentLength;
-            isChangingLength = true;
         }
 
         if (isChangingLength)
@@ -155,11 +105,19 @@ public class VerletLine : MonoBehaviour
             return;
         }
 
+        if (StartPoint == null || EndPoint == null || particles == null || particles.Count == 0)
+        {
+            return;
+        }
+
     
         foreach (var p in particles)
         {
             Verlet(p, Time.fixedDeltaTime);
         }
+
+        particles[0].Pos = StartPoint.position;
+        particles[particles.Count - 1].Pos = EndPoint.position;
     
         for (int i = 0; i < Iterations; i++)
         {
@@ -167,15 +125,17 @@ public class VerletLine : MonoBehaviour
             {
                 PoleConstraint(particles[j], particles[j + 1], SegmentLength);
             }
+
+            // Keep both anchors pinned every iteration to avoid cumulative drift while moving.
+            particles[0].Pos = StartPoint.position;
+            particles[particles.Count - 1].Pos = EndPoint.position;
         }
-        particles[0].Pos = StartPoint.position;
+
         if (SecondHasRigidbody)
         {
             Vector3 force = (particles[particles.Count - 1].Pos - EndPoint.position) * tensionConstant;
             EndPoint.GetComponent<Rigidbody>().AddForce(force);
         }
-    
-        particles[particles.Count - 1].Pos = EndPoint.position;
     
         var positions = new Vector3[particles.Count];
         for (int i = 0; i < particles.Count; i++)
@@ -204,88 +164,30 @@ public class VerletLine : MonoBehaviour
         p2.Pos -= delta * diff * 0.5f;
     }
 
-    private bool CastPressed()
+    public void TriggerCast()
     {
-        if (castAction != null)
-        {
-            return castAction.WasPressedThisFrame();
-        }
-
-        bool mouse = Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
-        bool gamepad = Gamepad.current != null && Gamepad.current.rightTrigger.wasPressedThisFrame;
-        return mouse || gamepad;
-    }
-
-    private bool ReelPressed()
-    {
-        if (reelAction != null)
-        {
-            return reelAction.WasPressedThisFrame();
-        }
-
-        bool keyboard = Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame;
-        bool gamepad = Gamepad.current != null && Gamepad.current.buttonNorth.wasPressedThisFrame;
-        return keyboard || gamepad;
-    }
-
-    private void InitializeInputActions()
-    {
-        if (inputActionsAsset == null)
-        {
-            var playerInput = GetComponent<PlayerInput>();
-            if (playerInput != null)
-            {
-                inputActionsAsset = playerInput.actions;
-            }
-        }
-
-        if (inputActionsAsset == null)
+        if (!isRodEquipped)
         {
             return;
         }
 
-        InputActionMap actionMap = inputActionsAsset.FindActionMap(playerActionMapName, false);
-        if (actionMap == null)
+        StopAllCoroutines();
+        StartCoroutine(IncreaseLengthAfterDelay(Delay));
+    }
+
+    public void TriggerReel()
+    {
+        if (!isRodEquipped)
         {
             return;
         }
 
-        castAction = actionMap.FindAction(castActionName, false);
-        reelAction = actionMap.FindAction(reelActionName, false);
-
-        EnableInputActions();
-    }
-
-    private void EnableInputActions()
-    {
-        castAction?.Enable();
-        reelAction?.Enable();
-    }
-
-    private void DisableInputActions()
-    {
-        castAction?.Disable();
-        reelAction?.Disable();
-    }
-
-    private bool IsRodEquipped()
-    {
-        if (externalEquipStateOverride)
-        {
-            return isRodEquipped;
-        }
-
-        if (playerController != null)
-        {
-            return playerController.isFishing;
-        }
-
-        return true;
+        currentTargetLength = startSegmentLength;
+        isChangingLength = true;
     }
 
     public void SetEquippedFromController(bool equipped)
     {
-        externalEquipStateOverride = true;
         isRodEquipped = equipped;
         ApplyEquipVisualState(isRodEquipped);
 
@@ -295,6 +197,22 @@ public class VerletLine : MonoBehaviour
             currentTargetLength = startSegmentLength;
             SegmentLength = startSegmentLength;
             isChangingLength = false;
+            ResetParticlesToAnchors();
+        }
+    }
+
+    private void ResetParticlesToAnchors()
+    {
+        if (particles == null || particles.Count == 0 || StartPoint == null || EndPoint == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < particles.Count; i++)
+        {
+            Vector3 point = Vector3.Lerp(StartPoint.position, EndPoint.position, i / (float)(particles.Count - 1));
+            particles[i].Pos = point;
+            particles[i].OldPos = point;
         }
     }
 
