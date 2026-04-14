@@ -1425,7 +1425,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 9baafd032641a43b19c40bada1625073, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.76
+      value: 0.76000017
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9baafd032641a43b19c40bada1625073, type: 3}
       propertyPath: m_LocalScale.y
@@ -1433,7 +1433,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9baafd032641a43b19c40bada1625073, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.76
+      value: 0.76000017
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9baafd032641a43b19c40bada1625073, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1744,6 +1744,9 @@ MonoBehaviour:
   tensionDropRate: 4
   rarityWeight: 8
   maxTension: 10
+  rarity: 0
+  dripThreshold: 0
+  swimmingSpeed: 0
 --- !u!1 &1313077786
 GameObject:
   m_ObjectHideFlags: 0
@@ -1774,8 +1777,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishSpawner
   possibleFish:
-  - {fileID: 1652712460}
   - {fileID: 1256478411}
+  - {fileID: 1652712460}
 --- !u!4 &1313077788
 Transform:
   m_ObjectHideFlags: 0
@@ -2299,6 +2302,9 @@ MonoBehaviour:
   tensionDropRate: 10
   rarityWeight: 20
   maxTension: 20
+  rarity: 0
+  dripThreshold: 0
+  swimmingSpeed: 0
 --- !u!95 &1652712461
 Animator:
   serializedVersion: 7
