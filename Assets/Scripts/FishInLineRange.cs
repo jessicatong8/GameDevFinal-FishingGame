@@ -1,13 +1,8 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
-public class FishMovement : MonoBehaviour
+public class FishInLineRange : MonoBehaviour
 {
-
-    public static event Action LeavingLineRange;
-    public static event Action EnteringLineRange;
-
     private Animator animator;
     public FishingManager fishManager;
     private Vector3 position;
@@ -25,9 +20,6 @@ public class FishMovement : MonoBehaviour
 
     private int direction = 1; // 1 for right, -1 for left
 
-
-
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -41,6 +33,8 @@ public class FishMovement : MonoBehaviour
         // FishingManager.OnLineBreak += HandleLineBreak;
         // FishingManager.OnWiggle += HandleWiggleStart;
         // FishingManager.OffWiggle += HandleWiggleEnd;
+
+
         position = transform.position;
         swimmingSpeed = GetComponent<Fish>().swimmingSpeed;
         SetTargetPosition(position);
@@ -53,7 +47,6 @@ public class FishMovement : MonoBehaviour
     {
         // Debug.Log("Current Position: " + transform.position);
         SwimTowardTarget();
-        CheckInLineRange();
 
     }
 
@@ -62,12 +55,12 @@ public class FishMovement : MonoBehaviour
         if (position.x <= 0)
         {
             direction = 1; // Move right
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLineRightRange, xRightBoundary), position.y, position.z);
+            targetPosition = new Vector3(Random.Range(xLineRightRange, xRightBoundary), position.y, position.z);
         }
         else if (position.x > 0)
         {
             direction = -1; // Move left
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLeftBoundary, xLineLeftRange), position.y, position.z);
+            targetPosition = new Vector3(Random.Range(xLeftBoundary, xLineLeftRange), position.y, position.z);
         }
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, direction * 90f, transform.eulerAngles.z); // Flip the fish to face the right direction
 
@@ -88,18 +81,6 @@ public class FishMovement : MonoBehaviour
         }
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, swimmingSpeed * Time.deltaTime);
 
-    }
-
-    private void CheckInLineRange()
-    {
-        if (transform.position.x < xLineLeftRange || transform.position.x > xLineRightRange)
-        {
-            LeavingLineRange?.Invoke();
-        }
-        else
-        {
-            EnteringLineRange?.Invoke();
-        }
     }
 
 }

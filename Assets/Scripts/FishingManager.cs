@@ -13,6 +13,7 @@ public class FishingManager : MonoBehaviour
     public static event Action OnReelingInactive;
     public static event Action OnWiggle; //should this be an event?
     public static event Action OffWiggle; //should this be an event too
+
     public static event Action OnCaught;
     public static event Action OnLineBreak;
     public static event Action OnReturnToIdle;
@@ -173,6 +174,7 @@ public class FishingManager : MonoBehaviour
             AbortFishing();
             //go back to idle
         }
+
 
     }
 
