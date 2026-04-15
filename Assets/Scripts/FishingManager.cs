@@ -20,11 +20,8 @@ public class FishingManager : MonoBehaviour
     //maybe change getters at bottom to events like this 
     public static event Action<float> OnProgressUpdated;
     public static event Action<float> OnTensionUpdated;
-
-    public FishSpawner spawner;
-    private Fish activeFish;
     public float hookTimer;
-    // 
+    
     public enum FishingState
     {
         Idle,
@@ -32,12 +29,15 @@ public class FishingManager : MonoBehaviour
         HookWindow,
         Reeling
     }
+    public CastingManager castingManager;
 
     private FishingState currentState = FishingState.Idle;
     private float progress;
     private float tension;
     private float timer;
     private bool isWiggling;
+    private Fish activeFish;
+    public int currentDrip; //well get from player or overarching score
 
     void Update()
     {
@@ -75,13 +75,24 @@ public class FishingManager : MonoBehaviour
     void StartWaiting()
     {
         OnCast?.Invoke();
-        activeFish = spawner.GetRandomFish();
-        Debug.Log(activeFish.fishName);
+        activeFish = castingManager.GetFishInArea();
+        if (activeFish == null)
+        {
+            //no fish here in this spot
+        }
+        if (currentDrip >= activeFish.dripThreshold)
+        {
+            //were good
+        }
+        else
+        {
+            //drip is too low for this fish 
+        }
         //call event to trigger casting ui and sound 
         //does this go here or in update
         //do i want seperate event for after casting for an idle bobbing wait
 
-        currentState = FishingState.Waiting; //change state
+        currentState = FishingState.Waiting;
         timer = UnityEngine.Random.Range(2f, 5f); //random time to wait for bite
     }
 
