@@ -10,6 +10,8 @@ public class VerletLine : MonoBehaviour
     public Transform StartPoint;
     public Transform EndPoint;
     public LineRenderer lineRenderer;
+    [Tooltip("When true, both rope ends are fixed to transforms. Disable for a dynamic hook end.")]
+    public bool lockEndToTransform = false;
 
     // The length of the line will be Segments * SegmentLength, so adjust SegmentLength to change the total length of the line. You can also adjust SegmentLength at runtime to simulate casting and reeling in.
     public int Segments = 10;
@@ -117,7 +119,10 @@ public class VerletLine : MonoBehaviour
         }
 
         particles[0].Pos = StartPoint.position;
-        particles[particles.Count - 1].Pos = EndPoint.position;
+        if (lockEndToTransform)
+        {
+            particles[particles.Count - 1].Pos = EndPoint.position;
+        }
     
         for (int i = 0; i < Iterations; i++)
         {
@@ -126,15 +131,30 @@ public class VerletLine : MonoBehaviour
                 PoleConstraint(particles[j], particles[j + 1], SegmentLength);
             }
 
-            // Keep both anchors pinned every iteration to avoid cumulative drift while moving.
+            // Keep start anchor pinned every iteration to avoid cumulative drift while moving.
             particles[0].Pos = StartPoint.position;
-            particles[particles.Count - 1].Pos = EndPoint.position;
+            if (lockEndToTransform)
+            {
+                particles[particles.Count - 1].Pos = EndPoint.position;
+            }
         }
 
-        if (SecondHasRigidbody)
+        if (lockEndToTransform && SecondHasRigidbody)
         {
             Vector3 force = (particles[particles.Count - 1].Pos - EndPoint.position) * tensionConstant;
             EndPoint.GetComponent<Rigidbody>().AddForce(force);
+        }
+        else if (!lockEndToTransform)
+        {
+            Rigidbody endBody = EndPoint != null ? EndPoint.GetComponent<Rigidbody>() : null;
+            if (endBody != null && !endBody.isKinematic)
+            {
+                endBody.MovePosition(particles[particles.Count - 1].Pos);
+            }
+            else if (EndPoint != null)
+            {
+                EndPoint.position = particles[particles.Count - 1].Pos;
+            }
         }
     
         var positions = new Vector3[particles.Count];

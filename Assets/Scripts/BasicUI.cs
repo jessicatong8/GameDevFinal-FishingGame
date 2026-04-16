@@ -22,6 +22,7 @@ public class BasicUI : MonoBehaviour
 
         FishingManager.OnProgressUpdated += UpdateProgressSlider;
         FishingManager.OnTensionUpdated += UpdateTensionSlider;
+        FishingManager.OnTensionMaxUpdated += UpdateTensionSliderMax;
     }
 
     void OnDisable()
@@ -35,6 +36,7 @@ public class BasicUI : MonoBehaviour
         FishingManager.OffWiggle -= HandleWiggleEnd;
         FishingManager.OnProgressUpdated -= UpdateProgressSlider;
         FishingManager.OnTensionUpdated -= UpdateTensionSlider;
+        FishingManager.OnTensionMaxUpdated -= UpdateTensionSliderMax;
     }
 
     void UpdateProgressSlider(float val)
@@ -46,12 +48,19 @@ public class BasicUI : MonoBehaviour
     {
         tensionSlider.value = val;
     }
+
+    void UpdateTensionSliderMax(float val)
+    {
+        tensionSlider.maxValue = Mathf.Max(val, 0f);
+    }
+
     void HandleCast()
     {
         alertText.text = "Casting";
         alertText.color = Color.white;
         UpdateProgressSlider(0);
         UpdateTensionSlider(0);
+        UpdateTensionSliderMax(0);
     }
 
     void HandleBite()
