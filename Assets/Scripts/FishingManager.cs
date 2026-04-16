@@ -13,18 +13,15 @@ public class FishingManager : MonoBehaviour
     public static event Action OnReelingInactive;
     public static event Action OnWiggle; //should this be an event?
     public static event Action OffWiggle; //should this be an event too
+    public static event Action NoFishInSpot;
+    public static event Action DripTooLow;
     public static event Action OnCaught;
     public static event Action OnLineBreak;
     public static event Action OnReturnToIdle;
-
-    //maybe change getters at bottom to events like this 
     public static event Action<float> OnProgressUpdated;
     public static event Action<float> OnTensionUpdated;
-
-    public FishSpawner spawner;
-    private Fish activeFish;
     public float hookTimer;
-    // 
+    
     public enum FishingState
     {
         Idle,
@@ -32,12 +29,36 @@ public class FishingManager : MonoBehaviour
         HookWindow,
         Reeling
     }
+    public CastingManager castingManager;
 
     private FishingState currentState = FishingState.Idle;
     private float progress;
     private float tension;
     private float timer;
     private bool isWiggling;
+    private Fish activeFish;
+    public int currentDrip; //well get from player or overarching score
+    private bool isPlayerOnDock = false;
+
+    private void OnEnable()
+    {
+        DockAreaTrigger.OnPlayerEnterDock += SetOnDock;
+        DockAreaTrigger.OnPlayerExitDock += SetOffDock;
+    }
+
+    private void OnDisable()
+    {
+        DockAreaTrigger.OnPlayerEnterDock -= SetOnDock;
+        DockAreaTrigger.OnPlayerExitDock -= SetOffDock;
+    }
+
+    private void SetOnDock(){
+        isPlayerOnDock = true;
+    }
+    private void SetOffDock() 
+    {
+        isPlayerOnDock = false;
+    }
 
     void Update()
     {
@@ -51,7 +72,7 @@ public class FishingManager : MonoBehaviour
         switch (currentState)
         {
             case FishingState.Idle: //switch from idle to casting
-                if (Keyboard.current.spaceKey.wasPressedThisFrame) //this or other input system???
+                if (isPlayerOnDock && Keyboard.current.spaceKey.wasPressedThisFrame) //this or other input system???
                 {
                     StartWaiting(); //next round it will go to handle waiting
                 }
@@ -75,13 +96,20 @@ public class FishingManager : MonoBehaviour
     void StartWaiting()
     {
         OnCast?.Invoke();
-        activeFish = spawner.GetRandomFish();
-        Debug.Log(activeFish.fishName);
+        activeFish = castingManager.GetFishInArea();
+        if (activeFish == null)
+        {
+            NoFishInSpot?.Invoke();
+        }
+        if (currentDrip < activeFish.dripThreshold)
+        {
+            DripTooLow?.Invoke();
+        }
         //call event to trigger casting ui and sound 
         //does this go here or in update
         //do i want seperate event for after casting for an idle bobbing wait
 
-        currentState = FishingState.Waiting; //change state
+        currentState = FishingState.Waiting;
         timer = UnityEngine.Random.Range(2f, 5f); //random time to wait for bite
     }
 
@@ -162,6 +190,7 @@ public class FishingManager : MonoBehaviour
             AbortFishing();
             //go back to idle
         }
+
 
     }
 
