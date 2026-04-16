@@ -36,6 +36,6 @@ public class RodHighlighter : MonoBehaviour
 
     private void RemoveHighlight()
     {
-        rodRenderer.material = normalMaterial
+        rodRenderer.material = normalMaterial;
     }
 }
