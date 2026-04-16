@@ -11,6 +11,8 @@ public class RodHighlighter : MonoBehaviour
         FishingManager.OnBite += ApplyHighlight;
         FishingManager.OnReel += RemoveHighlight;
         FishingManager.OnCast += RemoveHighlight;
+        FishingManager.OnWiggle += ApplyRedLight;
+        FishingManager.OffWiggle += RemoveHighlight;
     }
 
     private void OnDisable()
@@ -18,15 +20,22 @@ public class RodHighlighter : MonoBehaviour
         FishingManager.OnBite -= ApplyHighlight;
         FishingManager.OnReel -= RemoveHighlight;
         FishingManager.OnCast -= RemoveHighlight;
+        FishingManager.OnWiggle -= ApplyRedLight;
+        FishingManager.OffWiggle -= RemoveHighlight;
     }
 
     private void ApplyHighlight()
     {
         rodRenderer.material = highlightMaterial;
     }
+    //maybe for wiggling - red light when wiggling
+    private void ApplyRedLight()
+    {
+        rodRenderer.material = highlightMaterial;
+    }
 
     private void RemoveHighlight()
     {
-        rodRenderer.material = normalMaterial;
+        rodRenderer.material = normalMaterial
     }
 }
