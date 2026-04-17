@@ -14,29 +14,25 @@ public class BasicUI : MonoBehaviour
     {
         FishingManager.OnCast += HandleCast;
         FishingManager.OnBite += HandleBite;
-        FishingManager.OnReel += HandleReel;
+        FishingManager.OnReelAttempt += HandleReel;
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnLineBreak += HandleLineBreak;
-        FishingManager.OnWiggle += HandleWiggle;
-        FishingManager.OffWiggle += HandleWiggleEnd;
 
-        FishingManager.OnProgressUpdated += UpdateProgressSlider;
-        FishingManager.OnTensionUpdated += UpdateTensionSlider;
-        FishingManager.OnTensionMaxUpdated += UpdateTensionSliderMax;
+        FishingManager.CurrentProgressUpdated += UpdateProgressSlider;
+        FishingManager.CurrentTensionUpdated += UpdateTensionSlider;
+        FishingManager.MaxTensionUpdated += UpdateTensionSliderMax;
     }
 
     void OnDisable()
     {
         FishingManager.OnCast -= HandleCast;
         FishingManager.OnBite -= HandleBite;
-        FishingManager.OnReel -= HandleReel;
+        FishingManager.OnReelAttempt -= HandleReel;
         FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnLineBreak -= HandleLineBreak;
-        FishingManager.OnWiggle -= HandleWiggle;
-        FishingManager.OffWiggle -= HandleWiggleEnd;
-        FishingManager.OnProgressUpdated -= UpdateProgressSlider;
-        FishingManager.OnTensionUpdated -= UpdateTensionSlider;
-        FishingManager.OnTensionMaxUpdated -= UpdateTensionSliderMax;
+        FishingManager.CurrentProgressUpdated -= UpdateProgressSlider;
+        FishingManager.CurrentTensionUpdated -= UpdateTensionSlider;
+        FishingManager.MaxTensionUpdated -= UpdateTensionSliderMax;
     }
 
     void UpdateProgressSlider(float val)
@@ -65,12 +61,12 @@ public class BasicUI : MonoBehaviour
 
     void HandleBite()
     {
-        alertText.text = "BITE! Press Space!";
+        alertText.text = "BITE! Press Reel!";
     }
 
     void HandleReel()
     {
-        alertText.text = "Start Reeling!";
+        alertText.text = "MASH TO REEL!";
     }
 
     void HandleCaught()
@@ -83,15 +79,5 @@ public class BasicUI : MonoBehaviour
     {
         alertText.text = "LINE SNAPPED!";
         alertText.color = Color.gray;
-    }
-
-    void HandleWiggle()
-    {
-        alertText.color = Color.red;
-    }
-
-    void HandleWiggleEnd()
-    {
-        alertText.color = Color.white;
     }
 }

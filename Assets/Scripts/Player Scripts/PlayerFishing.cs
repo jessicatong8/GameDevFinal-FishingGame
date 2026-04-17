@@ -1,46 +1,25 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-// Handles equip/cast/reel state and synchronizes fishing visuals and rope behavior.
+[RequireComponent(typeof(PlayerInputState))]
+[RequireComponent(typeof(PlayerMovement))]
 public class PlayerFishing : MonoBehaviour
 {
-    [Header("Input System Actions")]
-    [SerializeField] private InputActionAsset inputActionsAsset;
-    [SerializeField] private string playerActionMapName = "Player";
-    [SerializeField] private string fishingActionMapName = "Fishing";
-    [SerializeField] private string uiActionMapName = "UI";
-    [SerializeField] private string interactActionName = "Interact";
-    [SerializeField] private string castActionName = "-Cast";
-    [SerializeField] private string reelActionName = "Reel";
-    [SerializeField] private string menuActionName = "Menu";
-    [SerializeField] private string uiCancelActionName = "Cancel";
-
-    [Header("Pause")]
-    [SerializeField] private GameObject pauseMenuRoot;
-
     [Header("References")]
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject fishingRod;
     [SerializeField] private GameObject fishingLineObject;
     [SerializeField] private GameObject fishingHookObject;
     [SerializeField] private VerletLine fishingLine;
-    [SerializeField] private Player playerScript;
-
-    private InputAction interactAction;
-    private InputAction castAction;
-    private InputAction reelAction;
-    private InputAction menuAction;
-    private InputAction uiCancelAction;
-    private PlayerInput playerInput;
-    private bool usesPlayerInputMaps;
+    [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private FishingManager fishingManager;
+    [SerializeField] private PlayerInputState inputState;
 
     public bool IsFishing { get; private set; }
     private bool alreadyCast;
-    private bool isReeling;
-    private bool hasEnteredReelState;
-    private bool isPaused;
 
-    private void Start()
+    private bool CanUseAnimator => animator != null && animator.runtimeAnimatorController != null && animator.isActiveAndEnabled;
+
+    private void Awake()
     {
         if (animator == null)
         {
@@ -52,136 +31,168 @@ public class PlayerFishing : MonoBehaviour
             fishingLine = GetComponentInChildren<VerletLine>(true);
         }
 
-        if (playerScript == null)
+        if (playerMovement == null)
         {
-            playerScript = GetComponent<Player>();
+            playerMovement = GetComponent<PlayerMovement>();
         }
 
-        InitializeInputActions();
+        if (fishingManager == null)
+        {
+            fishingManager = GetComponent<FishingManager>();
+        }
+
+        if (inputState == null)
+        {
+            inputState = GetComponent<PlayerInputState>();
+        }
+
+        if (!EnsureAnimatorReference())
+        {
+            Debug.LogWarning("PlayerFishing: No valid Animator with a controller was found on player visuals. Fishing animation parameters will be ignored until one is assigned.");
+        }
+    }
+
+    private bool EnsureAnimatorReference()
+    {
+        if (CanUseAnimator)
+        {
+            return true;
+        }
+
+        Animator[] childAnimators = GetComponentsInChildren<Animator>(true);
+        Animator fallbackAnimator = null;
+        for (int i = 0; i < childAnimators.Length; i++)
+        {
+            Animator candidate = childAnimators[i];
+            if (candidate == null || candidate.runtimeAnimatorController == null)
+            {
+                continue;
+            }
+
+            if (candidate.isActiveAndEnabled)
+            {
+                animator = candidate;
+                return true;
+            }
+
+            if (fallbackAnimator == null)
+            {
+                fallbackAnimator = candidate;
+            }
+        }
+
+        if (fallbackAnimator != null)
+        {
+            animator = fallbackAnimator;
+            return true;
+        }
+
+        animator = null;
+        return false;
+    }
+
+    private void Start()
+    {
+        if (inputState == null)
+        {
+            Debug.LogWarning("PlayerFishing requires a PlayerInputState component on the same object.");
+            enabled = false;
+            return;
+        }
+
+        inputState.SetState(PlayerInputState.InputStates.Gameplay);
+        Debug.Log("PlayerFishing initialized. Starting in Gameplay state.");
         SetFishingState(false);
     }
 
     private void OnEnable()
     {
-        EnableInputActions();
+        if (inputState != null)
+        {
+            
+            inputState.InteractPerformed += HandleInteract;
+        }
+
+        FishingManager.OnReelAttempt += BeginReel;
+        FishingManager.OnReturnToIdle += HandleFishingEnded;
     }
 
     private void OnDisable()
     {
-        DisableInputActions();
+        if (inputState != null)
+        {
+            inputState.InteractPerformed -= HandleInteract;
+        }
+
+        FishingManager.OnReelAttempt -= BeginReel;
+        FishingManager.OnReturnToIdle -= HandleFishingEnded;
     }
 
-    private void Update()
+    private void HandleInteract()
     {
-        HandlePauseInput();
+        if (!IsFishing)
+        {
+            if (fishingManager != null && !fishingManager.TryStartFishing())
+            {
+                Debug.Log("Cannot start fishing: start conditions were not met.");
+                return;
+            }
 
-        if (isPaused)
+            SetFishingState(true);
+            BeginCast();
+            return;
+        }
+
+        if (!alreadyCast)
+        {
+            Debug.Log("Player is fishing but has not cast yet. Triggering cast.");
+            BeginCast();
+            HandleFishingEnded();
+        }
+    }
+
+    private void BeginCast()
+    {
+        if (EnsureAnimatorReference())
+        {
+            animator.SetTrigger("cast");
+        }
+
+        fishingLine?.TriggerCast();
+        alreadyCast = true;
+    }
+
+    private void BeginReel()
+    {
+        if (EnsureAnimatorReference())
+        {
+            animator.SetTrigger("reel");
+        }
+
+        fishingLine?.TriggerReel();
+    }
+
+    private void HandleFishingEnded()
+    {
+        if (!IsFishing)
         {
             return;
         }
 
-        HandleFishingInput();
-        HandleReelStateCompletion();
-    }
-
-    private void HandlePauseInput()
-    {
-        if (!isPaused)
-        {
-            if (MenuPressed())
-            {
-                SetPaused(true);
-            }
-
-            return;
-        }
-
-        if (UiCancelPressed())
-        {
-            SetPaused(false);
-        }
-    }
-
-    private void HandleFishingInput()
-    {
-        if (InteractPressed())
-        {
-            if (!IsFishing)
-            {
-                SetFishingState(true);
-            }
-            else if (!alreadyCast && !isReeling)
-            {
-                SetFishingState(false);
-            }
-        }
-
-        if (CastPressed() && IsFishing && !alreadyCast && !isReeling)
-        {
-            if (animator != null)
-            {
-                animator.SetTrigger("cast");
-            }
-
-            fishingLine?.TriggerCast();
-            alreadyCast = true;
-        }
-
-        if (ReelPressed() && IsFishing && alreadyCast && !isReeling)
-        {
-            if (animator != null)
-            {
-                animator.SetTrigger("reel");
-            }
-
-            fishingLine?.TriggerReel();
-            isReeling = true;
-            hasEnteredReelState = false;
-        }
-    }
-
-    private void HandleReelStateCompletion()
-    {
-        if (!isReeling)
-        {
-            return;
-        }
-
-        if (animator == null)
-        {
-            alreadyCast = false;
-            isReeling = false;
-            return;
-        }
-
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        bool inReelState = stateInfo.IsName("Reel In");
-
-        if (inReelState)
-        {
-            hasEnteredReelState = true;
-        }
-
-        if (hasEnteredReelState && !inReelState)
-        {
-            alreadyCast = false;
-            isReeling = false;
-            hasEnteredReelState = false;
-        }
+        SetFishingState(false);
     }
 
     private void SetFishingState(bool active)
     {
         IsFishing = active;
+        inputState.SetState(active ? PlayerInputState.InputStates.Fishing : PlayerInputState.InputStates.Gameplay);
 
         if (!active)
         {
             alreadyCast = false;
-            isReeling = false;
-            hasEnteredReelState = false;
         }
 
-        if (animator != null)
+        if (EnsureAnimatorReference())
         {
             animator.SetBool("startFishing", active);
         }
@@ -203,177 +214,9 @@ public class PlayerFishing : MonoBehaviour
 
         fishingLine?.SetEquippedFromController(active);
 
-        if (!isPaused)
+        if (playerMovement != null)
         {
-            SwitchActionMap(active ? fishingActionMapName : playerActionMapName);
+            playerMovement.enabled = !active;
         }
-
-        if (playerScript != null)
-        {
-            playerScript.enabled = !active;
-        }
-    }
-
-    private void SetPaused(bool active)
-    {
-        isPaused = active;
-
-        if (pauseMenuRoot != null)
-        {
-            pauseMenuRoot.SetActive(active);
-        }
-
-        if (active)
-        {
-            SwitchActionMap(uiActionMapName);
-            Time.timeScale = 0f;
-            return;
-        }
-
-        Time.timeScale = 1f;
-        SwitchActionMap(IsFishing ? fishingActionMapName : playerActionMapName);
-    }
-
-    private bool InteractPressed()
-    {
-        if (interactAction != null)
-        {
-            return interactAction.WasPressedThisFrame();
-        }
-
-        return (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
-            || (Gamepad.current != null && Gamepad.current.buttonWest.wasPressedThisFrame);
-    }
-
-    private bool CastPressed()
-    {
-        if (castAction != null)
-        {
-            return castAction.WasPressedThisFrame();
-        }
-
-        return (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-            || (Gamepad.current != null && Gamepad.current.rightTrigger.wasPressedThisFrame);
-    }
-
-    private bool ReelPressed()
-    {
-        if (reelAction != null)
-        {
-            return reelAction.WasPressedThisFrame();
-        }
-
-        return (Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame)
-            || (Gamepad.current != null && Gamepad.current.buttonNorth.wasPressedThisFrame);
-    }
-
-    private bool MenuPressed()
-    {
-        if (menuAction != null)
-        {
-            return menuAction.WasPressedThisFrame();
-        }
-
-        return Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame;
-    }
-
-    private bool UiCancelPressed()
-    {
-        if (uiCancelAction != null)
-        {
-            return uiCancelAction.WasPressedThisFrame();
-        }
-
-        return Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame;
-    }
-
-    private void SwitchActionMap(string actionMapName)
-    {
-        if (playerInput == null)
-        {
-            return;
-        }
-
-        if (playerInput.currentActionMap != null && playerInput.currentActionMap.name == actionMapName)
-        {
-            return;
-        }
-
-        playerInput.SwitchCurrentActionMap(actionMapName);
-    }
-
-    private void InitializeInputActions()
-    {
-        playerInput = GetComponent<PlayerInput>();
-        usesPlayerInputMaps = playerInput != null;
-
-        if (inputActionsAsset == null)
-        {
-            if (playerInput != null)
-            {
-                inputActionsAsset = playerInput.actions;
-            }
-        }
-
-        if (inputActionsAsset == null)
-        {
-            return;
-        }
-
-        InputActionMap playerMap = inputActionsAsset.FindActionMap(playerActionMapName, false);
-        if (playerMap == null)
-        {
-            return;
-        }
-
-        InputActionMap uiMap = inputActionsAsset.FindActionMap(uiActionMapName, false);
-
-        interactAction = playerMap.FindAction(interactActionName, false);
-        castAction = playerMap.FindAction(castActionName, false);
-        menuAction = playerMap.FindAction(menuActionName, false);
-        uiCancelAction = uiMap != null ? uiMap.FindAction(uiCancelActionName, false) : null;
-
-        InputActionMap fishingMap = inputActionsAsset.FindActionMap(fishingActionMapName, false);
-        reelAction = fishingMap != null ? fishingMap.FindAction(reelActionName, false) : null;
-
-        // Backward-compatible aliases for older action assets.
-        if (castAction == null)
-        {
-            castAction = playerMap.FindAction("Cast", false);
-        }
-        if (reelAction == null)
-        {
-            reelAction = playerMap.FindAction("Next", false);
-        }
-
-        EnableInputActions();
-    }
-
-    private void EnableInputActions()
-    {
-        if (usesPlayerInputMaps)
-        {
-            return;
-        }
-
-        interactAction?.Enable();
-        castAction?.Enable();
-        reelAction?.Enable();
-        menuAction?.Enable();
-        uiCancelAction?.Enable();
-    }
-
-    private void DisableInputActions()
-    {
-        if (usesPlayerInputMaps)
-        {
-            return;
-        }
-
-        interactAction?.Disable();
-        castAction?.Disable();
-        reelAction?.Disable();
-        menuAction?.Disable();
-        uiCancelAction?.Disable();
     }
 }

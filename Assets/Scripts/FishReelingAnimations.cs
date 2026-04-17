@@ -10,14 +10,10 @@ public class FishReelingAnimations : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
-        // FishingManager.OnCast += HandleCast;
         FishingManager.OnBite += HandleBite;
-        FishingManager.OnReelingActive += HandleReelingActive;
-        FishingManager.OnReelingInactive += HandleReelingInactive;
+        FishingManager.OnReelAttempt += HandleReelAttempt;
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnLineBreak += HandleLineBreak;
-        FishingManager.OnWiggle += HandleWiggleStart;
-        FishingManager.OffWiggle += HandleWiggleEnd;
 
     }
 
@@ -32,14 +28,9 @@ public class FishReelingAnimations : MonoBehaviour
         animator.SetTrigger("Bite");
     }
 
-    void HandleWiggleStart()
+    void HandleReelAttempt()
     {
-        animator.SetBool("IsWiggling", true);
-    }
-
-    void HandleWiggleEnd()
-    {
-        animator.SetBool("IsWiggling", false);
+        animator.SetBool("IsReeling", true);
     }
 
     void HandleCaught()
@@ -50,15 +41,6 @@ public class FishReelingAnimations : MonoBehaviour
     void HandleLineBreak()
     {
         animator.SetTrigger("Escaped");
-    }
-
-    void HandleReelingActive()
-    {
-        animator.SetBool("IsReeling", true);
-    }
-
-    void HandleReelingInactive()
-    {
         animator.SetBool("IsReeling", false);
     }
 

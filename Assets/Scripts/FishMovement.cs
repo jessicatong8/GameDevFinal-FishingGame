@@ -71,7 +71,7 @@ public class FishMovement : MonoBehaviour
         }
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, direction * 90f, transform.eulerAngles.z); // Flip the fish to face the right direction
 
-        Debug.Log("Target Position: " + targetPosition);
+        // Debug.Log("Target Position: " + targetPosition);
         return targetPosition;
     }
 
@@ -81,7 +81,7 @@ public class FishMovement : MonoBehaviour
 
         if (distanceToTarget <= arrivalThreshold)
         {
-            Debug.Log("Arrived at Target Position: " + targetPosition);
+            // Debug.Log("Arrived at Target Position: " + targetPosition);
             transform.position = targetPosition;
             SetTargetPosition(transform.position);
             return;
