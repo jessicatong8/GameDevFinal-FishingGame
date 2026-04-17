@@ -9,6 +9,8 @@ public class FishMovement : MonoBehaviour
     public static event Action EnteringLineRange;
 
     private Animator animator;
+
+    private Fish fish;
     public FishingManager fishManager;
     private Vector3 position;
     private Vector3 targetPosition;
@@ -31,10 +33,11 @@ public class FishMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        fish = GetComponent<Fish>();
         animator = GetComponent<Animator>();
 
         // FishingManager.OnCast += HandleCast;
-        // FishingManager.OnBite += HandleBite;
+        FishingManager.OnBite += HandleBite;
         // FishingManager.OnReelingActive += HandleReelingActive;
         // FishingManager.OnReelingInactive += HandleReelingInactive;
         // FishingManager.OnCaught += HandleCaught;
@@ -59,7 +62,7 @@ public class FishMovement : MonoBehaviour
 
     public Vector3 SetTargetPosition(Vector3 position)
     {
-        if (position.x <= 0)
+        if (position.x < 0)
         {
             direction = 1; // Move right
             targetPosition = new Vector3(UnityEngine.Random.Range(xLineRightRange, xRightBoundary), position.y, position.z);
@@ -99,6 +102,15 @@ public class FishMovement : MonoBehaviour
         else
         {
             EnteringLineRange?.Invoke();
+        }
+    }
+
+    public void HandleBite()
+    {
+        if (fish.isActive)
+        {
+            transform.position = new Vector3(0, transform.position.y, transform.position.z); // Move the fish to the center of the screen
+            targetPosition = transform.position; // Set the target position to the center as well
         }
     }
 

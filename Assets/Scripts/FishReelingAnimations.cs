@@ -20,6 +20,7 @@ public class FishReelingAnimations : MonoBehaviour
         FishingManager.OnLineBreak += HandleLineBreak;
         FishingManager.OnWiggle += HandleWiggleStart;
         FishingManager.OffWiggle += HandleWiggleEnd;
+        // FishingManager.OnReturnToIdle += HandleReturnToIdle;
 
     }
 
@@ -34,6 +35,7 @@ public class FishReelingAnimations : MonoBehaviour
         if (fish.isActive)
         {
             Debug.Log(fish.name + " has bitten!");
+            animator.SetBool("IsActive", true);
             animator.SetTrigger("Bite");
         }
     }
@@ -67,6 +69,11 @@ public class FishReelingAnimations : MonoBehaviour
     {
         animator.SetBool("IsReeling", false);
     }
+
+    // void HandleReturnToIdle()
+    // {
+    //     animator.SetBool("IsActive", false);
+    // }
 
 
 }
