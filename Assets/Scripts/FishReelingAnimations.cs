@@ -4,11 +4,13 @@ public class FishReelingAnimations : MonoBehaviour
 {
     private Animator animator;
     public FishingManager fishManager;
+    private Fish fish;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         animator = GetComponent<Animator>();
+        fish = GetComponent<Fish>();
 
         // FishingManager.OnCast += HandleCast;
         FishingManager.OnBite += HandleBite;
@@ -29,7 +31,11 @@ public class FishReelingAnimations : MonoBehaviour
 
     void HandleBite()
     {
-        animator.SetTrigger("Bite");
+        if (fish.isActive)
+        {
+            Debug.Log(fish.name + " has bitten!");
+            animator.SetTrigger("Bite");
+        }
     }
 
     void HandleWiggleStart()

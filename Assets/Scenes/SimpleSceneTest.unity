@@ -2720,6 +2720,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fish
   fishName: Anglerfish
+  isActive: 0
   wiggleOnTimer: 3
   wiggleOffTimer: 3
   wiggleStrength: 6
@@ -3428,6 +3429,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fish
   fishName: LionFish
+  isActive: 0
   wiggleOnTimer: 2
   wiggleOffTimer: 2
   wiggleStrength: 10
@@ -3437,7 +3439,7 @@ MonoBehaviour:
   maxTension: 20
   rarity: 0
   dripThreshold: 0
-  swimmingSpeed: 0
+  swimmingSpeed: 8
 --- !u!95 &1652712461
 Animator:
   serializedVersion: 7

@@ -77,6 +77,7 @@ public class FishingManager : MonoBehaviour
     {
         OnCast?.Invoke();
         activeFish = spawner.GetRandomFish();
+        activeFish.isActive = true;
         Debug.Log(activeFish.fishName);
         //call event to trigger casting ui and sound 
         //does this go here or in update
@@ -191,6 +192,7 @@ public class FishingManager : MonoBehaviour
     void AbortFishing()
     {
         currentState = FishingState.Idle;
+        activeFish.isActive = false;
         activeFish = null;
         OnReturnToIdle?.Invoke();
     }

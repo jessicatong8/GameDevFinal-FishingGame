@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 
 public class Fish : MonoBehaviour
 {
     public string fishName;
+    public bool isActive = false;
+
     public float wiggleOnTimer;
     public float wiggleOffTimer;
     public float wiggleStrength;
