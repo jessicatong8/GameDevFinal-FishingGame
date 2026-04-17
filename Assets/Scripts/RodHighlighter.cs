@@ -9,14 +9,14 @@ public class RodHighlighter : MonoBehaviour
     private void OnEnable()
     {
         FishingManager.OnBite += ApplyHighlight;
-        FishingManager.OnReelAttempt += RemoveHighlight;
+        FishingManager.OnHook += RemoveHighlight;
         FishingManager.OnCast += RemoveHighlight;
     }
 
     private void OnDisable()
     {
         FishingManager.OnBite -= ApplyHighlight;
-        FishingManager.OnReelAttempt -= RemoveHighlight;
+        FishingManager.OnHook -= RemoveHighlight;
         FishingManager.OnCast -= RemoveHighlight;
     }
 

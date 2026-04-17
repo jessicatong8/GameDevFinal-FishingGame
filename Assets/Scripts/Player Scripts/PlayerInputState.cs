@@ -18,7 +18,7 @@ public class PlayerInputState : MonoBehaviour
 
     public event Action InteractPerformed;
     public event Action JumpPerformed;
-    public event Action ReelPerformed;
+    public event Action HookPerformed;
     public event Action MashPerformed;
     public event Action AbortPerformed;
 
@@ -30,34 +30,50 @@ public class PlayerInputState : MonoBehaviour
     }
     public void SetState(InputStates state)
     {
-        Debug.Log($"Input state changed to: {state}");
+        Debug.Log($"PlayerInputState: Switching to state: {currentState}");
         currentState = state;
         ClearInputs();
+        if (state == InputStates.Gameplay)
+        {
+            GetComponent<PlayerMovement>().enabled = true;
+            GetComponent<PlayerFishing>().enabled = false;
+            // GetComponent<PlayerMenu>().enabled = false;
+        }
+        else if (state == InputStates.Fishing)
+        {
+            GetComponent<PlayerMovement>().enabled = false;
+            GetComponent<PlayerFishing>().enabled = true;
+            // GetComponent<PlayerMenu>().enabled = false;
+        }
+        // else if (state == InputStates.Menu)
+        // {
+        //     GetComponent<PlayerMovement>().enabled = false;
+        //     GetComponent<PlayerFishing>().enabled = false;
+        //     // GetComponent<PlayerMenu>().enabled = true;
+        // }
+    }
+    public InputStates GetCurrentInputState()
+    {
+        return currentState;
     }
 
     public void OnMove(InputValue value)
     {
-        if (currentState != InputStates.Gameplay)
-        {
-            return;
-        }
+        if (currentState != InputStates.Gameplay) { return; }
 
         MovementInputData = value.Get<Vector2>();
     }
 
     public void OnLook(InputValue value)
     {
-        if (currentState != InputStates.Gameplay && currentState != InputStates.Fishing)
-        {
-            return;
-        }
+        if (currentState != InputStates.Gameplay && currentState != InputStates.Fishing) { return; }
 
         LookInputData = value.Get<Vector2>();
     }
 
     public void OnZoomScroll(InputValue value)
     {
-        // if (currentState == InputStates.Menu) { return; }
+        // if (currentState != InputStates.Menu) { return; }
         ZoomInputData = value.Get<Vector2>().y;
     }
 
@@ -78,11 +94,9 @@ public class PlayerInputState : MonoBehaviour
 
     public void OnInteract(InputValue value)
     {
-        if (!value.isPressed)
-        {
-            // Debug.Log("Interact input ignored. Current state: " + currentState + ", Value pressed: " + value.isPressed);
-            return;
-        }
+        // For one off actions
+        if (!value.isPressed) { return; }
+
         if (currentState == InputStates.Gameplay)
         {
             Debug.Log("Fishing Started");
@@ -91,46 +105,53 @@ public class PlayerInputState : MonoBehaviour
         if (currentState == InputStates.Fishing)
         {
             Debug.Log("Casting Started");
-            ReelPerformed?.Invoke();
+            HookPerformed?.Invoke();
         }
     }
 
     public void OnJump(InputValue value)
     {
-        if (currentState != InputStates.Gameplay || !value.isPressed)
+        if (!value.isPressed) { return; }
+
+        if (currentState != InputStates.Gameplay)
         {
+            // Debug.Log("Wrong state for jump input. Current state: " + currentState);
             return;
         }
         JumpPerformed?.Invoke();
     }
 
-    public void OnReel(InputValue value)
+    public void OnHook(InputValue value)
     {
-        if (currentState != InputStates.Fishing || !value.isPressed)
+        if (!value.isPressed) { return; }
+
+        if (currentState != InputStates.Fishing)
         {
-            Debug.Log("PlayerInputState: Reel input ignored. Current state: " + currentState + ", Value pressed: " + value.isPressed);
+            // Debug.Log("Wrong state for hook input. Current state: " + currentState);
             return;
         }
-
-        ReelPerformed?.Invoke();
+        HookPerformed?.Invoke();
     }
 
     public void OnMash(InputValue value)
     {
-        if (currentState != InputStates.Fishing || !value.isPressed)
+        if (!value.isPressed) { return; }
+
+        if (currentState != InputStates.Fishing)
         {
-            Debug.Log("PlayerInputState: Mash input ignored. Current state: " + currentState + ", Value pressed: " + value.isPressed);
+            // Debug.Log("Wrong state for mash input. Current state: " + currentState);
             return;
         }
-
         MashPerformed?.Invoke();
     }
 
     public void OnAbort(InputValue value)
     {
-        if (currentState != InputStates.Fishing || !value.isPressed)
+        if (!value.isPressed) { return; }
+
+        if (currentState != InputStates.Fishing)
         {
-            Debug.Log("PlayerInputState: Abort input ignored. Current state: " + currentState + ", Value pressed: " + value.isPressed);
+            // Debug.Log("Wrong state for abort input. Current state: " + currentState);
             return;
         }
 

@@ -8,15 +8,20 @@ public class FishingManager : MonoBehaviour
     * Order of events during fishing sequence:
     * OnCast (on player pressing space to cast)
     * OnBite (player waits for random time -> gets bite)
-    * OnReelAttempt (player has short window to press reel button to start reeling)
-    * NoFishInSpot (if player tries to cast but there is no fish in the area)
-    * DripTooLow (if player tries to cast but doesn't have enough "drip" to catch the fish in the area)
+    * OnHook (player has short window to press hook button to start reeling)
+    * -- NoFishInSpot (if player tries to cast but there is no fish in the area)
+    * -- DripTooLow (if player tries to cast but doesn't have enough "drip" to catch the fish in the area)
+    * OnReeling (while player is reeling/mashing, progress and tension events will be fired to update UI)
+        * Player will mash + arrow keys
+        * CurrentProgressUpdated (float value between 0-100 indicating how close player is to catching the fish)
+        * CurrentTensionUpdated (float value indicating current tension level of the line)
+        * MaxTensionUpdated (float value indicating max tension level before line breaks - this is a property of the fish being caught)
     * OnCaught (if player successfully reels to 100% progress)
     * OnLineBreak (if tension reaches max tension)
     **/
     public static event Action OnCast;
     public static event Action OnBite;
-    public static event Action OnReelAttempt;
+    public static event Action OnHook;
     public static event Action NoFishInSpot;
     public static event Action DripTooLow; // when player doesn't have enough "drip" to catch the fish in the area
     public static event Action OnCaught;
@@ -24,9 +29,9 @@ public class FishingManager : MonoBehaviour
     public static event Action OnReturnToIdle;
     public static event Action<float> CurrentProgressUpdated; // for updating progress bar during reeling
     public static event Action<float> CurrentTensionUpdated; // for updating tension bar during reeling
-    public static event Action<float> MaxTensionUpdated; // 
+    public static event Action<float> MaxTensionUpdated; // not used until multiple fish implemented
     public float hookTimer;
-    
+
     public enum FishingState
     {
         Idle,
@@ -35,7 +40,6 @@ public class FishingManager : MonoBehaviour
         Reeling
     }
     [SerializeField] private PlayerInputState inputState;
-    [Header("Fish Selection")]
     [SerializeField] private bool bypassCastingManager = true;
     [SerializeField] private Fish fallbackFish;
     public CastingManager castingManager;
@@ -46,14 +50,10 @@ public class FishingManager : MonoBehaviour
     private float timer;
     private Fish activeFish;
     public int currentDrip; // will get from player or overarching score
-    private bool isPlayerOnDock = false;
     private bool mashTriggeredThisFrame;
 
     private void OnEnable()
     {
-        FishingAreaTrigger.OnPlayerEnterFishingArea += SetFishingAreaStatus;
-        FishingAreaTrigger.OnPlayerExitFishingArea += SetFishingAreaStatus;
-
         if (inputState == null)
         {
             Debug.LogError("FishingManager: No PlayerInputState reference assigned in inspector.");
@@ -61,7 +61,7 @@ public class FishingManager : MonoBehaviour
 
         if (inputState != null)
         {
-            inputState.ReelPerformed += HandleReelPerformed;
+            inputState.HookPerformed += HandleHookPerformed;
             inputState.MashPerformed += HandleMashPerformed;
             inputState.AbortPerformed += HandleAbortPerformed;
         }
@@ -69,25 +69,19 @@ public class FishingManager : MonoBehaviour
 
     private void OnDisable()
     {
-        FishingAreaTrigger.OnPlayerEnterFishingArea -= SetFishingAreaStatus;
-        FishingAreaTrigger.OnPlayerExitFishingArea -= SetFishingAreaStatus;
-
         if (inputState != null)
         {
-            inputState.ReelPerformed -= HandleReelPerformed;
+            inputState.HookPerformed -= HandleHookPerformed;
             inputState.MashPerformed -= HandleMashPerformed;
             inputState.AbortPerformed -= HandleAbortPerformed;
         }
     }
 
-    private void HandleReelPerformed()
+    private void HandleHookPerformed()
     {
-        if (currentState != FishingState.HookWindow)
-        {
-            return;
-        }
+        if (currentState != FishingState.HookWindow) { return; }
 
-        OnReelAttempt?.Invoke();
+        OnHook?.Invoke();
         StartReeling();
     }
 
@@ -105,10 +99,6 @@ public class FishingManager : MonoBehaviour
         {
             AbortFishing();
         }
-    }
-
-    private void SetFishingAreaStatus(bool isInFishingArea){
-        isPlayerOnDock = isInFishingArea;
     }
 
     void Update()
@@ -134,36 +124,26 @@ public class FishingManager : MonoBehaviour
         mashTriggeredThisFrame = false;
     }
 
+    // 
     public bool TryStartFishing()
     {
         if (!IsPlayerOnDock() || currentState != FishingState.Idle)
         {
-            Debug.Log("Cannot start fishing. IsPlayerOnDock: " + isPlayerOnDock + ", CurrentState: " + currentState);
+            Debug.Log("FishingManager: Cannot start fishing. IsPlayerOnDock: " + FishingAreaTrigger.IsPlayerInFishingArea + ", CurrentState: " + currentState);
             return false;
         }
-
+        
         return StartWaiting();
     }
 
     private bool IsPlayerOnDock()
     {
-        if (FishingAreaTrigger.IsPlayerInFishingArea)
-        {
-            isPlayerOnDock = true;
-            return true;
-        }
-
-        if (isPlayerOnDock)
-        {
-            return true;
-        }
-
-        return false;
+        return FishingAreaTrigger.IsPlayerInFishingArea;
     }
 
     bool StartWaiting()
     {
-        activeFish = ResolveFishForCast();
+        activeFish = CastingManagerBypassFish();
         if (activeFish == null)
         {
             NoFishInSpot?.Invoke();
@@ -178,13 +158,15 @@ public class FishingManager : MonoBehaviour
 
         OnCast?.Invoke();
 
+        Debug.Log("Currently waiting to get a bite from the fish: " + activeFish.fishName);
         currentState = FishingState.Waiting;
         timer = UnityEngine.Random.Range(2f, 5f);
         return true;
     }
 
-    private Fish ResolveFishForCast()
+    private Fish CastingManagerBypassFish()
     {
+        // Using CastingManager 
         if (!bypassCastingManager && castingManager != null)
         {
             Fish detectedFish = castingManager.GetFishInArea();
@@ -194,27 +176,11 @@ public class FishingManager : MonoBehaviour
             }
         }
 
+        // Bypassing CastingManager
         if (fallbackFish != null)
         {
             return fallbackFish;
         }
-
-        Fish[] availableFish;
-    #if UNITY_2023_1_OR_NEWER
-        availableFish = FindObjectsByType<Fish>(FindObjectsSortMode.None);
-    #else
-        availableFish = FindObjectsOfType<Fish>();
-    #endif
-        if (availableFish.Length > 0)
-        {
-            return availableFish[UnityEngine.Random.Range(0, availableFish.Length)];
-        }
-
-        if (castingManager != null)
-        {
-            return castingManager.GetFishInArea();
-        }
-
         return null;
     }
 
@@ -298,6 +264,7 @@ public class FishingManager : MonoBehaviour
         CurrentTensionUpdated?.Invoke(0f);
         MaxTensionUpdated?.Invoke(0f);
         OnReturnToIdle?.Invoke();
+        Debug.Log("Fishing sequence aborted. Returning to idle state.");
     }
 
 }

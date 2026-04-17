@@ -14,7 +14,7 @@ public class BasicUI : MonoBehaviour
     {
         FishingManager.OnCast += HandleCast;
         FishingManager.OnBite += HandleBite;
-        FishingManager.OnReelAttempt += HandleReel;
+        FishingManager.OnHook += HandleReel;
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnLineBreak += HandleLineBreak;
 
@@ -27,7 +27,7 @@ public class BasicUI : MonoBehaviour
     {
         FishingManager.OnCast -= HandleCast;
         FishingManager.OnBite -= HandleBite;
-        FishingManager.OnReelAttempt -= HandleReel;
+        FishingManager.OnHook -= HandleReel;
         FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnLineBreak -= HandleLineBreak;
         FishingManager.CurrentProgressUpdated -= UpdateProgressSlider;

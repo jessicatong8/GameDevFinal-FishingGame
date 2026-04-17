@@ -1,35 +1,28 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInputState))]
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Camera Reference")]
     public Transform cameraTransform;
-    public CharacterController characterController;
-
-    [Header("Input")]
-    private PlayerInputState inputStateScript;
-
     [Header("Movement Settings")]
     public float movementSpeed = 12f;
     public float jumpForce = 1.2f;
     public float gravity = -20f;
-
+    [SerializeField] private float rotationSharpness = 12f;
+    private CharacterController characterController;
+    private PlayerInputState inputStateScript;
     private float verticalVelocity;
     private bool jumpRequested;
+    private Vector3 lastMoveDirection = Vector3.forward;
 
     private void Awake()
     {
-        if (characterController == null)
-        {
-            characterController = GetComponent<CharacterController>();
-        }
-
-        if (inputStateScript == null)
-        {
-            inputStateScript = GetComponent<PlayerInputState>();
-        }
+        characterController = GetComponent<CharacterController>();
+        inputStateScript = GetComponent<PlayerInputState>();
     }
 
     private void Start()
@@ -38,7 +31,6 @@ public class PlayerMovement : MonoBehaviour
         {
             cameraTransform = Camera.main.transform;
         }
-
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -46,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (inputStateScript != null)
         {
-            inputStateScript.JumpPerformed += HandleJumpPerformed;
+            // inputStateScript.JumpPerformed += HandleJumpPerformed;
         }
     }
 
@@ -74,11 +66,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (inputStateScript.CurrentState != PlayerInputState.InputStates.Gameplay)
         {
+            // disable script when 
             return;
         }
 
+        // constantly read movement input from player input state
         Vector2 moveInput = inputStateScript.MovementInputData;
 
+        // constantly read camera movement input from player input state
         Vector3 cameraRight = cameraTransform.right;
         cameraRight.y = 0f;
         cameraRight.Normalize();
@@ -86,7 +81,16 @@ public class PlayerMovement : MonoBehaviour
         Vector3 cameraForward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up);
         cameraForward.Normalize();
 
-        Vector3 horizontalVelocity = (cameraRight * moveInput.x + cameraForward * moveInput.y) * movementSpeed;
+        Vector3 moveDirection = cameraRight * moveInput.x + cameraForward * moveInput.y;
+        if (moveDirection.sqrMagnitude > 0.0001f)
+        {
+            lastMoveDirection = moveDirection.normalized;
+        }
+
+        Quaternion targetRotation = Quaternion.LookRotation(lastMoveDirection, Vector3.up);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSharpness * Time.deltaTime);
+
+        Vector3 horizontalVelocity = moveDirection * movementSpeed;
 
         if (characterController.isGrounded && verticalVelocity < 0f)
         {

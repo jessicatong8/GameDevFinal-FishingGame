@@ -11,16 +11,14 @@ public class FishReelingAnimations : MonoBehaviour
         animator = GetComponent<Animator>();
 
         FishingManager.OnBite += HandleBite;
-        FishingManager.OnReelAttempt += HandleReelAttempt;
+        FishingManager.OnHook += HandleReelAttempt;
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnLineBreak += HandleLineBreak;
 
     }
 
-    // Update is called once per frame
     void Update()
     {
-
     }
 
     void HandleBite()

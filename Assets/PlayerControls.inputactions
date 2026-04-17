@@ -43,6 +43,24 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Reel Left",
+                    "type": "Button",
+                    "id": "9cc36fde-9752-4dbe-97a1-4745744ffb7e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Reel Right",
+                    "type": "Button",
+                    "id": "a3875d6f-9011-4677-9a2d-2f3a20b29a27",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Menu",
                     "type": "Button",
                     "id": "b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba",
@@ -290,6 +308,28 @@
                     "action": "ZoomToggle",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "62d72d31-56bf-4ee5-b108-be1fcafcd3e2",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reel Left",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8cd711b9-17d1-4025-96d1-7ea35ef40fd9",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reel Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -298,18 +338,18 @@
             "id": "04503995-b7b6-4091-806a-073d974c201c",
             "actions": [
                 {
-                    "name": "Mash",
+                    "name": "Hook",
                     "type": "Button",
-                    "id": "9634e4d5-2637-44a0-9d85-b8884702820b",
+                    "id": "04c2ae11-f464-488c-89fe-b03201a38a75",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Reel",
+                    "name": "Mash",
                     "type": "Button",
-                    "id": "04c2ae11-f464-488c-89fe-b03201a38a75",
+                    "id": "9634e4d5-2637-44a0-9d85-b8884702820b",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -328,67 +368,12 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "7c1e38e9-95e6-4d78-a74b-2e2a1249ea53",
-                    "path": "<Gamepad>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Reel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "cacbf8bb-21b1-4019-ba4d-cc0f865cdc93",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Reel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9dfbd04a-391f-4f60-a8e4-25d94fad4975",
-                    "path": "<Touchscreen>/primaryTouch/tap",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Touch",
-                    "action": "Reel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "4b1ef58d-8fd4-41f8-ba6c-3b94547741d7",
-                    "path": "<Joystick>/trigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Joystick",
-                    "action": "Reel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "465ea9d9-88f0-4361-8be9-3d1a9e029145",
-                    "path": "<XRController>/{PrimaryAction}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "XR",
-                    "action": "Reel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "8cdb0c58-4faa-4e41-97c7-0774028f110c",
-                    "path": "<Keyboard>/enter",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Reel",
+                    "action": "Hook",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -410,28 +395,6 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Mash",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9f5ca0cf-4f74-4843-8746-475a5691eda3",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Mash",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "30622142-1867-4f45-8d62-aa4e61671964",
-                    "path": "<XRController>/secondaryButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "XR",
                     "action": "Mash",
                     "isComposite": false,
                     "isPartOfComposite": false

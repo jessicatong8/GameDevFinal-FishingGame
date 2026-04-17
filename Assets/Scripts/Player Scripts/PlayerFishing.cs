@@ -5,115 +5,40 @@ using UnityEngine;
 public class PlayerFishing : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Animator animator;
-    [SerializeField] private GameObject fishingRod;
-    [SerializeField] private GameObject fishingLineObject;
-    [SerializeField] private GameObject fishingHookObject;
-    [SerializeField] private VerletLine fishingLine;
-    [SerializeField] private PlayerMovement playerMovement;
+    private PlayerMovement playerMovement;
+    private PlayerInputState inputState;
+    private Animator animator;
     [SerializeField] private FishingManager fishingManager;
-    [SerializeField] private PlayerInputState inputState;
+    [SerializeField] private FishingRig fishingRig;
 
-    public bool IsFishing { get; private set; }
+    [Header("Rig Migration (Optional)")]
+    [SerializeField] private GameObject fishingRodAssembly;
+    [SerializeField] private string fishingLineChildPath = "Line";
+    [SerializeField] private string fishingHookChildPath = "Hook";
+
+    public bool IsFishing;
     private bool alreadyCast;
-
-    private bool CanUseAnimator => animator != null && animator.runtimeAnimatorController != null && animator.isActiveAndEnabled;
 
     private void Awake()
     {
-        if (animator == null)
-        {
-            animator = GetComponentInChildren<Animator>();
-        }
+        playerMovement = GetComponent<PlayerMovement>();
+        inputState = GetComponent<PlayerInputState>();
 
-        if (fishingLine == null)
-        {
-            fishingLine = GetComponentInChildren<VerletLine>(true);
-        }
-
-        if (playerMovement == null)
-        {
-            playerMovement = GetComponent<PlayerMovement>();
-        }
-
-        if (fishingManager == null)
-        {
-            fishingManager = GetComponent<FishingManager>();
-        }
-
-        if (inputState == null)
-        {
-            inputState = GetComponent<PlayerInputState>();
-        }
-
-        if (!EnsureAnimatorReference())
-        {
-            Debug.LogWarning("PlayerFishing: No valid Animator with a controller was found on player visuals. Fishing animation parameters will be ignored until one is assigned.");
-        }
-    }
-
-    private bool EnsureAnimatorReference()
-    {
-        if (CanUseAnimator)
-        {
-            return true;
-        }
-
-        Animator[] childAnimators = GetComponentsInChildren<Animator>(true);
-        Animator fallbackAnimator = null;
-        for (int i = 0; i < childAnimators.Length; i++)
-        {
-            Animator candidate = childAnimators[i];
-            if (candidate == null || candidate.runtimeAnimatorController == null)
-            {
-                continue;
-            }
-
-            if (candidate.isActiveAndEnabled)
-            {
-                animator = candidate;
-                return true;
-            }
-
-            if (fallbackAnimator == null)
-            {
-                fallbackAnimator = candidate;
-            }
-        }
-
-        if (fallbackAnimator != null)
-        {
-            animator = fallbackAnimator;
-            return true;
-        }
-
-        animator = null;
-        return false;
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
     {
-        if (inputState == null)
-        {
-            Debug.LogWarning("PlayerFishing requires a PlayerInputState component on the same object.");
-            enabled = false;
-            return;
-        }
-
         inputState.SetState(PlayerInputState.InputStates.Gameplay);
-        Debug.Log("PlayerFishing initialized. Starting in Gameplay state.");
+        // Debug.Log("PlayerFishing: Starting in Gameplay state.");
         SetFishingState(false);
     }
 
     private void OnEnable()
     {
-        if (inputState != null)
-        {
-            
-            inputState.InteractPerformed += HandleInteract;
-        }
+        inputState.InteractPerformed += HandleInteract;
 
-        FishingManager.OnReelAttempt += BeginReel;
+        FishingManager.OnHook += BeginReeling;
         FishingManager.OnReturnToIdle += HandleFishingEnded;
     }
 
@@ -124,15 +49,15 @@ public class PlayerFishing : MonoBehaviour
             inputState.InteractPerformed -= HandleInteract;
         }
 
-        FishingManager.OnReelAttempt -= BeginReel;
+        FishingManager.OnHook -= BeginReeling;
         FishingManager.OnReturnToIdle -= HandleFishingEnded;
     }
 
     private void HandleInteract()
     {
-        if (!IsFishing)
+        if (!inputState.GetCurrentInputState().Equals(PlayerInputState.InputStates.Fishing))
         {
-            if (fishingManager != null && !fishingManager.TryStartFishing())
+            if (!fishingManager.TryStartFishing())
             {
                 Debug.Log("Cannot start fishing: start conditions were not met.");
                 return;
@@ -153,70 +78,43 @@ public class PlayerFishing : MonoBehaviour
 
     private void BeginCast()
     {
-        if (EnsureAnimatorReference())
-        {
-            animator.SetTrigger("cast");
-        }
-
-        fishingLine?.TriggerCast();
+        animator?.SetTrigger("cast");
+        fishingRig?.TriggerCast();
         alreadyCast = true;
     }
 
-    private void BeginReel()
+    // Begin Reeling/Mashing Process
+    private void BeginReeling()
     {
-        if (EnsureAnimatorReference())
-        {
-            animator.SetTrigger("reel");
-        }
-
-        fishingLine?.TriggerReel();
+        animator?.SetTrigger("reel");
+        fishingRig?.TriggerReel();
     }
 
     private void HandleFishingEnded()
     {
-        if (!IsFishing)
-        {
-            return;
-        }
-
+        if (!IsFishing) { return; }
         SetFishingState(false);
     }
 
-    private void SetFishingState(bool active)
+    private void SetFishingState(bool fishingActive)
     {
-        IsFishing = active;
-        inputState.SetState(active ? PlayerInputState.InputStates.Fishing : PlayerInputState.InputStates.Gameplay);
+        IsFishing = fishingActive;
 
-        if (!active)
+        // Set player input state to fishing mode
+        inputState.SetState(fishingActive ? PlayerInputState.InputStates.Fishing : PlayerInputState.InputStates.Gameplay);
+
+        // animator parameter for idle/fishing animation transition
+        animator?.SetBool("startFishing", fishingActive);
+
+        // enable/disable fishing visuals and player movement
+        fishingRig?.SetActive(fishingActive);
+
+        // enable/disable 
+        playerMovement.enabled = !fishingActive;
+
+        if (!fishingActive)
         {
             alreadyCast = false;
-        }
-
-        if (EnsureAnimatorReference())
-        {
-            animator.SetBool("startFishing", active);
-        }
-
-        if (fishingRod != null)
-        {
-            fishingRod.SetActive(active);
-        }
-
-        if (fishingLineObject != null)
-        {
-            fishingLineObject.SetActive(active);
-        }
-
-        if (fishingHookObject != null)
-        {
-            fishingHookObject.SetActive(active);
-        }
-
-        fishingLine?.SetEquippedFromController(active);
-
-        if (playerMovement != null)
-        {
-            playerMovement.enabled = !active;
         }
     }
 }
