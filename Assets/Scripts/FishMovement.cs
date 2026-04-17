@@ -7,8 +7,8 @@ public class FishMovement : MonoBehaviour
     // will likely have to adjust these based on the camera view 
     public float xLeftBoundary = -15f;
     public float xRightBoundary = 15f;
-    public float outerLineRange = 8f;
-    public float innerLineRange = 5f;
+    public float outerLineRange = 12f;
+    public float innerLineRange = 6f;
     public float arrivalThreshold = 0.1f;
     public float idleSwimmingSpeed = 2f;
 
@@ -78,13 +78,13 @@ public class FishMovement : MonoBehaviour
 
     private void HandleIdleMovement()
     {
-        Debug.Log("Idle Movement");
+        // Debug.Log("Idle Movement");
         SwimTowardTarget(idleSwimmingSpeed);
     }
 
     private void HandleCastingMovement()
     {
-        Debug.Log("Casting Movement");
+        // Debug.Log("Casting Movement");
         if (fish.isActive)
         {
             transform.position = new Vector3(0, transform.position.y, transform.position.z); // Move the fish to the center of the screen
@@ -93,14 +93,14 @@ public class FishMovement : MonoBehaviour
     }
     private void HandleReelingMovement()
     {
-        Debug.Log("Reeling Movement");
+        // Debug.Log("Reeling Movement");
         SwimTowardTarget(reelingSwimmingSpeed);
         // TODO: functions to check for range
     }
 
     private void HandleCaughtMovement()
     {
-        Debug.Log("Caught Movement");
+        // Debug.Log("Caught Movement");
         transform.position = new Vector3(0, transform.position.y, transform.position.z); // Move the fish to the center of the screen
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, 180, transform.eulerAngles.z); // Face the fish forward
         // TODO - make it fly out of the water or add some sort of celebration animation or effect here
@@ -117,7 +117,7 @@ public class FishMovement : MonoBehaviour
 
     private void HandleEscapedMovement()
     {
-        Debug.Log("Escaped Movement");
+        // Debug.Log("Escaped Movement");
         SetTargetPosition(transform.position); // Set a new target position to swim towards
         currentState = FishingState.Idle; // Switch back to idle state to swim towards the new target position
     }
@@ -156,17 +156,5 @@ public class FishMovement : MonoBehaviour
         // TODO - ease in and out tweening for more natural movement
     }
 
-    public bool CheckInLineRange()
-    {
-        if (transform.position.x < -outerLineRange || transform.position.x > outerLineRange)
-        {
-            Debug.Log("Fish is out of line range!");
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
 
 }

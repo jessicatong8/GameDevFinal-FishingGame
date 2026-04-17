@@ -14,6 +14,10 @@ public class FishingManager : MonoBehaviour
     public static event Action OnWiggle; //should this be an event?
     public static event Action OffWiggle; //should this be an event too
 
+    public static event Action ExitingLeftLineRange;
+    public static event Action ExitingRightLineRange;
+    public static event Action InRange;
+
     public static event Action OnCaught;
     public static event Action OnEscaped;
     public static event Action OnReturnToIdle;
@@ -165,6 +169,29 @@ public class FishingManager : MonoBehaviour
             //go back to idle
         }
 
+        FishInLineRange.LineState currentLineState = activeFish.GetComponent<FishInLineRange>().CheckLineState();
+        if (currentLineState == FishInLineRange.LineState.OutOfLeftRange || currentLineState == FishInLineRange.LineState.OutOfRightRange)
+        {
+            Debug.Log("Fish is out of line range!");
+            OnEscaped?.Invoke();
+            AbortFishing();
+        }
+        else if (currentLineState == FishInLineRange.LineState.ExitingLeftRange)
+        {
+            Debug.Log("Fish is exiting left range, press right arrow to reel it back in!");
+            ExitingLeftLineRange?.Invoke();
+        }
+        else if (currentLineState == FishInLineRange.LineState.ExitingRightRange)
+        {
+            Debug.Log("Fish is exiting right range, press left arrow to reel it back in!");
+            ExitingRightLineRange?.Invoke();
+        }
+        else if (currentLineState == FishInLineRange.LineState.InRange)
+        {
+            Debug.Log("Fish is in range, keep reeling!");
+            InRange?.Invoke();
+            //maybe we want an event here to reset the line range ui back to normal if the fish goes back into range?
+        }
 
     }
 
