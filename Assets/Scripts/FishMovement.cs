@@ -7,7 +7,8 @@ public class FishMovement : MonoBehaviour
     // will likely have to adjust these based on the camera view 
     public float xLeftBoundary = -15f;
     public float xRightBoundary = 15f;
-    public float lineRange = 5f;
+    public float outerLineRange = 8f;
+    public float innerLineRange = 5f;
     public float arrivalThreshold = 0.1f;
     public float idleSwimmingSpeed = 2f;
 
@@ -126,12 +127,12 @@ public class FishMovement : MonoBehaviour
         if (position.x < 0)
         {
             direction = 1; // Move right
-            targetPosition = new Vector3(UnityEngine.Random.Range(lineRange, xRightBoundary), position.y, position.z);
+            targetPosition = new Vector3(UnityEngine.Random.Range(outerLineRange, xRightBoundary), position.y, position.z);
         }
         else if (position.x > 0)
         {
             direction = -1; // Move left
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLeftBoundary, -lineRange), position.y, position.z);
+            targetPosition = new Vector3(UnityEngine.Random.Range(xLeftBoundary, -outerLineRange), position.y, position.z);
         }
         Debug.Log("Target Position: " + targetPosition);
         return targetPosition;
@@ -157,8 +158,9 @@ public class FishMovement : MonoBehaviour
 
     public bool CheckInLineRange()
     {
-        if (transform.position.x < -lineRange || transform.position.x > lineRange)
+        if (transform.position.x < -outerLineRange || transform.position.x > outerLineRange)
         {
+            Debug.Log("Fish is out of line range!");
             return false;
         }
         else
