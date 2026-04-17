@@ -14,9 +14,9 @@ public class BasicUI : MonoBehaviour
     {
         FishingManager.OnCast += HandleCast;
         FishingManager.OnBite += HandleBite;
-        FishingManager.OnHook += HandleReel;
+        FishingManager.OnHooked += HandleReel;
         FishingManager.OnCaught += HandleCaught;
-        FishingManager.OnLineBreak += HandleLineBreak;
+        FishingManager.OnEscaped += HandleLineBreak;
         FishingManager.OnWiggle += HandleWiggle;
         FishingManager.OffWiggle += HandleWiggleEnd;
 
@@ -28,9 +28,9 @@ public class BasicUI : MonoBehaviour
     {
         FishingManager.OnCast -= HandleCast;
         FishingManager.OnBite -= HandleBite;
-        FishingManager.OnHook -= HandleReel;
+        FishingManager.OnHooked -= HandleReel;
         FishingManager.OnCaught -= HandleCaught;
-        FishingManager.OnLineBreak -= HandleLineBreak;
+        FishingManager.OnEscaped -= HandleLineBreak;
         FishingManager.OnWiggle -= HandleWiggle;
         FishingManager.OffWiggle -= HandleWiggleEnd;
         FishingManager.OnProgressUpdated -= UpdateProgressSlider;

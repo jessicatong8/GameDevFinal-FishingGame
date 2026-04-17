@@ -17,7 +17,7 @@ public class FishReelingAnimations : MonoBehaviour
         FishingManager.OnReelingActive += HandleReelingActive;
         FishingManager.OnReelingInactive += HandleReelingInactive;
         FishingManager.OnCaught += HandleCaught;
-        FishingManager.OnLineBreak += HandleLineBreak;
+        FishingManager.OnEscaped += HandleLineBreak;
         FishingManager.OnWiggle += HandleWiggleStart;
         FishingManager.OffWiggle += HandleWiggleEnd;
         // FishingManager.OnReturnToIdle += HandleReturnToIdle;

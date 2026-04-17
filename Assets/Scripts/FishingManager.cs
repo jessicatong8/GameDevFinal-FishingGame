@@ -8,14 +8,14 @@ public class FishingManager : MonoBehaviour
     //make events for future ui and audio 
     public static event Action OnCast;
     public static event Action OnBite;
-    public static event Action OnHook;
+    public static event Action OnHooked;
     public static event Action OnReelingActive;
     public static event Action OnReelingInactive;
     public static event Action OnWiggle; //should this be an event?
     public static event Action OffWiggle; //should this be an event too
 
     public static event Action OnCaught;
-    public static event Action OnLineBreak;
+    public static event Action OnEscaped;
     public static event Action OnReturnToIdle;
 
     //maybe change getters at bottom to events like this 
@@ -105,7 +105,7 @@ public class FishingManager : MonoBehaviour
         timer -= Time.deltaTime;
         if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
-            OnHook?.Invoke(); //change ui to reflecting reeling state
+            OnHooked?.Invoke(); //change ui to reflecting reeling state
             StartReeling();
         }
         else if (timer <= 0)
@@ -160,7 +160,7 @@ public class FishingManager : MonoBehaviour
         }
         if (tension >= activeFish.maxTension)
         {
-            OnLineBreak?.Invoke();
+            OnEscaped?.Invoke();
             AbortFishing();
             //go back to idle
         }
