@@ -8,7 +8,7 @@ public class FishingManager : MonoBehaviour
     //make events for future ui and audio 
     public static event Action OnCast;
     public static event Action OnBite;
-    public static event Action OnReel;
+    public static event Action OnHook;
     public static event Action OnReelingActive;
     public static event Action OnReelingInactive;
     public static event Action OnWiggle; //should this be an event?
@@ -23,7 +23,7 @@ public class FishingManager : MonoBehaviour
     public static event Action<float> OnTensionUpdated;
 
     public FishSpawner spawner;
-    private Fish activeFish;
+    public Fish activeFish;
     public float hookTimer;
     // 
     public enum FishingState
@@ -105,7 +105,7 @@ public class FishingManager : MonoBehaviour
         timer -= Time.deltaTime;
         if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
-            OnReel?.Invoke(); //change ui to reflecting reeling state
+            OnHook?.Invoke(); //change ui to reflecting reeling state
             StartReeling();
         }
         else if (timer <= 0)

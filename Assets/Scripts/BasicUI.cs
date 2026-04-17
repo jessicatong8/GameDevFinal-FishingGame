@@ -1,20 +1,20 @@
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 using TMPro;
 
 public class BasicUI : MonoBehaviour
 {
     public FishingManager fishManager;
-    
+
     public Slider progressSlider;
     public Slider tensionSlider;
-    public TextMeshProUGUI alertText; 
+    public TextMeshProUGUI alertText;
 
     void OnEnable()
     {
         FishingManager.OnCast += HandleCast;
         FishingManager.OnBite += HandleBite;
-        FishingManager.OnReel += HandleReel;
+        FishingManager.OnHook += HandleReel;
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnLineBreak += HandleLineBreak;
         FishingManager.OnWiggle += HandleWiggle;
@@ -28,7 +28,7 @@ public class BasicUI : MonoBehaviour
     {
         FishingManager.OnCast -= HandleCast;
         FishingManager.OnBite -= HandleBite;
-        FishingManager.OnReel -= HandleReel;
+        FishingManager.OnHook -= HandleReel;
         FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnLineBreak -= HandleLineBreak;
         FishingManager.OnWiggle -= HandleWiggle;
