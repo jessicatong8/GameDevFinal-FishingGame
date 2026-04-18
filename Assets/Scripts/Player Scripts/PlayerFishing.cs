@@ -48,11 +48,11 @@ public class PlayerFishing : MonoBehaviour
 
     private void HandleInteract()
     {
-        Debug.Log("HandleInteract called. Current input state: " + inputState.CurrentState);
-        if (inputState.GetCurrentInputState().Equals(PlayerInputState.InputStates.Fishing))
-        {
-            return;
-        }
+        // Debug.Log("HandleInteract called. Current input state: " + inputState.CurrentState);
+        // if (inputState.GetCurrentInputState().Equals(PlayerInputState.InputStates.Fishing))
+        // {
+        //     return;
+        // }
 
         if (!fishingManager.TryStartFishing())
         {
@@ -66,7 +66,7 @@ public class PlayerFishing : MonoBehaviour
 
     private void BeginCast()
     {
-        animator?.SetTrigger("cast"); 
+        animator?.SetTrigger("cast");
         fishingRig?.TriggerCast();
         lineCasted = true;
     }
@@ -80,7 +80,11 @@ public class PlayerFishing : MonoBehaviour
 
     private void HandleFishingEnded()
     {
-        if (!IsFishing) { return; }
+        if (!IsFishing)
+        {
+            Debug.LogWarning("HandleFishingEnded called but player is not in fishing state.");
+            return;
+        }
         SetFishingState(false);
     }
 
@@ -97,9 +101,10 @@ public class PlayerFishing : MonoBehaviour
         // enable/disable fishing visuals and player movement
         fishingRig?.SetActive(fishingActive);
 
-        // enable/disable 
+        // if fishing -> movement disabled, if not fishing -> movement enabled
         playerMovement.enabled = !fishingActive;
 
+        // when exiting fishing mode, reset line casted state
         if (!fishingActive)
         {
             lineCasted = false;

@@ -106,7 +106,7 @@ public class PlayerInputState : MonoBehaviour
         if (currentState == InputStates.Fishing)
         {
             // Hooking uses the dedicated Hook action to avoid early/duplicate hook triggers.
-            Debug.Log("PlayerInputState: Interact pressed while fishing. Ignoring.");
+            // Debug.Log("PlayerInputState: Interact pressed while fishing. Ignoring.");
         }
     }
 
