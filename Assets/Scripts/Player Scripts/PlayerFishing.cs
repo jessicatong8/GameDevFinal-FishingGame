@@ -24,7 +24,7 @@ public class PlayerFishing : MonoBehaviour
     private void Start()
     {
         inputState.SetState(PlayerInputState.InputStates.Gameplay);
-        // Debug.Log("PlayerFishing: Starting in Gameplay state.");
+        Debug.Log("PlayerFishing: Starting in Gameplay state.");
         SetFishingActive(false);
     }
 
@@ -47,16 +47,13 @@ public class PlayerFishing : MonoBehaviour
 
     private void HandleInteract()
     {
-        // Calls TryStartFishing which checks all conditions and returns false if fishing cannot be started (e.g. no fish in spot, drip too low, not on dock, not in idle state)
-        if (!fishingManager.TryStartFishing())
+        // Calls TryStartFishing which checks all conditions and returns false if fishing cannot be started
+        // - not on dock
+        // - not in idle state
+        if (fishingManager.TryStartFishing())
         {
-            Debug.Log("Cannot start fishing: start conditions were not met.");
-            return;
-        }
-        else
-        {
-            // On TryStartFishing success, fishingManager takes over (either failing or progressing to EnterCastingState()).
-            // Debug.Log("Fishing started successfully.");
+            Debug.Log("PlayerFishing: Fishing started successfully.");
+            // TryStartFishing() -> fishingManager takes over (either failing or progressing to EnterCastingState()).
             SetFishingActive(true);
             BeginCast();
         }
@@ -65,14 +62,14 @@ public class PlayerFishing : MonoBehaviour
     private void BeginCast()
     {
         animator?.SetTrigger("cast");
-        // fishingRig?.TriggerCast();
+        fishingRig?.TriggerCast();
     }
 
     // Begin Reeling/Mashing Process
     private void BeginReeling()
     {
         animator?.SetTrigger("reel");
-        // fishingRig?.TriggerReel();
+        fishingRig?.TriggerReel();
     }
 
     private void HandleFishingEnded()
@@ -91,12 +88,13 @@ public class PlayerFishing : MonoBehaviour
 
         // Set player input state to fishing mode
         inputState.SetState(fishingActive ? PlayerInputState.InputStates.Fishing : PlayerInputState.InputStates.Gameplay);
+        Debug.Log($"PlayerFishing: Set fishing active: {fishingActive}. \nCurrent input state: {inputState.GetCurrentInputState()}");
 
         // animator parameter for idle/fishing animation transition
         animator?.SetBool("startFishing", fishingActive);
 
         // enable/disable fishing visuals and player movement
-        // fishingRig?.SetActive(fishingActive);
+        fishingRig?.SetActive(fishingActive);
 
         // if fishing -> movement disabled, if not fishing -> movement enabled
         playerMovement.enabled = !fishingActive;
