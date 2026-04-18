@@ -199,7 +199,7 @@ public class FishingManager : MonoBehaviour
 
         OnCast?.Invoke();
 
-        Debug.Log("Fishing Manager: Waiting for a bite/hook from fish: " + activeFish.fishName);
+        Debug.Log("Fishing Manager: Entered casting state. Waiting for a bite from fish: " + activeFish.fishName);
         SetFlowState(FishingFlowState.Casting);
         timer = UnityEngine.Random.Range(minHookDelay, maxHookDelay);
         return true;
@@ -207,6 +207,7 @@ public class FishingManager : MonoBehaviour
 
     private Fish ResolveFishForCurrentCast()
     {
+        // For prototyping purposes, use a preassigned sequence of fish that will be caught in order.
         if (usePrototypeFishSequence)
         {
             Fish sequenceFish = GetFishFromSequence();
@@ -216,7 +217,8 @@ public class FishingManager : MonoBehaviour
             }
         }
 
-        // Using CastingManager 
+        // Using CastingManager, checks collision area for fish and returns fish if found.
+        // TODO - does this only check once when first entering casting state, or should we check continuously while in casting state to wait for a fish to swim into the area?
         if (!bypassCastingManager && castingManager != null)
         {
             Fish detectedFish = castingManager.GetFishInArea();
@@ -340,7 +342,7 @@ public class FishingManager : MonoBehaviour
         {
             OnCaught?.Invoke();
             AdvanceFishSequenceOnCatch();
-            ReturnToIdle("Fish caught.");
+            ReturnToIdle(activeFish.fishName + " caught.");
             return;
         }
 
