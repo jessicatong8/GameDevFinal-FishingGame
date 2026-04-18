@@ -1,14 +1,14 @@
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 using TMPro;
 
 public class BasicUI : MonoBehaviour
 {
-    public FishingManager fishManager;
-    
+    [SerializeField] private FishingManager fishingManager;
+
     public Slider progressSlider;
     public Slider tensionSlider;
-    public TextMeshProUGUI alertText; 
+    public TextMeshProUGUI alertText;
 
     void OnEnable()
     {
@@ -19,9 +19,9 @@ public class BasicUI : MonoBehaviour
         FishingManager.OnEscaped += HandleEscaped;
         FishingManager.OnLineBreak += HandleLineBreak;
 
-        FishingManager.CurrentProgressUpdated += UpdateProgressSlider;
-        FishingManager.CurrentTensionUpdated += UpdateTensionSlider;
-        FishingManager.MaxTensionUpdated += UpdateTensionSliderMax;
+        // FishingManager.CurrentProgressUpdated += UpdateProgressSlider;
+        // FishingManager.CurrentTensionUpdated += UpdateTensionSlider;
+        // FishingManager.MaxTensionUpdated += UpdateTensionSliderMax;
     }
 
     void OnDisable()
@@ -32,9 +32,21 @@ public class BasicUI : MonoBehaviour
         FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnEscaped -= HandleEscaped;
         FishingManager.OnLineBreak -= HandleLineBreak;
-        FishingManager.CurrentProgressUpdated -= UpdateProgressSlider;
-        FishingManager.CurrentTensionUpdated -= UpdateTensionSlider;
-        FishingManager.MaxTensionUpdated -= UpdateTensionSliderMax;
+
+    }
+
+    void Start()
+    {
+        UpdateProgressSlider(0);
+        UpdateTensionSlider(0);
+        UpdateTensionSliderMax(0);
+
+    }
+    void Update()
+    {
+        UpdateProgressSlider(fishingManager.progressManager.GetCurrentProgress());
+        UpdateTensionSlider(fishingManager.tensionManager.GetCurrentTension());
+        UpdateTensionSliderMax(fishingManager.tensionManager.GetCurrentMaxTension());
     }
 
     void UpdateProgressSlider(float val)
