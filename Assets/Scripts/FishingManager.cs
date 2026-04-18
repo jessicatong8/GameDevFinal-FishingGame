@@ -169,6 +169,14 @@ public class FishingManager : MonoBehaviour
             //go back to idle
         }
 
+        HandleLineRangeCheck();
+
+
+    }
+
+    void HandleLineRangeCheck()
+    {
+
         FishInLineRange.LineState currentLineState = activeFish.GetComponent<FishInLineRange>().CheckLineState();
         if (currentLineState == FishInLineRange.LineState.OutOfLeftRange || currentLineState == FishInLineRange.LineState.OutOfRightRange)
         {
@@ -192,7 +200,6 @@ public class FishingManager : MonoBehaviour
             InRange?.Invoke();
             //maybe we want an event here to reset the line range ui back to normal if the fish goes back into range?
         }
-
     }
 
     void HandleWiggleTimer()
