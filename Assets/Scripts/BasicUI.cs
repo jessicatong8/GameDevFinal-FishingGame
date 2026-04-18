@@ -17,11 +17,6 @@ public class BasicUI : MonoBehaviour
         FishingManager.OnHook += HandleReel;
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnEscaped += HandleEscaped;
-        FishingManager.OnLineBreak += HandleLineBreak;
-
-        // FishingManager.CurrentProgressUpdated += UpdateProgressSlider;
-        // FishingManager.CurrentTensionUpdated += UpdateTensionSlider;
-        // FishingManager.MaxTensionUpdated += UpdateTensionSliderMax;
     }
 
     void OnDisable()
@@ -31,7 +26,6 @@ public class BasicUI : MonoBehaviour
         FishingManager.OnHook -= HandleReel;
         FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnEscaped -= HandleEscaped;
-        FishingManager.OnLineBreak -= HandleLineBreak;
 
     }
 
@@ -95,9 +89,4 @@ public class BasicUI : MonoBehaviour
         alertText.color = new Color(1f, 0.75f, 0.2f);
     }
 
-    void HandleLineBreak()
-    {
-        alertText.text = "LINE SNAPPED!";
-        alertText.color = Color.gray;
-    }
 }

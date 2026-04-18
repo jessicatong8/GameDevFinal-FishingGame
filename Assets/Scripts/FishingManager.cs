@@ -3,40 +3,24 @@ using System;
 
 public class FishingManager : MonoBehaviour
 {
-    //make events for future ui and audio 
-    /**
-    * Order of events during fishing sequence:
-    * OnCast (on player pressing space to cast)
-    * OnBite (player waits for random time -> gets bite)
-    * OnHook (player has short window to press hook button to start reeling)
-    * -- NoFishInSpot (if player tries to cast but there is no fish in the area)
-    * -- DripTooLow (if player tries to cast but doesn't have enough "drip" to catch the fish in the area)
-    * OnReeling (while player is reeling/mashing, progress and tension events will be fired to update UI)
-        * Player will mash + arrow keys
-        * CurrentProgressUpdated (float value between 0-100 indicating how close player is to catching the fish)
-        * CurrentTensionUpdated (float value indicating current tension level of the line)
-        * MaxTensionUpdated (float value indicating max tension level before line breaks - this is a property of the fish being caught)
-    * OnCaught (if player successfully reels to 100% progress)
-    * OnLineBreak (if tension reaches max tension)
-    **/
+    // This class manages the overall fishing game flow, including game state transitions, and event broadcasting for the fishing mini-game.
+
     public Fish activeFish;
     public TensionManager tensionManager;
     public ProgressManager progressManager;
 
     public int currentDrip; // will get from player or overarching score
-    public static event Action OnCast;
-    public static event Action OnBite;
-    public static event Action OnHook;
+    public static event Action OnCast; // when player initiates fishing by casting the line
+    public static event Action OnBite; // after timer, when a fish bites the line and player has opportunity to hook
+    public static event Action OnHook; // when player successfully hooks the fish by pressing the button within the hook window
     public static event Action NoFishInSpot;
     public static event Action DripTooLow; // when player doesn't have enough "drip" to catch the fish in the area
-    public static event Action OnCaught;
-    public static event Action OnLineBreak;
-    public static event Action OnEscaped;
+    public static event Action OnCaught; // when player successfully catches the fish by reeling to 100% progress
+    public static event Action OnEscaped; // when fish escapes due to hook window timing out, player drip being too low, line breaking from high tension, or fish moving out of line range
     public static event Action OnReturnToIdle;
 
     public static event Action<FishingFlowState> OnFlowStateChanged; // for triggering state-specific animations
     public static event Action<Reeling_LineRangeState> OnReelLineRangeStateChanged; // for triggering line range related animations/effects during reeling
-    public static event Action<Reeling_TensionState> OnReelTensionStateChanged; // for triggering tension related animations/effects during reeling
     public float hookTimer;
 
     public enum FishingFlowState
@@ -54,13 +38,6 @@ public class FishingManager : MonoBehaviour
         OutOfLineRange
     }
 
-    public enum Reeling_TensionState
-    {
-        TooLow,
-        Safe,
-        TooHigh
-    }
-
     [SerializeField] private PlayerInputState inputState;
     [SerializeField] private bool usePrototypeFishSequence = true;
     [SerializeField] private bool bypassCastingManager = true;
@@ -70,22 +47,19 @@ public class FishingManager : MonoBehaviour
     public CastingManager castingManager;
     public FishingFlowState CurrentFlowState => currentFlowState;
     public Reeling_LineRangeState CurrentReelLineRangeState => currentLineRangeState;
-    public Reeling_TensionState CurrentReelTensionState => currentTensionState;
 
     // Starting Fishing States 
     private FishingFlowState currentFlowState = FishingFlowState.Idle;
     private Reeling_LineRangeState currentLineRangeState = Reeling_LineRangeState.InLineRange;
-    private Reeling_TensionState currentTensionState = Reeling_TensionState.Safe;
 
     private float timer;    // general purpose timer used for casting and hook window states
     private float minHookDelay = 1.5f;
     private float maxHookDelay = 4f;
-    private float minStableTension = 0.25f; // if tension is below 25% of max tension, we consider it too low
-    private float maxStableTension = 0.75f; // if tension is above 75% of max tension, we consider it too high
+
     private float outOfRangeTimer; // timer to track how long player has been in too high/low tension state
     private float outOfRangeTimeLimit = 2f; // how long player can be in too high/low tension state before we consider them out of line range and trigger escape on next update tick
     private int fishSequenceIndex;
-    private bool mashTriggeredThisFrame;
+
 
     void Start()
     {
@@ -130,14 +104,6 @@ public class FishingManager : MonoBehaviour
         }
     }
 
-    private void HandleMashPerformed()
-    {
-        if (currentFlowState == FishingFlowState.Reeling)
-        {
-            mashTriggeredThisFrame = true;
-        }
-    }
-
     private void HandleAbortPerformed()
     {
         if (currentFlowState != FishingFlowState.Idle)
@@ -162,12 +128,10 @@ public class FishingManager : MonoBehaviour
                 break;
 
             case FishingFlowState.Reeling:
-                // TickReelingState(mashTriggeredThisFrame);
                 HandleReeling();
                 break;
         }
 
-        mashTriggeredThisFrame = false;
     }
 
     public bool TryStartFishing()
@@ -330,7 +294,6 @@ public class FishingManager : MonoBehaviour
             return;
         }
     }
-
 
     private void SetFlowState(FishingFlowState requestedState)
     {
