@@ -304,7 +304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 000b9b10968034e84b42f0654629f207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicUI
-  fishManager: {fileID: 1940631099}
+  fishingManager: {fileID: 1940631099}
   progressSlider: {fileID: 160860258}
   tensionSlider: {fileID: 1354072942}
   alertText: {fileID: 1632286579}
@@ -4398,6 +4398,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1940631100}
   - component: {fileID: 1940631099}
+  - component: {fileID: 1940631102}
+  - component: {fileID: 1940631101}
   m_Layer: 0
   m_Name: FishingManager
   m_TagString: Untagged
@@ -4417,6 +4419,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 047bbb956d9c541eb82ca06ee54f5c96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishingManager
+  activeFish: {fileID: 0}
+  tensionManager: {fileID: 0}
+  progressManager: {fileID: 0}
   currentDrip: 10
   hookTimer: 2
   inputState: {fileID: 708269776}
@@ -4425,7 +4430,6 @@ MonoBehaviour:
   fallbackFish: {fileID: 1256478411}
   fishSequence:
   - {fileID: 1256478411}
-  - {fileID: 1652712460}
   castingManager: {fileID: 1637651798}
 --- !u!4 &1940631100
 Transform:
@@ -4442,6 +4446,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1940631101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940631098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d63a22c1fdf8d4d599d58557de606008, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProgressManager
+  inputState: {fileID: 708269776}
+--- !u!114 &1940631102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940631098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4634f455c0fe4ba7b8ebfaa74a42ff2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TensionManager
+  inputState: {fileID: 708269776}
 --- !u!1 &1952247253
 GameObject:
   m_ObjectHideFlags: 0
