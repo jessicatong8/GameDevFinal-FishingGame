@@ -4297,8 +4297,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 047bbb956d9c541eb82ca06ee54f5c96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishingManager
-  spawner: {fileID: 1313077787}
+  currentDrip: 0
   hookTimer: 2
+  inputState: {fileID: 0}
+  bypassCastingManager: 1
+  fallbackFish: {fileID: 0}
+  castingManager: {fileID: 0}
 --- !u!4 &1940631100
 Transform:
   m_ObjectHideFlags: 0
