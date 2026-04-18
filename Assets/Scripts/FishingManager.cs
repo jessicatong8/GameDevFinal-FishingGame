@@ -1,13 +1,12 @@
 using UnityEngine;
 using System;
+using Unity.XR.CoreUtils;
 
 public class FishingManager : MonoBehaviour
 {
     // This class manages the overall fishing game flow, including game state transitions, and event broadcasting for the fishing mini-game.
 
     public Fish activeFish;
-    public TensionManager tensionManager;
-    public ProgressManager progressManager;
 
     public int currentDrip; // will get from player or overarching score
     public static event Action OnCast; // when player initiates fishing by casting the line
@@ -56,16 +55,7 @@ public class FishingManager : MonoBehaviour
     private float minHookDelay = 1.5f;
     private float maxHookDelay = 4f;
 
-    private float outOfRangeTimer; // timer to track how long player has been in too high/low tension state
-    private float outOfRangeTimeLimit = 2f; // how long player can be in too high/low tension state before we consider them out of line range and trigger escape on next update tick
     private int fishSequenceIndex;
-
-
-    void Start()
-    {
-        progressManager = GetComponent<ProgressManager>();
-        tensionManager = GetComponent<TensionManager>();
-    }
 
     private void OnEnable()
     {
@@ -278,21 +268,21 @@ public class FishingManager : MonoBehaviour
 
     private void HandleReeling()
     {
-        tensionManager = GetComponent<TensionManager>();
-        progressManager = GetComponent<ProgressManager>();
-        if (tensionManager.GetCurrentTension() > activeFish.maxTension)
-        {
-            EscapeFishing("Fish escaped due to line break from high tension.");
-            return;
-        }
-        ;
-        if (progressManager.GetCurrentProgress() >= 100f)
-        {
-            OnCaught?.Invoke();
-            AdvanceFishSequenceOnCatch();
-            ReturnToIdle(activeFish.fishName + " caught.");
-            return;
-        }
+        // tensionManager = GetComponent<TensionManager>();
+        // progressManager = GetComponent<ProgressManager>();
+        // if (tensionManager.GetCurrentTension() > activeFish.maxTension)
+        // {
+        //     EscapeFishing("Fish escaped due to line break from high tension.");
+        //     return;
+        // }
+        // ;
+        // if (progressManager.IsProgressComplete())
+        // {
+        //     OnCaught?.Invoke();
+        //     AdvanceFishSequenceOnCatch();
+        //     ReturnToIdle(activeFish.fishName + " caught.");
+        //     return;
+        // }
     }
 
     private void SetFlowState(FishingFlowState requestedState)
@@ -304,10 +294,17 @@ public class FishingManager : MonoBehaviour
     }
 
 
-    private void EscapeFishing(string reason)
+    public void EscapeFishing(string reason)
     {
         OnEscaped?.Invoke();
         ReturnToIdle(reason);
+    }
+
+    public void CaughtFish()
+    {
+        OnCaught?.Invoke();
+        AdvanceFishSequenceOnCatch();
+        ReturnToIdle(activeFish.fishName + " caught.");
     }
 
     private void ReturnToIdle(string reason)
@@ -317,7 +314,6 @@ public class FishingManager : MonoBehaviour
         activeFish = null;
 
         timer = 0f;
-        outOfRangeTimer = 0f;
 
         OnReturnToIdle?.Invoke();
 

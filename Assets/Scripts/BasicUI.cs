@@ -5,6 +5,9 @@ using TMPro;
 public class BasicUI : MonoBehaviour
 {
     [SerializeField] private FishingManager fishingManager;
+    [SerializeField] public TensionManager tensionManager;
+    [SerializeField] public ProgressManager progressManager;
+
 
     public Slider progressSlider;
     public Slider tensionSlider;
@@ -38,9 +41,9 @@ public class BasicUI : MonoBehaviour
     }
     void Update()
     {
-        UpdateProgressSlider(fishingManager.progressManager.GetCurrentProgress());
-        UpdateTensionSlider(fishingManager.tensionManager.GetCurrentTension());
-        UpdateTensionSliderMax(fishingManager.tensionManager.GetCurrentMaxTension());
+        UpdateProgressSlider(progressManager.GetCurrentProgress());
+        UpdateTensionSlider(tensionManager.GetCurrentTension());
+        UpdateTensionSliderMax(tensionManager.GetCurrentMaxTension());
     }
 
     void UpdateProgressSlider(float val)

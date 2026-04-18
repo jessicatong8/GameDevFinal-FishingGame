@@ -3,12 +3,22 @@ using UnityEngine;
 public class TensionManager : MonoBehaviour
 {
     [SerializeField] private PlayerInputState inputState;
+    [SerializeField] private FishingManager fishingManager;
+    Fish activeFish;
+    private const float TARGET_MASH_RATE = 3f; // expected mashes per second
+
+
+    private bool isReeling;
     private bool mashTriggeredThisFrame;
     private float tension;
     private float maxTension;
     private float tensionDropRate;
-    Fish activeFish;
-    private FishingManager fishingManager;
+
+    private float safeZoneLower;
+    private float safeZoneUpper;
+    private float escapeTime; // how many seconds you have of exceeding safe tension before the fish escapes
+    private float outOfZoneTimer;
+
 
 
     private void OnEnable()
@@ -24,6 +34,10 @@ public class TensionManager : MonoBehaviour
         if (inputState != null)
         {
             inputState.MashPerformed -= HandleMashPerformed;
+
+            FishingManager.OnHook -= HandleHooked;
+            FishingManager.OnCaught -= HandleResetToIdle;
+            FishingManager.OnEscaped -= HandleResetToIdle;
         }
     }
 
@@ -33,14 +47,18 @@ public class TensionManager : MonoBehaviour
     }
     void Start()
     {
-        fishingManager = GetComponent<FishingManager>();
         tension = 0f;
     }
 
     void Update()
     {
-        UpdateTension(mashTriggeredThisFrame);
-        mashTriggeredThisFrame = false;
+        if (isReeling)
+        {
+            UpdateTension(mashTriggeredThisFrame);
+            UpdateEscapeTimer();
+            mashTriggeredThisFrame = false;
+            Debug.Log("Current Tension: " + tension);
+        }
     }
 
     private void HandleHooked()
@@ -49,9 +67,20 @@ public class TensionManager : MonoBehaviour
         if (activeFish == null)
         {
             Debug.LogError("TensionManager: No active fish found.");
+            return;
         }
+        isReeling = true;
         maxTension = activeFish.maxTension;
         tensionDropRate = activeFish.tensionDropRate;
+        tension = activeFish.safeZoneCenter * maxTension; // start in the middle of the safe zone
+
+        safeZoneLower = maxTension * (activeFish.safeZoneCenter - activeFish.safeZoneWidth / 2f);
+        safeZoneUpper = maxTension * (activeFish.safeZoneCenter + activeFish.safeZoneWidth / 2f);
+        escapeTime = activeFish.tensionEscapeTime;
+
+        outOfZoneTimer = 0f;
+
+
     }
 
     private void UpdateTension(bool mashedThisFrame)
@@ -59,7 +88,8 @@ public class TensionManager : MonoBehaviour
         if (mashedThisFrame)
         {
 
-            tension += activeFish.reelingSpeed * 0.25f;
+            float increment = activeFish.reelingSpeed / TARGET_MASH_RATE;
+            tension += increment;
             tension = Mathf.Min(tension, maxTension);
 
         }
@@ -70,9 +100,30 @@ public class TensionManager : MonoBehaviour
         }
 
     }
+
+    private void UpdateEscapeTimer()
+    {
+        if (IsInSafeZone())
+        {
+            outOfZoneTimer = 0f;
+            return;
+        }
+
+        outOfZoneTimer += Time.deltaTime;
+
+        if (outOfZoneTimer >= escapeTime)
+        {
+            outOfZoneTimer = 0f;
+            fishingManager.EscapeFishing("Tension too high, line snapped");
+        }
+    }
+
+
     private void HandleResetToIdle()
     {
         tension = 0f;
+        outOfZoneTimer = 0f;
+        isReeling = false;
     }
     public float GetCurrentTension()
     {
@@ -82,4 +133,9 @@ public class TensionManager : MonoBehaviour
     {
         return maxTension;
     }
+    public bool IsInSafeZone() => tension >= safeZoneLower && tension <= safeZoneUpper;
+    public bool IsTensionTooHigh() => tension > safeZoneUpper;
+    public bool IsTensionTooLow() => tension < safeZoneLower;
+
+
 }
