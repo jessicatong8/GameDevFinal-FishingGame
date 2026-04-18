@@ -45,11 +45,11 @@ public class FishingManager : MonoBehaviour
     // for prototyping, we preassign all fishes in the order they will be caught. In final version, we will use CastingManager to dynamically determine fish based on player's location and other factors
     [SerializeField] private Fish[] fishSequence;
     public CastingManager castingManager;
-    public FishingGameState CurrentFishingGameState => currentFlowState;
+    public FishingGameState CurrentFishingGameState => currentFishingGameState;
     public Reeling_LineRangeState CurrentReelLineRangeState => currentLineRangeState;
 
     // Starting Fishing States 
-    private FishingGameState currentFlowState = FishingGameState.Idle;
+    private FishingGameState currentFishingGameState = FishingGameState.Idle;
     private Reeling_LineRangeState currentLineRangeState = Reeling_LineRangeState.InLineRange;
 
     private float timer;    // general purpose timer used for casting and hook window states
@@ -97,9 +97,9 @@ public class FishingManager : MonoBehaviour
 
     public bool TryStartFishing()
     {
-        if (!IsPlayerOnDock() || currentFlowState != FishingGameState.Idle)
+        if (!IsPlayerOnDock() || currentFishingGameState != FishingGameState.Idle)
         {
-            Debug.Log("FishingManager: \nIsPlayerOnDock: " + IsPlayerOnDock() + "(should be true)" + "\nCurrentState: " + currentFlowState + "(should be Idle)");
+            Debug.Log("FishingManager: \nIsPlayerOnDock: " + IsPlayerOnDock() + "(should be true)" + "\nCurrentState: " + currentFishingGameState + "(should be Idle)");
             return false;
         }
         return EnterCastingState(); // returns true on success and false on failure (e.g. no fish in spot, drip too low)
@@ -108,7 +108,7 @@ public class FishingManager : MonoBehaviour
     private void HandleHookPerformed()
     {
         Debug.Log("HandleHookPerformed called. Current input state: " + inputState.CurrentState);
-        if (currentFlowState == FishingGameState.HookWindow)
+        if (currentFishingGameState == FishingGameState.HookWindow)
         {
             Debug.Log("HandleHookPerformed check passed.");
 
@@ -119,7 +119,7 @@ public class FishingManager : MonoBehaviour
 
     private void HandleAbortPerformed()
     {
-        if (currentFlowState != FishingGameState.Idle)
+        if (currentFishingGameState != FishingGameState.Idle)
         {
             ReturnToIdle("Fishing aborted by player input.");
         }
@@ -254,8 +254,8 @@ public class FishingManager : MonoBehaviour
 
     private void HandleReeling()
     {
-        tensionManager = GetComponent<TensionManager>();
-        progressManager = GetComponent<ProgressManager>();
+        // tensionManager = GetComponent<TensionManager>();
+        // progressManager = GetComponent<ProgressManager>();
         if (tensionManager.GetCurrentTension() > activeFish.maxTension)
         {
             EscapeFishing("Fish escaped due to line break from high tension.");
@@ -273,10 +273,10 @@ public class FishingManager : MonoBehaviour
 
     private void SetFishingGameState(FishingGameState requestedState)
     {
-        if (currentFlowState == requestedState) { return; }
+        if (currentFishingGameState == requestedState) { return; }
 
-        currentFlowState = requestedState;
-        OnFishingGameStateChanged?.Invoke(currentFlowState);
+        currentFishingGameState = requestedState;
+        OnFishingGameStateChanged?.Invoke(currentFishingGameState);
     }
 
 
@@ -305,7 +305,7 @@ public class FishingManager : MonoBehaviour
 
     private void Update()
     {
-        switch (currentFlowState)
+        switch (currentFishingGameState)
         {
             case FishingGameState.Idle:
                 break;

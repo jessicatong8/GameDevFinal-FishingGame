@@ -46,11 +46,9 @@ public class PlayerInputState : MonoBehaviour
         {
             case InputStates.Gameplay:
                 movementScript.enabled = true;
-                fishingScript.enabled = false;
                 break;
             case InputStates.Fishing:
                 movementScript.enabled = false;
-                fishingScript.enabled = true;
                 break;
             default:
                 Debug.LogWarning("PlayerInputState: Unhandled state: " + currentState);
@@ -108,10 +106,9 @@ public class PlayerInputState : MonoBehaviour
 
         if (currentState == InputStates.Gameplay)
         {
-            Debug.Log("PlayerInputState: Interact in Gameplay state.");
-            // Call interact for Playerfishing, which will check if fishing can be started and if so, will switch to fishing state. 
+            // Call interact for PlayerFishing, which will check if fishing can be started and if so, will switch to fishing state. 
             InteractPerformed?.Invoke();
-            return;
+            // Debug.Log("PlayerInputState: Interact in Gameplay state.");
         }
     }
 
@@ -119,49 +116,57 @@ public class PlayerInputState : MonoBehaviour
     {
         if (!value.isPressed) { return; }
 
-        if (currentState != InputStates.Gameplay)
+        if (currentState == InputStates.Gameplay)
         {
-            // Debug.Log("Wrong state for jump input. Current state: " + currentState);
-            return;
+            JumpPerformed?.Invoke();
         }
-        JumpPerformed?.Invoke();
     }
 
     public void OnHook(InputValue value)
     {
         if (!value.isPressed) { return; }
 
-        if (currentState != InputStates.Fishing)
+        if (currentState == InputStates.Fishing)
         {
-            // Debug.Log("Wrong state for hook input. Current state: " + currentState);
-            return;
+            if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.HookWindow)
+            {
+                HookPerformed?.Invoke();
+            }
+            else
+            {
+                Debug.Log("PlayerInputState: Not in hook window state, cannot perform hook action. Current fishing state: " + fishingManager.CurrentFishingGameState);
+            }
         }
-        HookPerformed?.Invoke();
+
     }
 
     public void OnMash(InputValue value)
     {
         if (!value.isPressed) { return; }
 
-        if (currentState != InputStates.Fishing)
+        if (currentState == InputStates.Fishing)
         {
-            // Debug.Log("Wrong state for mash input. Current state: " + currentState);
-            return;
+            if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
+            {
+                Debug.Log("PlayerInputState: Mashed");
+                MashPerformed?.Invoke();
+            }
+            else
+            {
+                Debug.Log("PlayerInputState: Not in reeling state, cannot perform mash action. Current fishing state: " + fishingManager.CurrentFishingGameState);
+            }
         }
-        MashPerformed?.Invoke();
     }
 
     public void OnAbort(InputValue value)
     {
         if (!value.isPressed) { return; }
 
-        if (currentState != InputStates.Fishing)
+        if (currentState == InputStates.Fishing)
         {
-            // Debug.Log("Wrong state for abort input. Current state: " + currentState);
-            return;
+            AbortPerformed?.Invoke();
         }
 
-        AbortPerformed?.Invoke();
     }
 
     private void LateUpdate()

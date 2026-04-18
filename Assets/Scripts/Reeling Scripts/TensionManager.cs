@@ -24,6 +24,9 @@ public class TensionManager : MonoBehaviour
         if (inputState != null)
         {
             inputState.MashPerformed -= HandleMashPerformed;
+            FishingManager.OnHook -= HandleHooked;
+            FishingManager.OnCaught -= HandleResetToIdle;
+            FishingManager.OnEscaped -= HandleResetToIdle;
         }
     }
 

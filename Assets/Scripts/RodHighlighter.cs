@@ -17,8 +17,8 @@ public class RodHighlighter : MonoBehaviour
     private void OnEnable()
     {
         FishingManager.OnBite += HandleBite;
-        FishingManager.MaxTensionUpdated += HandleMaxTensionUpdated;
-        FishingManager.CurrentTensionUpdated += HandleCurrentTensionUpdated;
+        // FishingManager.MaxTensionUpdated += HandleMaxTensionUpdated;
+        // FishingManager.CurrentTensionUpdated += HandleCurrentTensionUpdated;
         FishingManager.OnReturnToIdle += ClearHighlight;
         FishingManager.OnCaught += ClearHighlight;
         FishingManager.OnEscaped += ClearHighlight;
@@ -31,8 +31,8 @@ public class RodHighlighter : MonoBehaviour
     private void OnDisable()
     {
         FishingManager.OnBite -= HandleBite;
-        FishingManager.MaxTensionUpdated -= HandleMaxTensionUpdated;
-        FishingManager.CurrentTensionUpdated -= HandleCurrentTensionUpdated;
+        // FishingManager.MaxTensionUpdated -= HandleMaxTensionUpdated;
+        // FishingManager.CurrentTensionUpdated -= HandleCurrentTensionUpdated;
         FishingManager.OnReturnToIdle -= ClearHighlight;
         FishingManager.OnCaught -= ClearHighlight;
         FishingManager.OnEscaped -= ClearHighlight;
