@@ -1,27 +1,37 @@
 using UnityEngine;
 using System;
-using System.Collections;
-using UnityEngine.InputSystem;
 
 public class FishingManager : MonoBehaviour
 {
     //make events for future ui and audio 
+    /**
+    * Order of events during fishing sequence:
+    * OnCast (on player pressing space to cast)
+    * OnBite (player waits for random time -> gets bite)
+    * OnHook (player has short window to press hook button to start reeling)
+    * -- NoFishInSpot (if player tries to cast but there is no fish in the area)
+    * -- DripTooLow (if player tries to cast but doesn't have enough "drip" to catch the fish in the area)
+    * OnReeling (while player is reeling/mashing, progress and tension events will be fired to update UI)
+        * Player will mash + arrow keys
+        * CurrentProgressUpdated (float value between 0-100 indicating how close player is to catching the fish)
+        * CurrentTensionUpdated (float value indicating current tension level of the line)
+        * MaxTensionUpdated (float value indicating max tension level before line breaks - this is a property of the fish being caught)
+    * OnCaught (if player successfully reels to 100% progress)
+    * OnLineBreak (if tension reaches max tension)
+    **/
     public static event Action OnCast;
     public static event Action OnBite;
-    public static event Action OnReel;
-    public static event Action OnReelingActive;
-    public static event Action OnReelingInactive;
-    public static event Action OnWiggle; //should this be an event?
-    public static event Action OffWiggle; //should this be an event too
+    public static event Action OnHook;
     public static event Action NoFishInSpot;
-    public static event Action DripTooLow;
+    public static event Action DripTooLow; // when player doesn't have enough "drip" to catch the fish in the area
     public static event Action OnCaught;
     public static event Action OnLineBreak;
     public static event Action OnReturnToIdle;
-    public static event Action<float> OnProgressUpdated;
-    public static event Action<float> OnTensionUpdated;
+    public static event Action<float> CurrentProgressUpdated; // for updating progress bar during reeling
+    public static event Action<float> CurrentTensionUpdated; // for updating tension bar during reeling
+    public static event Action<float> MaxTensionUpdated; // not used until multiple fish implemented
     public float hookTimer;
-    
+
     public enum FishingState
     {
         Idle,
@@ -29,39 +39,71 @@ public class FishingManager : MonoBehaviour
         HookWindow,
         Reeling
     }
+    [SerializeField] private PlayerInputState inputState;
+    [SerializeField] private bool bypassCastingManager = true;
+    [SerializeField] private Fish fallbackFish;
     public CastingManager castingManager;
 
     private FishingState currentState = FishingState.Idle;
     private float progress;
     private float tension;
     private float timer;
-    private bool isWiggling;
     private Fish activeFish;
-    public int currentDrip; //well get from player or overarching score
-    private bool isPlayerOnDock = false;
+    public int currentDrip; // will get from player or overarching score
+    private bool mashTriggeredThisFrame;
 
     private void OnEnable()
     {
-        DockAreaTrigger.OnPlayerEnterDock += SetOnDock;
-        DockAreaTrigger.OnPlayerExitDock += SetOffDock;
+        if (inputState == null)
+        {
+            Debug.LogError("FishingManager: No PlayerInputState reference assigned in inspector.");
+        }
+
+        if (inputState != null)
+        {
+            inputState.HookPerformed += HandleHookPerformed;
+            inputState.MashPerformed += HandleMashPerformed;
+            inputState.AbortPerformed += HandleAbortPerformed;
+        }
     }
 
     private void OnDisable()
     {
-        DockAreaTrigger.OnPlayerEnterDock -= SetOnDock;
-        DockAreaTrigger.OnPlayerExitDock -= SetOffDock;
+        if (inputState != null)
+        {
+            inputState.HookPerformed -= HandleHookPerformed;
+            inputState.MashPerformed -= HandleMashPerformed;
+            inputState.AbortPerformed -= HandleAbortPerformed;
+        }
     }
 
-    private void SetOnDock(){
-        isPlayerOnDock = true;
-    }
-    private void SetOffDock() 
+    private void HandleHookPerformed()
     {
-        isPlayerOnDock = false;
+        if (currentState != FishingState.HookWindow) { return; }
+
+        OnHook?.Invoke();
+        StartReeling();
+    }
+
+    private void HandleMashPerformed()
+    {
+        if (currentState == FishingState.Reeling)
+        {
+            mashTriggeredThisFrame = true;
+        }
+    }
+
+    private void HandleAbortPerformed()
+    {
+        if (currentState != FishingState.Idle)
+        {
+            AbortFishing();
+        }
     }
 
     void Update()
     {
+<<<<<<< HEAD
         //condition to escape any time during fishing
         if (isPlayerOnDock && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
@@ -69,13 +111,11 @@ public class FishingManager : MonoBehaviour
             AbortFishing();
 
         }
+=======
+>>>>>>> 590cff0fe037c0b4b70d16ba356071b74f048998
         switch (currentState)
         {
-            case FishingState.Idle: //switch from idle to casting
-                if (isPlayerOnDock && Keyboard.current.spaceKey.wasPressedThisFrame) //this or other input system???
-                {
-                    StartWaiting(); //next round it will go to handle waiting
-                }
+            case FishingState.Idle:
                 break;
 
             case FishingState.Waiting:
@@ -87,94 +127,127 @@ public class FishingManager : MonoBehaviour
                 break;
 
             case FishingState.Reeling:
-                HandleReeling();
+                HandleReeling(mashTriggeredThisFrame);
                 break;
         }
+
+        mashTriggeredThisFrame = false;
     }
 
-    //
-    void StartWaiting()
+    // 
+    public bool TryStartFishing()
     {
-        OnCast?.Invoke();
-        activeFish = castingManager.GetFishInArea();
+        if (!IsPlayerOnDock() || currentState != FishingState.Idle)
+        {
+            Debug.Log("FishingManager: Cannot start fishing. IsPlayerOnDock: " + FishingAreaTrigger.IsPlayerInFishingArea + ", CurrentState: " + currentState);
+            return false;
+        }
+        
+        return StartWaiting();
+    }
+
+    private bool IsPlayerOnDock()
+    {
+        return FishingAreaTrigger.IsPlayerInFishingArea;
+    }
+
+    bool StartWaiting()
+    {
+        activeFish = CastingManagerBypassFish();
         if (activeFish == null)
         {
             NoFishInSpot?.Invoke();
+            return false;
         }
         if (currentDrip < activeFish.dripThreshold)
         {
+            Debug.Log("Not enough drip to catch this fish! Current Drip: " + currentDrip + ", Required Drip: " + activeFish.dripThreshold);
             DripTooLow?.Invoke();
+            return false;
         }
-        //call event to trigger casting ui and sound 
-        //does this go here or in update
-        //do i want seperate event for after casting for an idle bobbing wait
 
+        OnCast?.Invoke();
+
+        Debug.Log("Currently waiting to get a bite from the fish: " + activeFish.fishName);
         currentState = FishingState.Waiting;
-        timer = UnityEngine.Random.Range(2f, 5f); //random time to wait for bite
+        timer = UnityEngine.Random.Range(2f, 5f);
+        return true;
+    }
+
+    private Fish CastingManagerBypassFish()
+    {
+        // Using CastingManager 
+        if (!bypassCastingManager && castingManager != null)
+        {
+            Fish detectedFish = castingManager.GetFishInArea();
+            if (detectedFish != null)
+            {
+                return detectedFish;
+            }
+        }
+
+        // Bypassing CastingManager
+        if (fallbackFish != null)
+        {
+            return fallbackFish;
+        }
+        return null;
     }
 
     void HandleWaiting()
     {
-        timer -= Time.deltaTime; // count down the clock
-        if (timer <= 0) //once we get a bite
+        timer -= Time.deltaTime;
+        if (timer <= 0)
         {
-            OnBite?.Invoke(); //do i again put this right here
+            OnBite?.Invoke();
 
-            currentState = FishingState.HookWindow; //change state
+            currentState = FishingState.HookWindow;
 
-            timer = hookTimer; //sets timer to hook window time
+            timer = hookTimer;
         }
     }
 
     void HandleHookWindow()
     {
         timer -= Time.deltaTime;
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (timer <= 0)
         {
-            OnReel?.Invoke(); //change ui to reflecting reeling state
-            StartReeling();
-        }
-        else if (timer <= 0)
-        {
-            StartWaiting(); //fish got away but it was during initial part of fishing so 
-            // we make it go back to jsut after casting the rod
+            if (!StartWaiting())
+            {
+                AbortFishing();
+            }
         }
     }
 
     void StartReeling()
     {
-        currentState = FishingState.Reeling; //change state
+        currentState = FishingState.Reeling;
         progress = 0;
         tension = 0;
-        timer = activeFish.wiggleOffTimer; // reuse timer for wiggling
+        CurrentProgressUpdated?.Invoke(progress);
+        CurrentTensionUpdated?.Invoke(tension);
+        MaxTensionUpdated?.Invoke(activeFish.maxTension);
     }
 
-    void HandleReeling()
+    void HandleReeling(bool mashedThisFrame)
     {
-        HandleWiggleTimer();
-
-        if (Keyboard.current.spaceKey.isPressed)
+        if (mashedThisFrame)
         {
-            OnReelingActive?.Invoke();
-            if (isWiggling)
-            {
-                tension += activeFish.wiggleStrength * Time.deltaTime;
-                OnTensionUpdated?.Invoke(tension);
-            }
-            else
-            {
-                progress += activeFish.reelingSpeed * Time.deltaTime;
-                OnProgressUpdated?.Invoke(progress);
-            }
+            progress += activeFish.reelingSpeed;
+            progress = Mathf.Min(progress, 100f);
+
+            tension += activeFish.reelingSpeed * 0.25f;
+            tension = Mathf.Min(tension, activeFish.maxTension);
+
+            CurrentProgressUpdated?.Invoke(progress);
+            CurrentTensionUpdated?.Invoke(tension);
         }
         else
         {
-            OnReelingInactive?.Invoke();
-            // tension drops when you aren't pulling
             tension -= activeFish.tensionDropRate * Time.deltaTime;
-            tension = Mathf.Max(tension, 0); //we dont want our tension to drop below 0 
+            tension = Mathf.Max(tension, 0);
 
-            OnTensionUpdated?.Invoke(tension);
+            CurrentTensionUpdated?.Invoke(tension);
         }
 
 
@@ -182,36 +255,11 @@ public class FishingManager : MonoBehaviour
         {
             OnCaught?.Invoke();
             AbortFishing();
-            //go back to idle
         }
         if (tension >= activeFish.maxTension)
         {
             OnLineBreak?.Invoke();
             AbortFishing();
-            //go back to idle
-        }
-
-
-    }
-
-    void HandleWiggleTimer()
-    {
-        timer -= Time.deltaTime;
-
-        if (timer <= 0)
-        {
-            isWiggling = !isWiggling; //flip wiggling state to new one
-            //now if it is supposed to start wiggling
-            if (isWiggling == true)
-            {
-                OnWiggle?.Invoke();
-                timer = activeFish.wiggleOnTimer; //maybe set based on fish
-            }
-            else
-            {
-                OffWiggle?.Invoke();
-                timer = activeFish.wiggleOffTimer; //is this done right
-            }
         }
     }
 
@@ -219,7 +267,14 @@ public class FishingManager : MonoBehaviour
     {
         currentState = FishingState.Idle;
         activeFish = null;
+        progress = 0f;
+        tension = 0f;
+        timer = 0f;
+        CurrentProgressUpdated?.Invoke(0f);
+        CurrentTensionUpdated?.Invoke(0f);
+        MaxTensionUpdated?.Invoke(0f);
         OnReturnToIdle?.Invoke();
+        Debug.Log("Fishing sequence aborted. Returning to idle state.");
     }
 
 }
