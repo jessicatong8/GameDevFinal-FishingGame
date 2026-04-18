@@ -60,8 +60,11 @@ public class FishingManager : MonoBehaviour
     }
 
     [SerializeField] private PlayerInputState inputState;
+    [SerializeField] private bool usePrototypeFishSequence = true;
     [SerializeField] private bool bypassCastingManager = true;
     [SerializeField] private Fish fallbackFish;
+    // for prototyping, we preassign all fishes in the order they will be caught. In final version, we will use CastingManager to dynamically determine fish based on player's location and other factors
+    [SerializeField] private Fish[] fishSequence;
     public CastingManager castingManager;
     public FishingFlowState CurrentFlowState => currentFlowState;
     public Reeling_LineRangeState CurrentReelLineRangeState => currentLineRangeState;
@@ -81,6 +84,7 @@ public class FishingManager : MonoBehaviour
     private float maxStableTension = 0.75f; // if tension is above 75% of max tension, we consider it too high
     private float outOfRangeTimer; // timer to track how long player has been in too high/low tension state
     private float outOfRangeTimeLimit = 2f; // how long player can be in too high/low tension state before we consider them out of line range and trigger escape on next update tick
+    private int fishSequenceIndex;
     private Fish activeFish;
     private bool mashTriggeredThisFrame;
 
@@ -165,7 +169,7 @@ public class FishingManager : MonoBehaviour
     {
         if (!IsPlayerOnDock() || currentFlowState != FishingFlowState.Idle)
         {
-            // Debug.Log("FishingManager: \nIsPlayerOnDock: " + IsPlayerOnDock() + "(should be true)" + "\nCurrentState: " + currentFlowState + "(should be Idle)");
+            Debug.Log("FishingManager: \nIsPlayerOnDock: " + IsPlayerOnDock() + "(should be true)" + "\nCurrentState: " + currentFlowState + "(should be Idle)");
             return false;
         }
         return EnterCastingState(); // returns true on success and false on failure (e.g. no fish in spot, drip too low)
@@ -181,13 +185,14 @@ public class FishingManager : MonoBehaviour
         activeFish = ResolveFishForCurrentCast();
         if (activeFish == null)
         {
+            Debug.Log("FishingManager: activeFish is null. Either no fish in the area to catch, or no fallback fish available!");
             NoFishInSpot?.Invoke();
             return false;
         }
 
         if (currentDrip < activeFish.dripThreshold)
         {
-            Debug.Log("Not enough drip to catch this fish! Current Drip: " + currentDrip + ", Required Drip: " + activeFish.dripThreshold);
+            Debug.Log("FishingManager: Not enough drip to catch this fish! Current Drip: " + currentDrip + ", Required Drip: " + activeFish.dripThreshold);
             DripTooLow?.Invoke();
             return false;
         }
@@ -202,6 +207,15 @@ public class FishingManager : MonoBehaviour
 
     private Fish ResolveFishForCurrentCast()
     {
+        if (usePrototypeFishSequence)
+        {
+            Fish sequenceFish = GetFishFromSequence();
+            if (sequenceFish != null)
+            {
+                return sequenceFish;
+            }
+        }
+
         // Using CastingManager 
         if (!bypassCastingManager && castingManager != null)
         {
@@ -219,6 +233,50 @@ public class FishingManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    // Prototyping Function ONLY
+    private Fish GetFishFromSequence()
+    {
+        if (fishSequence == null || fishSequence.Length == 0)
+        {
+            Debug.LogWarning("FishingManager: Fish sequence is null or empty, but usePrototypeFishSequence is true. Please assign fish to the sequence in the inspector.");
+            return null;
+        }
+
+        if (fishSequenceIndex < 0)
+        {
+            fishSequenceIndex = 0;
+        }
+
+        while (fishSequenceIndex < fishSequence.Length)
+        {
+            Fish nextFish = fishSequence[fishSequenceIndex];
+            if (nextFish != null)
+            {
+                return nextFish;
+            }
+
+            // Skip empty slots so prototyping arrays can have gaps.
+            fishSequenceIndex++;
+        }
+
+        // if no valid fish within entire sequence, return null.
+        return null;
+    }
+
+    // Prototyping Function ONLY
+    private void AdvanceFishSequenceOnCatch()
+    {
+        if (!usePrototypeFishSequence || fishSequence == null || fishSequence.Length == 0)
+        {
+            return;
+        }
+
+        if (fishSequenceIndex < fishSequence.Length)
+        {
+            fishSequenceIndex++;
+        }
     }
 
     private void TickCastingState()
@@ -281,6 +339,7 @@ public class FishingManager : MonoBehaviour
         if (progress >= 100)
         {
             OnCaught?.Invoke();
+            AdvanceFishSequenceOnCatch();
             ReturnToIdle("Fish caught.");
             return;
         }

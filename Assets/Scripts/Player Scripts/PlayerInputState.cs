@@ -102,12 +102,6 @@ public class PlayerInputState : MonoBehaviour
             InteractPerformed?.Invoke();
             return;
         }
-
-        if (currentState == InputStates.Fishing)
-        {
-            // Hooking uses the dedicated Hook action to avoid early/duplicate hook triggers.
-            // Debug.Log("PlayerInputState: Interact pressed while fishing. Ignoring.");
-        }
     }
 
     public void OnJump(InputValue value)
