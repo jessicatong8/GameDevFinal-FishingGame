@@ -62,9 +62,11 @@ public class FishingManager : MonoBehaviour
     }
 
     [SerializeField] private PlayerInputState inputState;
+    [SerializeField] private bool usePrototypeFishSequence = true;
     [SerializeField] private bool bypassCastingManager = true;
     [SerializeField] private Fish fallbackFish;
-
+    // for prototyping, we preassign all fishes in the order they will be caught. In final version, we will use CastingManager to dynamically determine fish based on player's location and other factors
+    [SerializeField] private Fish[] fishSequence;
     public CastingManager castingManager;
     public FishingFlowState CurrentFlowState => currentFlowState;
     public Reeling_LineRangeState CurrentReelLineRangeState => currentLineRangeState;
@@ -78,11 +80,11 @@ public class FishingManager : MonoBehaviour
     private float timer;    // general purpose timer used for casting and hook window states
     private float minHookDelay = 1.5f;
     private float maxHookDelay = 4f;
-    private float minStableTensionRatio = 0.25f; // if tension is below 25% of max tension, we consider it too low
-    private float maxStableTensionRatio = 0.75f; // if tension is above 75% of max tension, we consider it too high
+    private float minStableTension = 0.25f; // if tension is below 25% of max tension, we consider it too low
+    private float maxStableTension = 0.75f; // if tension is above 75% of max tension, we consider it too high
     private float outOfRangeTimer; // timer to track how long player has been in too high/low tension state
     private float outOfRangeTimeLimit = 2f; // how long player can be in too high/low tension state before we consider them out of line range and trigger escape on next update tick
-
+    private int fishSequenceIndex;
     private bool mashTriggeredThisFrame;
 
     void Start()
@@ -115,16 +117,26 @@ public class FishingManager : MonoBehaviour
         }
     }
 
+
     private void HandleHookPerformed()
     {
         Debug.Log("HandleHookPerformed called. Current input state: " + inputState.CurrentState);
-        if (currentFlowState != FishingFlowState.HookWindow) { return; }
-        Debug.Log("HandleHookPerformed check passed.");
+        if (currentFlowState == FishingFlowState.HookWindow)
+        {
+            Debug.Log("HandleHookPerformed check passed.");
 
-        OnHook?.Invoke();
-        EnterReelingState();
+            OnHook?.Invoke();
+            EnterReelingState();
+        }
     }
 
+    private void HandleMashPerformed()
+    {
+        if (currentFlowState == FishingFlowState.Reeling)
+        {
+            mashTriggeredThisFrame = true;
+        }
+    }
 
     private void HandleAbortPerformed()
     {
@@ -162,11 +174,10 @@ public class FishingManager : MonoBehaviour
     {
         if (!IsPlayerOnDock() || currentFlowState != FishingFlowState.Idle)
         {
-            Debug.Log("FishingManager: Cannot start fishing. IsPlayerOnDock: " + FishingAreaTrigger.IsPlayerInFishingArea + ", CurrentState: " + currentFlowState);
+            Debug.Log("FishingManager: \nIsPlayerOnDock: " + IsPlayerOnDock() + "(should be true)" + "\nCurrentState: " + currentFlowState + "(should be Idle)");
             return false;
         }
-
-        return EnterCastingState();
+        return EnterCastingState(); // returns true on success and false on failure (e.g. no fish in spot, drip too low)
     }
 
     private bool IsPlayerOnDock()
@@ -179,20 +190,21 @@ public class FishingManager : MonoBehaviour
         activeFish = ResolveFishForCurrentCast();
         if (activeFish == null)
         {
+            Debug.Log("FishingManager: activeFish is null. Either no fish in the area to catch, or no fallback fish available!");
             NoFishInSpot?.Invoke();
             return false;
         }
 
         if (currentDrip < activeFish.dripThreshold)
         {
-            Debug.Log("Not enough drip to catch this fish! Current Drip: " + currentDrip + ", Required Drip: " + activeFish.dripThreshold);
+            Debug.Log("FishingManager: Not enough drip to catch this fish! Current Drip: " + currentDrip + ", Required Drip: " + activeFish.dripThreshold);
             DripTooLow?.Invoke();
             return false;
         }
 
         OnCast?.Invoke();
 
-        Debug.Log("Waiting for a bite/hook from fish: " + activeFish.fishName);
+        Debug.Log("Fishing Manager: Entered casting state. Waiting for a bite from fish: " + activeFish.fishName);
         SetFlowState(FishingFlowState.Casting);
         timer = UnityEngine.Random.Range(minHookDelay, maxHookDelay);
         return true;
@@ -200,7 +212,18 @@ public class FishingManager : MonoBehaviour
 
     private Fish ResolveFishForCurrentCast()
     {
-        // Using CastingManager 
+        // For prototyping purposes, use a preassigned sequence of fish that will be caught in order.
+        if (usePrototypeFishSequence)
+        {
+            Fish sequenceFish = GetFishFromSequence();
+            if (sequenceFish != null)
+            {
+                return sequenceFish;
+            }
+        }
+
+        // Using CastingManager, checks collision area for fish and returns fish if found.
+        // TODO - does this only check once when first entering casting state, or should we check continuously while in casting state to wait for a fish to swim into the area?
         if (!bypassCastingManager && castingManager != null)
         {
             Fish detectedFish = castingManager.GetFishInArea();
@@ -217,6 +240,50 @@ public class FishingManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    // Prototyping Function ONLY
+    private Fish GetFishFromSequence()
+    {
+        if (fishSequence == null || fishSequence.Length == 0)
+        {
+            Debug.LogWarning("FishingManager: Fish sequence is null or empty, but usePrototypeFishSequence is true. Please assign fish to the sequence in the inspector.");
+            return null;
+        }
+
+        if (fishSequenceIndex < 0)
+        {
+            fishSequenceIndex = 0;
+        }
+
+        while (fishSequenceIndex < fishSequence.Length)
+        {
+            Fish nextFish = fishSequence[fishSequenceIndex];
+            if (nextFish != null)
+            {
+                return nextFish;
+            }
+
+            // Skip empty slots so prototyping arrays can have gaps.
+            fishSequenceIndex++;
+        }
+
+        // if no valid fish within entire sequence, return null.
+        return null;
+    }
+
+    // Prototyping Function ONLY
+    private void AdvanceFishSequenceOnCatch()
+    {
+        if (!usePrototypeFishSequence || fishSequence == null || fishSequence.Length == 0)
+        {
+            return;
+        }
+
+        if (fishSequenceIndex < fishSequence.Length)
+        {
+            fishSequenceIndex++;
+        }
     }
 
     private void TickCastingState()
@@ -258,7 +325,8 @@ public class FishingManager : MonoBehaviour
         if (progressManager.GetCurrentProgress() >= 100f)
         {
             OnCaught?.Invoke();
-            ReturnToIdle("Fish caught successfully!");
+            AdvanceFishSequenceOnCatch();
+            ReturnToIdle(activeFish.fishName + " caught.");
             return;
         }
     }
