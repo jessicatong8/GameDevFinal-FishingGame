@@ -63,7 +63,7 @@ public class FishingManager : MonoBehaviour
     void Update()
     {
         //condition to escape any time during fishing
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (isPlayerOnDock && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             //do we need an event here to trigger idle?
             AbortFishing();
