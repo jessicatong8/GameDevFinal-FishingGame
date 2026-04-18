@@ -1,12 +1,19 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ProgressManager : MonoBehaviour
 {
     [SerializeField] private PlayerInputState inputState;
+    [SerializeField] private TensionManager tensionManager;
+    [SerializeField] private FishingManager fishingManager;
+
+    private const float TARGET_MASH_RATE = 3f; // expected mashes per second
     private bool mashTriggeredThisFrame;
     private float progress;
+    private bool isReeling;
 
-    FishingManager fishingManager;
+
+
     Fish activeFish;
 
 
@@ -42,13 +49,14 @@ public class ProgressManager : MonoBehaviour
 
     private void HandleHooked()
     {
-        fishingManager = GetComponent<FishingManager>();
+
         activeFish = fishingManager.activeFish;
         if (activeFish == null)
         {
-            Debug.LogError("TensionManager: No active fish found.");
+            Debug.LogError("ProgressManager: No active fish found.");
         }
         progress = 0f;
+        isReeling = true;
     }
     void Start()
     {
@@ -57,28 +65,41 @@ public class ProgressManager : MonoBehaviour
 
     void Update()
     {
-        TickReelingState(mashTriggeredThisFrame);
-        mashTriggeredThisFrame = false;
+        if (isReeling)
+        {
+            UpdateProgress(mashTriggeredThisFrame);
+            mashTriggeredThisFrame = false;
+        }
     }
 
-    private void TickReelingState(bool mashedThisFrame)
+    private void UpdateProgress(bool mashedThisFrame)
     {
-        if (mashedThisFrame)
+        if (mashedThisFrame && tensionManager.IsInSafeZone())
         {
-            progress += activeFish.reelingSpeed;
+            float increment = activeFish.reelingSpeed / TARGET_MASH_RATE;
+            progress += increment;
             progress = Mathf.Min(progress, 100f);
-
-
+        }
+        if (progress >= 100f)
+        {
+            fishingManager.CaughtFish();
         }
     }
 
     private void HandleResetToIdle()
     {
         progress = 0f;
+        isReeling = false;
     }
 
     public float GetCurrentProgress()
     {
         return progress;
+    }
+
+    public bool IsProgressComplete()
+    {
+        return progress >= 100f;
+
     }
 }

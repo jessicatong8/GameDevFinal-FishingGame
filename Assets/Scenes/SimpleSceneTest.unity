@@ -305,6 +305,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicUI
   fishingManager: {fileID: 1940631099}
+  tensionManager: {fileID: 1419121292}
+  progressManager: {fileID: 1152363078}
   progressSlider: {fileID: 160860258}
   tensionSlider: {fileID: 1354072942}
   alertText: {fileID: 1632286579}
@@ -3119,6 +3121,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2053364194926261492, guid: ce66a822c9a3f614fbdf2bc93393f17e, type: 3}
   m_PrefabInstance: {fileID: 657797935}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1152363077
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1152363079}
+  - component: {fileID: 1152363078}
+  m_Layer: 0
+  m_Name: ProgressManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1152363078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152363077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d63a22c1fdf8d4d599d58557de606008, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProgressManager
+  inputState: {fileID: 708269776}
+  tensionManager: {fileID: 1419121292}
+  fishingManager: {fileID: 1940631099}
+--- !u!4 &1152363079
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152363077}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1202799046 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3861894819865720379, guid: c4ce77fae258db1419fe426be4a51bbb, type: 3}
@@ -3212,17 +3261,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ef91e4b9978f4180b5ab9fa6b2bd52e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fish
-  fishName: Anglerfish
-  wiggleOnTimer: 3
-  wiggleOffTimer: 3
-  wiggleStrength: 6
-  reelingSpeed: 15
-  tensionDropRate: 4
-  rarityWeight: 8
-  maxTension: 10
+  fishName: AnglerFish
+  swimmingSpeed: 4
+  rarityWeight: 0
   rarity: 0
   dripThreshold: 0
-  swimmingSpeed: 4
+  wiggleOnTimer: 0
+  wiggleOffTimer: 0
+  wiggleStrength: 0
+  maxTension: 100
+  reelingSpeed: 15
+  tensionDropRate: 12
+  safeZoneCenter: 0.7
+  safeZoneWidth: 0.4
+  burstStrength: 0.3
+  tensionEscapeTime: 3
 --- !u!114 &1256478413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3443,9 +3496,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 901991364}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 10
+  m_MaxValue: 100
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3588,6 +3641,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: fdce958e5917d4effad60cf0830061d0, type: 3}
   m_PrefabInstance: {fileID: 1050321225}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1419121291
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1419121293}
+  - component: {fileID: 1419121292}
+  m_Layer: 0
+  m_Name: TensionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1419121292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419121291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4634f455c0fe4ba7b8ebfaa74a42ff2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TensionManager
+  inputState: {fileID: 708269776}
+  fishingManager: {fileID: 1940631099}
+--- !u!4 &1419121293
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419121291}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1477207644 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5527816746292536304, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
@@ -3881,16 +3980,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fish
   fishName: LionFish
+  swimmingSpeed: 0
+  rarityWeight: 20
+  rarity: 0
+  dripThreshold: 0
   wiggleOnTimer: 2
   wiggleOffTimer: 2
   wiggleStrength: 10
+  maxTension: 20
   reelingSpeed: 15
   tensionDropRate: 10
-  rarityWeight: 20
-  maxTension: 20
-  rarity: 0
-  dripThreshold: 0
-  swimmingSpeed: 0
+  safeZoneCenter: 0
+  safeZoneWidth: 0
+  burstStrength: 0
+  tensionEscapeTime: 3
 --- !u!95 &1652712461
 Animator:
   serializedVersion: 7
@@ -4398,8 +4501,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1940631100}
   - component: {fileID: 1940631099}
-  - component: {fileID: 1940631102}
-  - component: {fileID: 1940631101}
   m_Layer: 0
   m_Name: FishingManager
   m_TagString: Untagged
@@ -4420,8 +4521,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishingManager
   activeFish: {fileID: 0}
-  tensionManager: {fileID: 0}
-  progressManager: {fileID: 0}
   currentDrip: 10
   hookTimer: 2
   inputState: {fileID: 708269776}
@@ -4446,32 +4545,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1940631101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1940631098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d63a22c1fdf8d4d599d58557de606008, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProgressManager
-  inputState: {fileID: 708269776}
---- !u!114 &1940631102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1940631098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4634f455c0fe4ba7b8ebfaa74a42ff2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TensionManager
-  inputState: {fileID: 708269776}
 --- !u!1 &1952247253
 GameObject:
   m_ObjectHideFlags: 0
@@ -5254,6 +5327,8 @@ SceneRoots:
   - {fileID: 1007312318}
   - {fileID: 410087041}
   - {fileID: 832575519}
+  - {fileID: 1152363079}
+  - {fileID: 1419121293}
   - {fileID: 1940631100}
   - {fileID: 1313077788}
   - {fileID: 1739418596}
