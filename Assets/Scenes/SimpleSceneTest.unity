@@ -2904,6 +2904,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1209043419273133153, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
+      propertyPath: fishingManager
+      value: 
+      objectReference: {fileID: 1940631099}
     - target: {fileID: 2646506790307004226, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: StartPoint
       value: 
@@ -4520,12 +4524,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 047bbb956d9c541eb82ca06ee54f5c96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishingManager
+  currentDrip: 10
   hookTimer: 2
   inputState: {fileID: 708269776}
   bypassCastingManager: 1
   fallbackFish: {fileID: 1256478411}
   castingManager: {fileID: 1637651798}
-  currentDrip: 10
 --- !u!4 &1940631100
 Transform:
   m_ObjectHideFlags: 0
