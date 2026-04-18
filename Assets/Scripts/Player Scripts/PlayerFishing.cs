@@ -11,13 +11,8 @@ public class PlayerFishing : MonoBehaviour
     [SerializeField] private FishingManager fishingManager;
     [SerializeField] private FishingRig fishingRig;
 
-    [Header("Rig Migration (Optional)")]
-    [SerializeField] private GameObject fishingRodAssembly;
-    [SerializeField] private string fishingLineChildPath = "Line";
-    [SerializeField] private string fishingHookChildPath = "Hook";
-
     public bool IsFishing;
-    private bool alreadyCast;
+    private bool lineCasted;
 
     private void Awake()
     {
@@ -44,10 +39,8 @@ public class PlayerFishing : MonoBehaviour
 
     private void OnDisable()
     {
-        if (inputState != null)
-        {
-            inputState.InteractPerformed -= HandleInteract;
-        }
+
+        inputState.InteractPerformed -= HandleInteract;
 
         FishingManager.OnHook -= BeginReeling;
         FishingManager.OnReturnToIdle -= HandleFishingEnded;
@@ -55,32 +48,27 @@ public class PlayerFishing : MonoBehaviour
 
     private void HandleInteract()
     {
-        if (!inputState.GetCurrentInputState().Equals(PlayerInputState.InputStates.Fishing))
+        Debug.Log("HandleInteract called. Current input state: " + inputState.CurrentState);
+        if (inputState.GetCurrentInputState().Equals(PlayerInputState.InputStates.Fishing))
         {
-            if (!fishingManager.TryStartFishing())
-            {
-                Debug.Log("Cannot start fishing: start conditions were not met.");
-                return;
-            }
-
-            SetFishingState(true);
-            BeginCast();
             return;
         }
 
-        if (!alreadyCast)
+        if (!fishingManager.TryStartFishing())
         {
-            Debug.Log("Player is fishing but has not cast yet. Triggering cast.");
-            BeginCast();
-            HandleFishingEnded();
+            Debug.Log("Cannot start fishing: start conditions were not met.");
+            return;
         }
+
+        SetFishingState(true);
+        BeginCast();
     }
 
     private void BeginCast()
     {
-        animator?.SetTrigger("cast");
+        animator?.SetTrigger("cast"); 
         fishingRig?.TriggerCast();
-        alreadyCast = true;
+        lineCasted = true;
     }
 
     // Begin Reeling/Mashing Process
@@ -114,7 +102,7 @@ public class PlayerFishing : MonoBehaviour
 
         if (!fishingActive)
         {
-            alreadyCast = false;
+            lineCasted = false;
         }
     }
 }

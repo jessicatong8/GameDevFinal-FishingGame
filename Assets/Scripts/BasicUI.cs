@@ -16,6 +16,7 @@ public class BasicUI : MonoBehaviour
         FishingManager.OnBite += HandleBite;
         FishingManager.OnHook += HandleReel;
         FishingManager.OnCaught += HandleCaught;
+        FishingManager.OnEscaped += HandleEscaped;
         FishingManager.OnLineBreak += HandleLineBreak;
 
         FishingManager.CurrentProgressUpdated += UpdateProgressSlider;
@@ -29,6 +30,7 @@ public class BasicUI : MonoBehaviour
         FishingManager.OnBite -= HandleBite;
         FishingManager.OnHook -= HandleReel;
         FishingManager.OnCaught -= HandleCaught;
+        FishingManager.OnEscaped -= HandleEscaped;
         FishingManager.OnLineBreak -= HandleLineBreak;
         FishingManager.CurrentProgressUpdated -= UpdateProgressSlider;
         FishingManager.CurrentTensionUpdated -= UpdateTensionSlider;
@@ -73,6 +75,12 @@ public class BasicUI : MonoBehaviour
     {
         alertText.text = "FISH CAUGHT!";
         alertText.color = Color.green;
+    }
+
+    void HandleEscaped()
+    {
+        alertText.text = "FISH ESCAPED!";
+        alertText.color = new Color(1f, 0.75f, 0.2f);
     }
 
     void HandleLineBreak()

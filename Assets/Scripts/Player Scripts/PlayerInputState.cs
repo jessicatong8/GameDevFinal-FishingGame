@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(PlayerMovement))]
+[RequireComponent(typeof(PlayerFishing))]
 public class PlayerInputState : MonoBehaviour
 {
     public enum InputStates
@@ -23,33 +25,30 @@ public class PlayerInputState : MonoBehaviour
     public event Action AbortPerformed;
 
     public InputStates CurrentState => currentState;
+    [SerializeField] private FishingManager fishingManager;
+    private PlayerMovement movementScript;
+    private PlayerFishing fishingScript;
+
 
     public void Awake()
     {
         Debug.Log($"PlayerInputState initialized with state: {currentState}");
+        movementScript = GetComponent<PlayerMovement>();
+        fishingScript = GetComponent<PlayerFishing>();
+        // menuScript = GetComponent<PlayerMenu>();
     }
     public void SetState(InputStates state)
     {
         Debug.Log($"PlayerInputState: Switching to state: {currentState}");
         currentState = state;
         ClearInputs();
-        if (state == InputStates.Gameplay)
-        {
-            GetComponent<PlayerMovement>().enabled = true;
-            GetComponent<PlayerFishing>().enabled = false;
-            // GetComponent<PlayerMenu>().enabled = false;
-        }
-        else if (state == InputStates.Fishing)
-        {
-            GetComponent<PlayerMovement>().enabled = false;
-            GetComponent<PlayerFishing>().enabled = true;
-            // GetComponent<PlayerMenu>().enabled = false;
-        }
+        // Keep gameplay components enabled and gate behavior by input state checks.
+        // PlayerFishing handles movement lock and rig activation itself.
         // else if (state == InputStates.Menu)
         // {
-        //     GetComponent<PlayerMovement>().enabled = false;
-        //     GetComponent<PlayerFishing>().enabled = false;
-        //     // GetComponent<PlayerMenu>().enabled = true;
+        //     movementScript.enabled = false;
+        //     fishingScript.enabled = false;
+        //     // menuScript.enabled = true;
         // }
     }
     public InputStates GetCurrentInputState()
@@ -99,13 +98,15 @@ public class PlayerInputState : MonoBehaviour
 
         if (currentState == InputStates.Gameplay)
         {
-            Debug.Log("Fishing Started");
+            Debug.Log("PlayerInputState: Fishing Started");
             InteractPerformed?.Invoke();
+            return;
         }
+
         if (currentState == InputStates.Fishing)
         {
-            Debug.Log("Casting Started");
-            HookPerformed?.Invoke();
+            // Hooking uses the dedicated Hook action to avoid early/duplicate hook triggers.
+            Debug.Log("PlayerInputState: Interact pressed while fishing. Ignoring.");
         }
     }
 

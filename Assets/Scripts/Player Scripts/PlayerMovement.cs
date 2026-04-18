@@ -64,11 +64,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (inputStateScript.CurrentState != PlayerInputState.InputStates.Gameplay)
-        {
-            // disable script when 
-            return;
-        }
+        if (inputStateScript.CurrentState != PlayerInputState.InputStates.Gameplay) { return; }
 
         // constantly read movement input from player input state
         Vector2 moveInput = inputStateScript.MovementInputData;

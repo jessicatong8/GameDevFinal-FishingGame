@@ -13,8 +13,18 @@ public class FishReelingAnimations : MonoBehaviour
         FishingManager.OnBite += HandleBite;
         FishingManager.OnHook += HandleReelAttempt;
         FishingManager.OnCaught += HandleCaught;
+        FishingManager.OnEscaped += HandleEscaped;
         FishingManager.OnLineBreak += HandleLineBreak;
 
+    }
+
+    void OnDestroy()
+    {
+        FishingManager.OnBite -= HandleBite;
+        FishingManager.OnHook -= HandleReelAttempt;
+        FishingManager.OnCaught -= HandleCaught;
+        FishingManager.OnEscaped -= HandleEscaped;
+        FishingManager.OnLineBreak -= HandleLineBreak;
     }
 
     void Update()
@@ -37,6 +47,12 @@ public class FishReelingAnimations : MonoBehaviour
     }
 
     void HandleLineBreak()
+    {
+        animator.SetTrigger("Escaped");
+        animator.SetBool("IsReeling", false);
+    }
+
+    void HandleEscaped()
     {
         animator.SetTrigger("Escaped");
         animator.SetBool("IsReeling", false);
