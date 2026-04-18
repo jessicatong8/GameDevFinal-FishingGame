@@ -42,14 +42,20 @@ public class PlayerInputState : MonoBehaviour
         Debug.Log($"PlayerInputState: Switching to state: {currentState}");
         currentState = state;
         ClearInputs();
-        // Keep gameplay components enabled and gate behavior by input state checks.
-        // PlayerFishing handles movement lock and rig activation itself.
-        // else if (state == InputStates.Menu)
-        // {
-        //     movementScript.enabled = false;
-        //     fishingScript.enabled = false;
-        //     // menuScript.enabled = true;
-        // }
+        switch (currentState)
+        {
+            case InputStates.Gameplay:
+                movementScript.enabled = true;
+                fishingScript.enabled = false;
+                break;
+            case InputStates.Fishing:
+                movementScript.enabled = false;
+                fishingScript.enabled = true;
+                break;
+            default:
+                Debug.LogWarning("PlayerInputState: Unhandled state: " + currentState);
+                break;
+        }
     }
     public InputStates GetCurrentInputState()
     {
@@ -78,13 +84,17 @@ public class PlayerInputState : MonoBehaviour
 
     public void OnZoom(InputValue value)
     {
-        OnZoomScroll(value);
+        if (currentState == InputStates.Gameplay)
+        {
+            OnZoomScroll(value);
+        }
     }
 
     public void OnZoomToggle(InputValue value)
     {
-        // if (currentState == InputStates.Menu) { return; }
-        if (value.isPressed)
+        if (!value.isPressed) { return; }
+
+        if (currentState == InputStates.Gameplay)
         {
             // Toggle zoom between 1st person and 3rd person
             ZoomInputData = ZoomInputData == 0f ? 1f : 0f;
@@ -98,7 +108,8 @@ public class PlayerInputState : MonoBehaviour
 
         if (currentState == InputStates.Gameplay)
         {
-            Debug.Log("PlayerInputState: Fishing Started");
+            Debug.Log("PlayerInputState: Interact in Gameplay state.");
+            // Call interact for Playerfishing, which will check if fishing can be started and if so, will switch to fishing state. 
             InteractPerformed?.Invoke();
             return;
         }
