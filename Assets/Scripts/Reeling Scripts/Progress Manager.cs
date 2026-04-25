@@ -21,7 +21,7 @@ public class ProgressManager : MonoBehaviour
     {
         if (inputState == null)
         {
-            Debug.LogError("FishingManager: No PlayerInputState reference assigned in inspector.");
+            DebugLogger.Instance.LogError("FishingManager: No PlayerInputState reference assigned in inspector.");
         }
 
         if (inputState != null)
@@ -32,6 +32,7 @@ public class ProgressManager : MonoBehaviour
         FishingManager.OnCaught += HandleResetToIdle;
         FishingManager.OnEscaped += HandleResetToIdle;
         FishingManager.OnHook += HandleHooked;
+        FishingManager.OnReturnToIdle += HandleResetToIdle;
     }
 
     private void OnDisable()
@@ -40,6 +41,11 @@ public class ProgressManager : MonoBehaviour
         {
             inputState.MashPerformed -= HandleMashPerformed;
         }
+
+        FishingManager.OnCaught -= HandleResetToIdle;
+        FishingManager.OnEscaped -= HandleResetToIdle;
+        FishingManager.OnHook -= HandleHooked;
+        FishingManager.OnReturnToIdle -= HandleResetToIdle;
     }
 
     private void HandleMashPerformed()
@@ -53,7 +59,7 @@ public class ProgressManager : MonoBehaviour
         activeFish = fishingManager.activeFish;
         if (activeFish == null)
         {
-            Debug.LogError("ProgressManager: No active fish found.");
+            DebugLogger.Instance.LogError("ProgressManager: No active fish found.");
         }
         progress = 0f;
         isReeling = true;
@@ -88,8 +94,10 @@ public class ProgressManager : MonoBehaviour
 
     private void HandleResetToIdle()
     {
+        mashTriggeredThisFrame = false;
         progress = 0f;
         isReeling = false;
+        activeFish = null;
     }
 
     public float GetCurrentProgress()

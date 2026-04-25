@@ -24,7 +24,7 @@ public class PlayerFishing : MonoBehaviour
     private void Start()
     {
         inputState.SetState(PlayerInputState.InputStates.Gameplay);
-        Debug.Log("PlayerFishing: Starting in Gameplay state.");
+        DebugLogger.Instance.Log("PlayerFishing: Starting in Gameplay state.");
         SetFishingActive(false);
     }
 
@@ -52,7 +52,7 @@ public class PlayerFishing : MonoBehaviour
         // - not in idle state
         if (fishingManager.TryStartFishing())
         {
-            Debug.Log("PlayerFishing: Fishing started successfully.");
+            // DebugLogger.Instance.Log("PlayerFishing: Fishing started successfully.");
             // TryStartFishing() -> fishingManager takes over (either failing or progressing to EnterCastingState()).
             SetFishingActive(true);
             BeginCast();
@@ -62,6 +62,12 @@ public class PlayerFishing : MonoBehaviour
     private void BeginCast()
     {
         animator?.SetTrigger("cast");
+    }
+
+    // Call this from an animation event at the frame where the cast should release.
+    public void ReleaseCast()
+    {
+        DebugLogger.Instance.LogMethodCall("PlayerFishing.ReleaseCast");
         fishingRig?.TriggerCast();
     }
 
@@ -76,7 +82,7 @@ public class PlayerFishing : MonoBehaviour
     {
         if (!IsFishing)
         {
-            Debug.LogWarning("HandleFishingEnded called but player is not in fishing state.");
+            DebugLogger.Instance.LogWarning("HandleFishingEnded called but player is not in fishing state.");
             return;
         }
         SetFishingActive(false);
@@ -88,7 +94,7 @@ public class PlayerFishing : MonoBehaviour
 
         // Set player input state to fishing mode
         inputState.SetState(fishingActive ? PlayerInputState.InputStates.Fishing : PlayerInputState.InputStates.Gameplay);
-        Debug.Log($"PlayerFishing: Set fishing active: {fishingActive}. \nCurrent input state: {inputState.GetCurrentInputState()}");
+        DebugLogger.Instance.Log($"PlayerFishing: Set fishing active: {fishingActive}. \nCurrent input state: {inputState.GetCurrentInputState()}");
 
         // animator parameter for idle/fishing animation transition
         animator?.SetBool("startFishing", fishingActive);

@@ -311,6 +311,17 @@
                 },
                 {
                     "name": "",
+                    "id": "eeda6e80-06a5-4bbe-9811-32e1d9ad240e",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "ZoomToggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "62d72d31-56bf-4ee5-b108-be1fcafcd3e2",
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
@@ -491,6 +502,15 @@
                     "type": "PassThrough",
                     "id": "9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be",
                     "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Debug",
+                    "type": "Button",
+                    "id": "40f026b6-7102-4ed1-95b5-42702251a316",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -912,6 +932,17 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7c614e5b-d146-4299-bded-2d92e3410b1e",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Debug",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

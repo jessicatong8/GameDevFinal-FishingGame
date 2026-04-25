@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using Unity.XR.CoreUtils;
+using System.Diagnostics;
 
 public class FishingManager : MonoBehaviour
 {
@@ -61,7 +62,7 @@ public class FishingManager : MonoBehaviour
     {
         if (inputState == null)
         {
-            Debug.LogError("FishingManager: No PlayerInputState reference assigned in inspector.");
+            DebugLogger.Instance.LogError("FishingManager: No PlayerInputState reference assigned in inspector.");
         }
 
         if (inputState != null)
@@ -80,16 +81,17 @@ public class FishingManager : MonoBehaviour
         }
     }
 
-    private bool IsPlayerOnDock()
+    private bool IsPlayerInFishingArea()
     {
         return FishingAreaTrigger.IsPlayerInFishingArea;
     }
 
     public bool TryStartFishing()
     {
-        if (!IsPlayerOnDock() || currentFishingGameState != FishingGameState.Idle)
+        // DebugLogger.Instance.LogMethodCall("FishingManager.TryStartFishing");
+        if (!IsPlayerInFishingArea() || currentFishingGameState != FishingGameState.Idle)
         {
-            Debug.Log("FishingManager: \nIsPlayerOnDock: " + IsPlayerOnDock() + "(should be true)" + "\nCurrentState: " + currentFishingGameState + "(should be Idle)");
+            DebugLogger.Instance.LogMethodCall("FishingManager.TryStartFishing","IsPlayerInFishingArea: " + IsPlayerInFishingArea() + " (should be true)" + "\nCurrentState: " + currentFishingGameState + " (should be Idle)");
             return false;
         }
         return EnterCastingState(); // returns true on success and false on failure (e.g. no fish in spot, drip too low)
@@ -97,11 +99,11 @@ public class FishingManager : MonoBehaviour
 
     private void HandleHookPerformed()
     {
-        Debug.Log("HandleHookPerformed called. Current input state: " + inputState.CurrentState);
+        DebugLogger.Instance.Log("HandleHookPerformed called. Current input state: " + inputState.CurrentState);
         if (currentFishingGameState == FishingGameState.HookWindow)
         {
-            Debug.Log("HandleHookPerformed check passed.");
-
+            // DebugLogger.Instance.Log("HandleHookPerformed check passed.");
+            DebugLogger.Instance.LogMethodCall("FishingManager.HandleHookPerformed","-> !OnHook\nHook successful");
             OnHook?.Invoke();
             EnterReelingState();
         }
@@ -120,21 +122,21 @@ public class FishingManager : MonoBehaviour
         activeFish = ResolveFishForCurrentCast();
         if (activeFish == null)
         {
-            Debug.Log("FishingManager: activeFish is null. Either no fish in the area to catch, or no fallback fish available!");
+            DebugLogger.Instance.Log("FishingManager: activeFish is null. Either no fish in the area to catch, or no fallback fish available!");
             NoFishInSpot?.Invoke();
             return false;
         }
 
         if (currentDrip < activeFish.dripThreshold)
         {
-            Debug.Log("FishingManager: Not enough drip to catch this fish! Current Drip: " + currentDrip + ", Required Drip: " + activeFish.dripThreshold);
+            DebugLogger.Instance.Log("FishingManager: Not enough drip to catch this fish! Current Drip: " + currentDrip + ", Required Drip: " + activeFish.dripThreshold);
             DripTooLow?.Invoke();
             return false;
         }
 
+        // DebugLogger.Instance.LogMethodCall("FishingManager.EnterCastingState", "-> !OnCast\nCasting line with fish: " + activeFish.fishName);
         OnCast?.Invoke();
 
-        Debug.Log("Fishing Manager: Entered casting state. Waiting for a bite from fish: " + activeFish.fishName);
         SetFishingGameState(FishingGameState.Casting);
         timer = UnityEngine.Random.Range(minHookDelay, maxHookDelay);
         return true;
@@ -177,7 +179,7 @@ public class FishingManager : MonoBehaviour
     {
         if (fishSequence == null || fishSequence.Length == 0)
         {
-            Debug.LogWarning("FishingManager: Fish sequence is null or empty, but usePrototypeFishSequence is true. Please assign fish to the sequence in the inspector.");
+            DebugLogger.Instance.LogWarning("FishingManager: Fish sequence is null or empty, but usePrototypeFishSequence is true. Please assign fish to the sequence in the inspector.");
             return null;
         }
 
@@ -242,8 +244,8 @@ public class FishingManager : MonoBehaviour
 
     }
 
-    private void HandleReeling()
-    {
+    // private void HandleReeling()
+    // {
         // tensionManager = GetComponent<TensionManager>();
         // progressManager = GetComponent<ProgressManager>();
         // if (tensionManager.GetCurrentTension() > activeFish.maxTension)
@@ -259,25 +261,30 @@ public class FishingManager : MonoBehaviour
         //     ReturnToIdle(activeFish.fishName + " caught.");
         //     return;
         // }
-    }
+    // }
 
     private void SetFishingGameState(FishingGameState requestedState)
     {
         if (currentFishingGameState == requestedState) { return; }
 
+        FishingGameState previousState = currentFishingGameState;
         currentFishingGameState = requestedState;
+        DebugLogger.Instance.LogMethodCall("FishingManager.SetFishingGameState", $"{previousState} -> {currentFishingGameState}");
         OnFishingGameStateChanged?.Invoke(currentFishingGameState);
     }
 
 
     public void EscapeFishing(string reason)
     {
+        DebugLogger.Instance.LogMethodCall("FishingManager.EscapeFishing", "-> !OnEscaped");
         OnEscaped?.Invoke();
         ReturnToIdle(reason);
     }
 
     public void CaughtFish()
     {
+        string fishName = activeFish != null ? activeFish.fishName : "Unknown fish";
+        DebugLogger.Instance.LogMethodCall("FishingManager.CaughtFish", fishName);
         OnCaught?.Invoke();
         AdvanceFishSequenceOnCatch();
         ReturnToIdle(activeFish.fishName + " caught.");
@@ -285,6 +292,7 @@ public class FishingManager : MonoBehaviour
 
     private void ReturnToIdle(string reason)
     {
+        DebugLogger.Instance.LogMethodCall("FishingManager.ReturnToIdle", reason);
         SetFishingGameState(FishingGameState.Idle);
 
         activeFish = null;
@@ -295,7 +303,7 @@ public class FishingManager : MonoBehaviour
 
         if (!string.IsNullOrEmpty(reason))
         {
-            Debug.Log("Fishing sequence ended: " + reason);
+            DebugLogger.Instance.Log("Fishing sequence ended: " + reason);
         }
     }
 
@@ -315,7 +323,7 @@ public class FishingManager : MonoBehaviour
                 break;
 
             case FishingGameState.Reeling:
-                HandleReeling();
+                // HandleReeling(); // Now handled by ProgressManager and TensionManager
                 break;
         }
     }

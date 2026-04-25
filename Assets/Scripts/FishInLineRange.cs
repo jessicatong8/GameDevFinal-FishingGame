@@ -25,7 +25,7 @@ public class FishInLineRange : MonoBehaviour
         position = transform.position;
         swimmingSpeed = GetComponent<Fish>().swimmingSpeed;
         SetTargetPosition(position);
-        Debug.Log("Initial Position: " + position);
+        DebugLogger.Instance.Log("Initial Position: " + position);
 
     }
 
@@ -51,7 +51,7 @@ public class FishInLineRange : MonoBehaviour
         }
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, direction * 90f, transform.eulerAngles.z); // Flip the fish to face the right direction
 
-        Debug.Log("Target Position: " + targetPosition);
+        DebugLogger.Instance.Log("Target Position: " + targetPosition);
         return targetPosition;
     }
 
@@ -61,7 +61,7 @@ public class FishInLineRange : MonoBehaviour
 
         if (distanceToTarget <= arrivalThreshold)
         {
-            Debug.Log("Arrived at Target Position: " + targetPosition);
+            DebugLogger.Instance.Log("Arrived at Target Position: " + targetPosition);
             transform.position = targetPosition;
             SetTargetPosition(transform.position);
             return;

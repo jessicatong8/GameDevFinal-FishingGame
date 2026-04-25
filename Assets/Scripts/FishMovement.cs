@@ -44,7 +44,7 @@ public class FishMovement : MonoBehaviour
         position = transform.position;
         swimmingSpeed = GetComponent<Fish>().swimmingSpeed;
         SetTargetPosition(position);
-        Debug.Log("Initial Position: " + position);
+        // DebugLogger.Instance.Log("Initial Position: " + position);
 
     }
 

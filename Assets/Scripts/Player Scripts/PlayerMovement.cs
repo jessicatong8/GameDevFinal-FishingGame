@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (characterController == null || cameraTransform == null || inputStateScript == null)
         {
-            Debug.LogWarning("PlayerMovement: Missing required components. Please ensure CharacterController, Camera Transform, and PlayerInputState are assigned. CharacterController: " + characterController + ", Camera Transform: " + cameraTransform + ", PlayerInputState: " + inputStateScript);
+            DebugLogger.Instance.LogWarning("PlayerMovement: Missing required components. Please ensure CharacterController, Camera Transform, and PlayerInputState are assigned. CharacterController: " + characterController + ", Camera Transform: " + cameraTransform + ", PlayerInputState: " + inputStateScript);
             return;
         }
 

@@ -88,7 +88,7 @@ public class RodHighlighter : MonoBehaviour
 
         if (highlightMaterial == null)
         {
-            Debug.LogWarning("RodHighlighter: Highlight material is not assigned.");
+            DebugLogger.Instance.LogWarning("RodHighlighter: Highlight material is not assigned.");
             return;
         }
         if (runtimeHighlightMaterial == null)
