@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class FishInLineRange : MonoBehaviour
 {
-    private Animator animator;
     public FishingManager fishManager;
     private Vector3 position;
     private Vector3 targetPosition;
@@ -23,18 +22,6 @@ public class FishInLineRange : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        animator = GetComponent<Animator>();
-
-        // FishingManager.OnCast += HandleCast;
-        // FishingManager.OnBite += HandleBite;
-        // FishingManager.OnReelingActive += HandleReelingActive;
-        // FishingManager.OnReelingInactive += HandleReelingInactive;
-        // FishingManager.OnCaught += HandleCaught;
-        // FishingManager.OnLineBreak += HandleLineBreak;
-        // FishingManager.OnWiggle += HandleWiggleStart;
-        // FishingManager.OffWiggle += HandleWiggleEnd;
-
-
         position = transform.position;
         swimmingSpeed = GetComponent<Fish>().swimmingSpeed;
         SetTargetPosition(position);

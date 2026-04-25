@@ -5,7 +5,6 @@ public class FishReelingAnimations : MonoBehaviour
     private Animator animator;
     public FishingManager fishManager;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -14,7 +13,6 @@ public class FishReelingAnimations : MonoBehaviour
         FishingManager.OnHook += HandleReelAttempt;
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnEscaped += HandleEscaped;
-        FishingManager.OnLineBreak += HandleLineBreak;
 
     }
 
@@ -24,7 +22,6 @@ public class FishReelingAnimations : MonoBehaviour
         FishingManager.OnHook -= HandleReelAttempt;
         FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnEscaped -= HandleEscaped;
-        FishingManager.OnLineBreak -= HandleLineBreak;
     }
 
     void Update()

@@ -1,14 +1,17 @@
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 using TMPro;
 
 public class BasicUI : MonoBehaviour
 {
-    public FishingManager fishManager;
-    
+    [SerializeField] private FishingManager fishingManager;
+    [SerializeField] public TensionManager tensionManager;
+    [SerializeField] public ProgressManager progressManager;
+
+
     public Slider progressSlider;
     public Slider tensionSlider;
-    public TextMeshProUGUI alertText; 
+    public TextMeshProUGUI alertText;
 
     void OnEnable()
     {
@@ -17,11 +20,6 @@ public class BasicUI : MonoBehaviour
         FishingManager.OnHook += HandleReel;
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnEscaped += HandleEscaped;
-        FishingManager.OnLineBreak += HandleLineBreak;
-
-        FishingManager.CurrentProgressUpdated += UpdateProgressSlider;
-        FishingManager.CurrentTensionUpdated += UpdateTensionSlider;
-        FishingManager.MaxTensionUpdated += UpdateTensionSliderMax;
     }
 
     void OnDisable()
@@ -31,10 +29,21 @@ public class BasicUI : MonoBehaviour
         FishingManager.OnHook -= HandleReel;
         FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnEscaped -= HandleEscaped;
-        FishingManager.OnLineBreak -= HandleLineBreak;
-        FishingManager.CurrentProgressUpdated -= UpdateProgressSlider;
-        FishingManager.CurrentTensionUpdated -= UpdateTensionSlider;
-        FishingManager.MaxTensionUpdated -= UpdateTensionSliderMax;
+
+    }
+
+    void Start()
+    {
+        UpdateProgressSlider(0);
+        UpdateTensionSlider(0);
+        UpdateTensionSliderMax(0);
+
+    }
+    void Update()
+    {
+        UpdateProgressSlider(progressManager.GetCurrentProgress());
+        UpdateTensionSlider(tensionManager.GetCurrentTension());
+        UpdateTensionSliderMax(tensionManager.GetCurrentMaxTension());
     }
 
     void UpdateProgressSlider(float val)
@@ -83,9 +92,4 @@ public class BasicUI : MonoBehaviour
         alertText.color = new Color(1f, 0.75f, 0.2f);
     }
 
-    void HandleLineBreak()
-    {
-        alertText.text = "LINE SNAPPED!";
-        alertText.color = Color.gray;
-    }
 }
