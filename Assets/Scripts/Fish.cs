@@ -17,7 +17,6 @@ public class Fish : MonoBehaviour
 
     [Header("Stats for tension and progress when reeling")]
 
-    public float maxTension = 100f; //move this to player later
 
     public float reelingSpeed = 12f;
     public float tensionDropRate = 5f;

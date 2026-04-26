@@ -11,7 +11,7 @@ public class TensionManager : MonoBehaviour
     private bool isReeling;
     private bool mashTriggeredThisFrame;
     private float tension;
-    private float maxTension;
+    private float maxTension = 100; 
     private float tensionDropRate;
 
     private float safeZoneLower;
@@ -74,7 +74,6 @@ public class TensionManager : MonoBehaviour
             return;
         }
         isReeling = true;
-        maxTension = activeFish.maxTension;
         tensionDropRate = activeFish.tensionDropRate;
         tension = activeFish.safeZoneCenter * maxTension; // start in the middle of the safe zone
 
@@ -136,10 +135,6 @@ public class TensionManager : MonoBehaviour
     public float GetCurrentTension()
     {
         return tension;
-    }
-    public float GetCurrentMaxTension()
-    {
-        return maxTension;
     }
     public bool IsInSafeZone() => tension >= safeZoneLower && tension <= safeZoneUpper;
     public bool IsTensionTooHigh() => tension > safeZoneUpper;

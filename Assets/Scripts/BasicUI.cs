@@ -64,7 +64,6 @@ public class BasicUI : MonoBehaviour
     {
         UpdateProgressSlider(progressManager.GetCurrentProgress());
         UpdateTensionSlider(tensionManager.GetCurrentTension());
-        UpdateTensionSliderMax(tensionManager.GetCurrentMaxTension());
     }
 
     void UpdateProgressSlider(float val)
