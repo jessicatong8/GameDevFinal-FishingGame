@@ -15,7 +15,7 @@ public class FishingAreaTrigger : MonoBehaviour
             return;
         }
 
-        Debug.Log("Player entered fishing area.");
+        DebugLogger.Instance.Log("IN fishing area.");
         IsPlayerInFishingArea = true;
         OnPlayerEnterFishingArea?.Invoke(true);
     }
@@ -27,7 +27,7 @@ public class FishingAreaTrigger : MonoBehaviour
             return;
         }
 
-        Debug.Log("Player exited fishing area.");
+        DebugLogger.Instance.Log("LEFT fishing area.");
         IsPlayerInFishingArea = false;
         OnPlayerExitFishingArea?.Invoke(false);
     }

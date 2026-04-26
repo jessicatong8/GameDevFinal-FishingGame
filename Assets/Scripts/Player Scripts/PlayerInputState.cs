@@ -23,23 +23,31 @@ public class PlayerInputState : MonoBehaviour
     public event Action HookPerformed;
     public event Action MashPerformed;
     public event Action AbortPerformed;
+    public event Action DebugPerformed;
 
     public InputStates CurrentState => currentState;
     [SerializeField] private FishingManager fishingManager;
     private PlayerMovement movementScript;
-    private PlayerFishing fishingScript;
+    // private PlayerFishing fishingScript;
 
 
     public void Awake()
     {
-        Debug.Log($"PlayerInputState initialized with state: {currentState}");
+        // DebugLogger.Instance.Log($"PlayerInputState initialized with state: {currentState}");
         movementScript = GetComponent<PlayerMovement>();
-        fishingScript = GetComponent<PlayerFishing>();
+        // fishingScript = GetComponent<PlayerFishing>();
         // menuScript = GetComponent<PlayerMenu>();
     }
+
+    public InputStates GetCurrentInputState()
+    {
+        return currentState;
+    }
+
     public void SetState(InputStates state)
     {
-        Debug.Log($"PlayerInputState: Switching to state: {currentState}");
+        // DebugLogger.Instance.Log($"PlayerInputState: Switching to state: {currentState}");
+        // DebugLogger.Instance.LogMethodCall("PlayerInputState.SetState", $"{currentState} -> {state}");
         currentState = state;
         ClearInputs();
         switch (currentState)
@@ -51,13 +59,9 @@ public class PlayerInputState : MonoBehaviour
                 movementScript.enabled = false;
                 break;
             default:
-                Debug.LogWarning("PlayerInputState: Unhandled state: " + currentState);
+                DebugLogger.Instance.LogWarning("PlayerInputState: Unhandled state: " + currentState);
                 break;
         }
-    }
-    public InputStates GetCurrentInputState()
-    {
-        return currentState;
     }
 
     public void OnMove(InputValue value)
@@ -74,18 +78,18 @@ public class PlayerInputState : MonoBehaviour
         LookInputData = value.Get<Vector2>();
     }
 
-    public void OnZoomScroll(InputValue value)
-    {
-        // if (currentState != InputStates.Menu) { return; }
-        ZoomInputData = value.Get<Vector2>().y;
-    }
-
     public void OnZoom(InputValue value)
     {
         if (currentState == InputStates.Gameplay)
         {
             OnZoomScroll(value);
         }
+    }
+
+    public void OnZoomScroll(InputValue value)
+    {
+        // if (currentState != InputStates.Menu) { return; }
+        ZoomInputData = value.Get<Vector2>().y;
     }
 
     public void OnZoomToggle(InputValue value)
@@ -95,32 +99,33 @@ public class PlayerInputState : MonoBehaviour
         if (currentState == InputStates.Gameplay)
         {
             // Toggle zoom between 1st person and 3rd person
+            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnZoomToggle", $"-> Current zoom input: {(ZoomInputData == 0f ? "1 (3rd P)" : "0 (1st P)")}.");
             ZoomInputData = ZoomInputData == 0f ? 1f : 0f;
         }
     }
 
     public void OnInteract(InputValue value)
     {
-        // For one off actions
         if (!value.isPressed) { return; }
 
         if (currentState == InputStates.Gameplay)
         {
             // Call interact for PlayerFishing, which will check if fishing can be started and if so, will switch to fishing state. 
+            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnInteract", "-> !InteractPerformed");
             InteractPerformed?.Invoke();
-            // Debug.Log("PlayerInputState: Interact in Gameplay state.");
         }
     }
 
-    public void OnJump(InputValue value)
-    {
-        if (!value.isPressed) { return; }
+    // public void OnJump(InputValue value)
+    // {
+    //     if (!value.isPressed) { return; }
 
-        if (currentState == InputStates.Gameplay)
-        {
-            JumpPerformed?.Invoke();
-        }
-    }
+    //     if (currentState == InputStates.Gameplay)
+    //     {
+    //         // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnJump","-> !JumpPerformed");
+    //         JumpPerformed?.Invoke();
+    //     }
+    // }
 
     public void OnHook(InputValue value)
     {
@@ -130,11 +135,8 @@ public class PlayerInputState : MonoBehaviour
         {
             if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.HookWindow)
             {
+                // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnHook", "-> !HookPerformed\nHookWindow success");
                 HookPerformed?.Invoke();
-            }
-            else
-            {
-                Debug.Log("PlayerInputState: Not in hook window state, cannot perform hook action. Current fishing state: " + fishingManager.CurrentFishingGameState);
             }
         }
 
@@ -148,13 +150,13 @@ public class PlayerInputState : MonoBehaviour
         {
             if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
             {
-                Debug.Log("PlayerInputState: Mashed");
+                // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnMash","-> !MashPerformed");
                 MashPerformed?.Invoke();
             }
-            else
-            {
-                Debug.Log("PlayerInputState: Not in reeling state, cannot perform mash action. Current fishing state: " + fishingManager.CurrentFishingGameState);
-            }
+            // else
+            // {
+            //     DebugLogger.Instance.Log("PlayerInputState: Not in reeling state, cannot perform mash action. Current fishing state: " + fishingManager.CurrentFishingGameState);
+            // }
         }
     }
 
@@ -164,9 +166,18 @@ public class PlayerInputState : MonoBehaviour
 
         if (currentState == InputStates.Fishing)
         {
+            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !AbortPerformed");
             AbortPerformed?.Invoke();
         }
 
+    }
+
+    public void OnDebug(InputValue value)
+    {
+        if (!value.isPressed) { return; }
+
+        DebugLogger.Instance.LogMethodCall("PlayerInputState.OnDebug", "-> !DebugPerformed");
+        DebugPerformed?.Invoke();
     }
 
     private void LateUpdate()

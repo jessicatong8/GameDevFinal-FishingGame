@@ -27,6 +27,7 @@ public class TensionManager : MonoBehaviour
         FishingManager.OnHook += HandleHooked;
         FishingManager.OnCaught += HandleResetToIdle;
         FishingManager.OnEscaped += HandleResetToIdle;
+        FishingManager.OnReturnToIdle += HandleResetToIdle;
     }
 
     private void OnDisable()
@@ -35,10 +36,16 @@ public class TensionManager : MonoBehaviour
         {
             inputState.MashPerformed -= HandleMashPerformed;
         }
+
+        FishingManager.OnHook -= HandleHooked;
+        FishingManager.OnCaught -= HandleResetToIdle;
+        FishingManager.OnEscaped -= HandleResetToIdle;
+        FishingManager.OnReturnToIdle -= HandleResetToIdle;
     }
 
     private void HandleMashPerformed()
     {
+        // DebugLogger.Instance.LogMethodCall("TensionManager: HandleMashPerformed");
         mashTriggeredThisFrame = true;
     }
     void Start()
@@ -53,16 +60,17 @@ public class TensionManager : MonoBehaviour
             UpdateTension(mashTriggeredThisFrame);
             UpdateEscapeTimer();
             mashTriggeredThisFrame = false;
-            Debug.Log("Current Tension: " + tension);
+            // DebugLogger.Instance.Log("Current Tension: " + tension);
         }
     }
 
     private void HandleHooked()
     {
+        // DebugLogger.Instance.LogMethodCall("TensionManager: HandleHooked");
         activeFish = fishingManager.activeFish;
         if (activeFish == null)
         {
-            Debug.LogError("TensionManager: No active fish found.");
+            DebugLogger.Instance.LogError("TensionManager: No active fish found.");
             return;
         }
         isReeling = true;
@@ -110,6 +118,7 @@ public class TensionManager : MonoBehaviour
         if (outOfZoneTimer >= escapeTime)
         {
             outOfZoneTimer = 0f;
+            // DebugLogger.Instance.Log("Fish Escaped - Tension too high for too long");
             fishingManager.EscapeFishing("Tension too high, line snapped");
         }
     }
@@ -117,9 +126,12 @@ public class TensionManager : MonoBehaviour
 
     private void HandleResetToIdle()
     {
+        // DebugLogger.Instance.LogMethodCall("TensionManager: HandleResetToIdle");
+        mashTriggeredThisFrame = false;
         tension = 0f;
         outOfZoneTimer = 0f;
         isReeling = false;
+        activeFish = null;
     }
     public float GetCurrentTension()
     {

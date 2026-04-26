@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 // Based from this repo: https://github.com/Kevin-Kwan/Unity3D-FishingRodMotion?tab=readme-ov-file
@@ -32,7 +33,7 @@ public class VerletLine : MonoBehaviour
     public float tensionConstant = 10f;
     public bool SecondHasRigidbody = false;
     public float LerpSpeed = 1f;
-    public float Delay = 3f;
+    public float Delay = 2f;
     private bool isChangingLength = false;
 
     [Header("Equip State")]
@@ -40,7 +41,18 @@ public class VerletLine : MonoBehaviour
     [SerializeField] private bool hideLineWhenUnequipped = true;
     [SerializeField] private bool hideHookWhenUnequipped = true;
 
+    [Header("Debug / Prototyping")]
+    [SerializeField] private bool useSimpleLine = false;
+    [Tooltip("When true, draws a straight line for prototyping. When false, uses full Verlet physics.")]
+
+    [Header("Fish Attach")]
+    [SerializeField] private FishingManager fishingManager;
+    [Tooltip("Child transform names checked on the active fish to find a mouth anchor.")]
+    [SerializeField] private string[] fishMouthAnchorNames = { "Main1" };
+
     private bool isRodEquipped = true;
+    private Transform attachedFishOnLine;
+    private bool lockEndBeforeAttach;
 
     // Represents a segment of the line.
     private class LineParticle
@@ -54,6 +66,11 @@ public class VerletLine : MonoBehaviour
     // Initializes the line.
     void Start()
     {
+        if (fishingManager == null)
+        {
+            fishingManager = FindFirstObjectByType<FishingManager>();
+        }
+
         if (hookVisual == null && EndPoint != null)
         {
             hookVisual = EndPoint.gameObject;
@@ -69,7 +86,26 @@ public class VerletLine : MonoBehaviour
         }
         // The particles are simulated in world-space positions.
         lineRenderer.useWorldSpace = true;
+        lineRenderer.alignment = LineAlignment.TransformZ;
         lineRenderer.positionCount = particles.Count;
+    }
+
+    private void OnEnable()
+    {
+        FishingManager.OnHook += HandleHooked;
+        FishingManager.OnCaught += DetachFromFish;
+        FishingManager.OnEscaped += DetachFromFish;
+        FishingManager.OnReturnToIdle += DetachFromFish;
+        FishingManager.OnCast += DetachFromFish;
+    }
+
+    private void OnDisable()
+    {
+        FishingManager.OnHook -= HandleHooked;
+        FishingManager.OnCaught -= DetachFromFish;
+        FishingManager.OnEscaped -= DetachFromFish;
+        FishingManager.OnReturnToIdle -= DetachFromFish;
+        FishingManager.OnCast -= DetachFromFish;
     }
 
     void Update()
@@ -92,6 +128,19 @@ public class VerletLine : MonoBehaviour
         }
     }
 
+    void LateUpdate()
+    {
+        if (!isRodEquipped)
+        {
+            return;
+        }
+
+        if (attachedFishOnLine != null && EndPoint != null)
+        {
+            EndPoint.position = attachedFishOnLine.position;
+        }
+    }
+
     private IEnumerator IncreaseLengthAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -99,7 +148,7 @@ public class VerletLine : MonoBehaviour
         isChangingLength = true;
     }
 
-    // Update the line with Verlet Physics.
+    // Update the line with Verlet Physics or simple straight line.
     void FixedUpdate()
     {
         if (!isRodEquipped)
@@ -112,7 +161,18 @@ public class VerletLine : MonoBehaviour
             return;
         }
 
-    
+        if (useSimpleLine)
+        {
+            // Simple straight line for prototyping
+            var simpleLinePositions = new Vector3[2];
+            simpleLinePositions[0] = StartPoint.position;
+            simpleLinePositions[1] = EndPoint.position;
+            lineRenderer.positionCount = 2;
+            lineRenderer.SetPositions(simpleLinePositions);
+            return;
+        }
+
+        // Full Verlet physics simulation
         foreach (var p in particles)
         {
             Verlet(p, Time.fixedDeltaTime);
@@ -133,6 +193,7 @@ public class VerletLine : MonoBehaviour
 
             // Keep start anchor pinned every iteration to avoid cumulative drift while moving.
             particles[0].Pos = StartPoint.position;
+
             if (lockEndToTransform)
             {
                 particles[particles.Count - 1].Pos = EndPoint.position;
@@ -163,6 +224,85 @@ public class VerletLine : MonoBehaviour
             positions[i] = particles[i].Pos;
         }
         lineRenderer.SetPositions(positions);
+    }
+
+    private void HandleHooked()
+    {
+        TryAttachToActiveFishMouth();
+    }
+
+    private void TryAttachToActiveFishMouth()
+    {
+        if (fishingManager == null)
+        {
+            fishingManager = FindFirstObjectByType<FishingManager>();
+        }
+
+        if (fishingManager == null || fishingManager.activeFish == null || EndPoint == null)
+        {
+            return;
+        }
+
+        Transform fishRoot = fishingManager.activeFish.transform;
+        Transform mouthAnchor = ResolveMouthAnchor(fishRoot);
+        attachedFishOnLine = mouthAnchor != null ? mouthAnchor : fishRoot;
+
+        lockEndBeforeAttach = lockEndToTransform;
+        lockEndToTransform = true;
+        EndPoint.position = attachedFishOnLine.position;
+    }
+
+    private Transform ResolveMouthAnchor(Transform fishRoot)
+    {
+        if (fishRoot == null)
+        {
+            return null;
+        }
+
+        if (fishMouthAnchorNames != null)
+        {
+            for (int i = 0; i < fishMouthAnchorNames.Length; i++)
+            {
+                string anchorName = fishMouthAnchorNames[i];
+                if (string.IsNullOrWhiteSpace(anchorName))
+                {
+                    continue;
+                }
+
+                Transform candidate = FindChildByNameRecursive(fishRoot, anchorName);
+                if (candidate != null)
+                {
+                    return candidate;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private Transform FindChildByNameRecursive(Transform root, string targetName)
+    {
+        if (root.name == targetName)
+        {
+            return root;
+        }
+
+        for (int i = 0; i < root.childCount; i++)
+        {
+            Transform result = FindChildByNameRecursive(root.GetChild(i), targetName);
+            if (result != null)
+            {
+                return result;
+            }
+        }
+
+        return null;
+    }
+
+    private void DetachFromFish()
+    {
+        attachedFishOnLine = null;
+        lockEndToTransform = lockEndBeforeAttach;
     }
 
     // Performs Verlet integration to update the position of a particle.

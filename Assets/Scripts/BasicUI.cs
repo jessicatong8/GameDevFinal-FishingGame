@@ -13,6 +13,8 @@ public class BasicUI : MonoBehaviour
     public Slider tensionSlider;
     public TextMeshProUGUI alertText;
 
+    private CanvasGroup overlayCanvasGroup;
+
     void OnEnable()
     {
         FishingManager.OnCast += HandleCast;
@@ -20,6 +22,8 @@ public class BasicUI : MonoBehaviour
         FishingManager.OnHook += HandleReel;
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnEscaped += HandleEscaped;
+        FishingManager.OnFishingGameStateChanged += HandleFishingGameStateChanged;
+        FishingManager.OnReturnToIdle += HandleReturnToIdle;
     }
 
     void OnDisable()
@@ -29,14 +33,31 @@ public class BasicUI : MonoBehaviour
         FishingManager.OnHook -= HandleReel;
         FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnEscaped -= HandleEscaped;
+        FishingManager.OnFishingGameStateChanged -= HandleFishingGameStateChanged;
+        FishingManager.OnReturnToIdle -= HandleReturnToIdle;
 
     }
 
     void Start()
     {
+        overlayCanvasGroup = GetComponent<CanvasGroup>();
+        if (overlayCanvasGroup == null)
+        {
+            overlayCanvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+
         UpdateProgressSlider(0);
         UpdateTensionSlider(0);
         UpdateTensionSliderMax(0);
+
+        if (fishingManager != null)
+        {
+            HandleFishingGameStateChanged(fishingManager.CurrentFishingGameState);
+        }
+        else
+        {
+            SetOverlayVisible(false);
+        }
 
     }
     void Update()
@@ -90,6 +111,32 @@ public class BasicUI : MonoBehaviour
     {
         alertText.text = "FISH ESCAPED!";
         alertText.color = new Color(1f, 0.75f, 0.2f);
+    }
+
+    void HandleReturnToIdle()
+    {
+        HandleFishingGameStateChanged(FishingManager.FishingGameState.Idle);
+        UpdateProgressSlider(0);
+        UpdateTensionSlider(0);
+        UpdateTensionSliderMax(0);
+    }
+
+    void HandleFishingGameStateChanged(FishingManager.FishingGameState state)
+    {
+        bool isFishing = state != FishingManager.FishingGameState.Idle;
+        SetOverlayVisible(isFishing);
+    }
+
+    void SetOverlayVisible(bool visible)
+    {
+        if (overlayCanvasGroup == null)
+        {
+            return;
+        }
+
+        overlayCanvasGroup.alpha = visible ? 1f : 0f;
+        overlayCanvasGroup.interactable = visible;
+        overlayCanvasGroup.blocksRaycasts = visible;
     }
 
 }
