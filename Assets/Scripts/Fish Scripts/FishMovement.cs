@@ -73,8 +73,6 @@ public class FishMovement : MonoBehaviour
     void Update()
     {
         SwimTowardTarget();
-        // CheckInLineRange();
-
     }
 
     public Vector3 SetTargetPosition(Vector3 position)
@@ -101,7 +99,6 @@ public class FishMovement : MonoBehaviour
 
         if (distanceToTarget <= arrivalThreshold)
         {
-            // Debug.Log("Arrived at Target Position: " + targetPosition);
             transform.position = targetPosition;
             SetTargetPosition(transform.position);
             return;
@@ -120,6 +117,7 @@ public class FishMovement : MonoBehaviour
         {
             direction = -1;
             SetTargetPosition(transform.position);
+            transform.LookAt(targetPosition);
         }
     }
 
@@ -130,6 +128,7 @@ public class FishMovement : MonoBehaviour
         {
             direction = 1;
             SetTargetPosition(transform.position);
+            transform.LookAt(targetPosition);
         }
     }
 

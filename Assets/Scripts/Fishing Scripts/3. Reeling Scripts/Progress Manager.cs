@@ -6,14 +6,14 @@ public class ProgressManager : MonoBehaviour
 
     private const float TARGET_MASH_RATE = 3f; // expected mashes per second
     private bool mashTriggeredThisFrame;
-    private float progress = 90f; // TODO SET TO 0f after testing
+    private float progress = 0f; // TODO SET TO 0f after testing
     private bool isReeling;
 
     Fish activeFish;
 
     void Start()
     {
-        progress = 90f; // TODO SET TO 0f after testing
+        progress = 0f; // TODO SET TO 0f after testing
     }
     private void OnEnable()
     {
@@ -56,7 +56,7 @@ public class ProgressManager : MonoBehaviour
     private void HandleResetToIdle()
     {
         mashTriggeredThisFrame = false;
-        progress = 90f;     // TODO SET TO 0f after testing
+        progress = 0f;     // TODO SET TO 0f after testing
         isReeling = false;
         activeFish = null;
     }
