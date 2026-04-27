@@ -4,8 +4,9 @@ public class FishCaughtPresentation : MonoBehaviour
 {
     [Header("Fish Placement")]
     // Optional transform to specify exact hold position relative to camera
-    [SerializeField] private float distanceFromCamera = 1f;
-    [SerializeField] private Vector3 localOffset = new Vector3(0f, 0f, 10f);
+    // [SerializeField] private float distanceFromCamera = 1f;
+    [SerializeField] private Vector3 localOffset = new Vector3(0f, 0f, 5f);
+    [SerializeField] private float rotationSpeed = 20f;
 
     [Header("Optional Freeze")]
     [SerializeField] private bool disableFishMovement = true;
@@ -40,13 +41,21 @@ public class FishCaughtPresentation : MonoBehaviour
     private void FishCaughtPresentationAnimation()
     {
         PlaceFishInFrontOfCamera();
-        RotateFish();
+    }
+
+    private void Update()
+    {
+        if (isInCatchPresentation)
+        {
+            RotateFish();
+        }
     }
 
     private void HandleCatchConfirmation()
     {
         if (!isInCatchPresentation) { return; }
 
+        isInCatchPresentation = false;
         FishingManager.Instance.CompleteCatchConfirmation();
         RestoreFish();
     }
@@ -71,21 +80,21 @@ public class FishCaughtPresentation : MonoBehaviour
         }
 
         Transform targetAnchor = PlayerCamera.Instance.transform;
-        Vector3 targetPosition = targetAnchor.position + targetAnchor.forward * distanceFromCamera;
+        Vector3 targetPosition = targetAnchor.position + targetAnchor.forward;
         transform.position = targetPosition + targetAnchor.TransformVector(localOffset);
         transform.LookAt(PlayerCamera.Instance.transform.position);
         isInCatchPresentation = true;
     }
     private void RotateFish()
     {
-        float rotationSpeed = 20f; // degrees per second
         transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime, Space.World);
-
     }
+
     private void RestoreFish()
     {
+        DebugLogger.Instance.LogMethodCall("FishCaughtPresentation: RestoreFish");
         if (!isInCatchPresentation) { return; }
-
+        DebugLogger.Instance.Log("Restoring fish to normal state.");
         if (freezeRigidbody && fishRigidbody != null)
         {
             fishRigidbody.isKinematic = false;
