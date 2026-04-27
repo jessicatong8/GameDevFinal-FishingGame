@@ -1,11 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FishCaughtPresentation : MonoBehaviour
 {
     [Header("Fish Placement")]
-    // Optional transform to specify exact hold position relative to camera
-    // [SerializeField] private float distanceFromCamera = 1f;
-    [SerializeField] private Vector3 localOffset = new Vector3(0f, 0f, 5f);
+    [SerializeField] private Vector3 localOffset = new Vector3(0f, 0f, 2f);
     [SerializeField] private float rotationSpeed = 20f;
 
     [Header("Optional Freeze")]
@@ -17,12 +15,18 @@ public class FishCaughtPresentation : MonoBehaviour
     private Animator animator;
     private Rigidbody fishRigidbody;
     private bool isInCatchPresentation;
+    private bool catchPresentationApplied;
 
     private void Awake()
     {
         fishMovement = GetComponent<FishMovement>();
         animator = GetComponent<Animator>();
         fishRigidbody = GetComponent<Rigidbody>();
+        if (fishMovement == null || animator == null || fishRigidbody == null)
+        {
+            DebugLogger.Instance.LogWarning("FishCaughtPresentation: Missing components. FishMovement: " + fishMovement + ", Animator: " + animator + ", Rigidbody: " + fishRigidbody);
+        }
+
     }
 
     private void OnEnable()
@@ -53,26 +57,20 @@ public class FishCaughtPresentation : MonoBehaviour
 
     private void HandleCatchConfirmation()
     {
-        if (!isInCatchPresentation) { return; }
+        if (!isInCatchPresentation)
+        {
+            return;
+        }
 
-        isInCatchPresentation = false;
-        FishingManager.Instance.CompleteCatchConfirmation();
         RestoreFish();
+        FishingManager.Instance.CompleteCatchConfirmation();
     }
 
     private void PlaceFishInFrontOfCamera()
     {
-        if (disableFishMovement && fishMovement != null)
-        {
-            fishMovement.enabled = false;
-        }
-
-        if (disableAnimator && animator != null)
-        {
-            animator.enabled = false;
-        }
-
-        if (freezeRigidbody && fishRigidbody != null)
+        if (disableFishMovement) { fishMovement.enabled = false; }
+        if (disableAnimator) { animator.enabled = false; }
+        if (freezeRigidbody)
         {
             fishRigidbody.isKinematic = true;
             fishRigidbody.linearVelocity = Vector3.zero;
@@ -84,7 +82,9 @@ public class FishCaughtPresentation : MonoBehaviour
         transform.position = targetPosition + targetAnchor.TransformVector(localOffset);
         transform.LookAt(PlayerCamera.Instance.transform.position);
         isInCatchPresentation = true;
+        catchPresentationApplied = true;
     }
+
     private void RotateFish()
     {
         transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime, Space.World);
@@ -92,9 +92,15 @@ public class FishCaughtPresentation : MonoBehaviour
 
     private void RestoreFish()
     {
+        if (!catchPresentationApplied)
+        {
+            DebugLogger.Instance.LogWarning("FishCaughtPresentation: RestoreFish called but catch presentation was not applied. Skipping restore.");
+            return;
+        }
+
         DebugLogger.Instance.LogMethodCall("FishCaughtPresentation: RestoreFish");
-        if (!isInCatchPresentation) { return; }
         DebugLogger.Instance.Log("Restoring fish to normal state.");
+
         if (freezeRigidbody && fishRigidbody != null)
         {
             fishRigidbody.isKinematic = false;
@@ -112,5 +118,6 @@ public class FishCaughtPresentation : MonoBehaviour
         }
 
         isInCatchPresentation = false;
+        catchPresentationApplied = false;
     }
 }

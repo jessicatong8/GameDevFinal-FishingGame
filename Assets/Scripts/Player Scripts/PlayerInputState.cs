@@ -179,7 +179,7 @@ public class PlayerInputState : MonoBehaviour
         if (currentState == InputStates.Fishing || fishingManagerInstance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
         {
             DebugLogger.Instance.LogMethodCall("PlayerInputState.OnConfirmCatch", "-> !ConfirmCatchPerformed");
-            FishingManager.Instance.ReturnToIdle("Catch Confirmed");
+            ConfirmCatchPerformed?.Invoke();
         }
     }
 
