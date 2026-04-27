@@ -2978,8 +2978,8 @@ MonoBehaviour:
   tensionManager: {fileID: 1419121292}
   fishingManager: {fileID: 1940631099}
   uiPanel: {fileID: 413610375}
+  tensionSlider: {fileID: 1354072942}
   safeZoneOverlay: {fileID: 1348323011}
-  tensionPointer: {fileID: 0}
 --- !u!114 &935045288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3900,7 +3900,6 @@ MonoBehaviour:
   wiggleOnTimer: 0
   wiggleOffTimer: 0
   wiggleStrength: 0
-  maxTension: 100
   reelingSpeed: 15
   tensionDropRate: 12
   safeZoneCenter: 0.7
@@ -5050,7 +5049,6 @@ MonoBehaviour:
   wiggleOnTimer: 2
   wiggleOffTimer: 2
   wiggleStrength: 10
-  maxTension: 20
   reelingSpeed: 15
   tensionDropRate: 10
   safeZoneCenter: 0

@@ -143,12 +143,12 @@ public class DebugCanvasUI : MonoBehaviour
             else if (tensionManager != null && fishingManager != null)
             {
                 double currentTension = tensionManager.GetCurrentTension();
-                float maxTension = tensionManager.GetCurrentMaxTension();
+                // float maxTension = tensionManager.GetCurrentMaxTension();
                 bool isInTensionSafeZone = tensionManager.IsInSafeZone();
                 // bool isTensionTooHigh = tensionManager.IsTensionTooHigh();
                 // bool isTensionTooLow = tensionManager.IsTensionTooLow();
 
-                debugText += $"Tension: {currentTension:F2} / {maxTension:F2}\n";
+                // debugText += $"Tension: {currentTension:F2} / {maxTension:F2}\n";
                 string tensionSafeZoneIndicator = isInTensionSafeZone ? "<color=#00FF00>SAFE</color>" : "<color=#FF0000>OUT OF ZONE</color>";
                 debugText += $"Tension Zone?: {tensionSafeZoneIndicator}\n";
                 // if (isTensionTooHigh)
@@ -190,7 +190,7 @@ public class DebugCanvasUI : MonoBehaviour
                 debugText += $"Wiggle On Timer: {activeFish.wiggleOnTimer:F2}\n";
                 debugText += $"Wiggle Off Timer: {activeFish.wiggleOffTimer:F2}\n";
                 debugText += $"Wiggle Strength: {activeFish.wiggleStrength:F2}\n";
-                debugText += $"Max Tension: {activeFish.maxTension:F2}\n";
+                // debugText += $"Max Tension: {activeFish.maxTension:F2}\n";
                 debugText += $"Reeling Speed: {activeFish.reelingSpeed:F2}\n";
                 debugText += $"Tension Drop Rate: {activeFish.tensionDropRate:F2}\n";
                 debugText += $"Safe Zone Center: {activeFish.safeZoneCenter:F2}\n";

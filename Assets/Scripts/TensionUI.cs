@@ -3,23 +3,23 @@ using UnityEngine.UI;
 
 public class TensionUI : MonoBehaviour
 {
-    
+
     [SerializeField] private TensionManager tensionManager;
     [SerializeField] private FishingManager fishingManager;
 
     [Header("UI Objects")]
-    [SerializeField] private GameObject uiPanel; 
+    [SerializeField] private GameObject uiPanel;
     [SerializeField] private Slider tensionSlider;
-    [SerializeField] private RectTransform safeZoneOverlay; 
+    [SerializeField] private RectTransform safeZoneOverlay;
 
     private void Awake()
     {
-       uiPanel.SetActive(false);
+        uiPanel.SetActive(false);
     }
 
     private void OnEnable()
     {
-        FishingManager.OnHook += HandleShowUI; 
+        FishingManager.OnHook += HandleShowUI;
         FishingManager.OnCaught += HandleHideUI;
         FishingManager.OnEscaped += HandleHideUI;
         FishingManager.OnReturnToIdle += HandleHideUI;
@@ -33,15 +33,15 @@ public class TensionUI : MonoBehaviour
         FishingManager.OnReturnToIdle -= HandleHideUI;
     }
 
-    private void HandleShowUI() 
+    private void HandleShowUI()
     {
-        SetupSafeZone(); 
-        uiPanel.SetActive(true); 
+        SetupSafeZone();
+        uiPanel.SetActive(true);
     }
 
-    private void HandleHideUI() 
+    private void HandleHideUI()
     {
-        uiPanel.SetActive(false); 
+        uiPanel.SetActive(false);
     }
 
     private void SetupSafeZone()
@@ -54,18 +54,18 @@ public class TensionUI : MonoBehaviour
 
         safeZoneOverlay.anchorMin = new Vector2(left, 0);
         safeZoneOverlay.anchorMax = new Vector2(right, 1);
-        
+
         safeZoneOverlay.offsetMin = Vector2.zero;
         safeZoneOverlay.offsetMax = Vector2.zero;
     }
 
     private void Update()
     {
-        if (uiPanel.activeSelf == false) 
+        if (uiPanel.activeSelf == false)
         {
             return;
         }
-        
+
         float currentTension = tensionManager.GetCurrentTension();
         tensionSlider.value = currentTension;
     }
