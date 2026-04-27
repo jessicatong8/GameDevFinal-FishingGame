@@ -8,6 +8,8 @@ public class Fish : MonoBehaviour
     public float rarity;
     public float dripThreshold = 0f;
 
+    public bool isActiveFish;
+
 
     public float wiggleOnTimer;
     public float wiggleOffTimer;
@@ -20,8 +22,8 @@ public class Fish : MonoBehaviour
 
     public float reelingSpeed = 12f;
     public float tensionDropRate = 5f;
-    public float safeZoneCenter = 0.7f;
-    public float safeZoneWidth = 0.4f;
+    public float safeZoneCenter = 0.5f;
+    public float safeZoneWidth = 0.6f;
     public float burstStrength = 0.3f;
     public float tensionEscapeTime = 3f; // how long the player can stay out of the safe tension zone before the fish escapes
 }
