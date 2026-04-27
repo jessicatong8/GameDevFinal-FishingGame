@@ -3928,7 +3928,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 189e1e8fe4ab5472b90696e958954aec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishMovement
-  fishManager: {fileID: 1940631099}
 --- !u!114 &1256478411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3969,7 +3968,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishMovement
   lineRangeManager: {fileID: 356036559}
-  fishManager: {fileID: 1940631099}
   arrivalThreshold: 0.1
 --- !u!4 &1256478414 stripped
 Transform:
@@ -5086,7 +5084,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 189e1e8fe4ab5472b90696e958954aec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishMovement
-  fishManager: {fileID: 1940631099}
 --- !u!114 &1652712460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5154,7 +5151,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishMovement
   lineRangeManager: {fileID: 356036559}
-  fishManager: {fileID: 1940631099}
   arrivalThreshold: 0.1
 --- !u!1001 &1677912750
 PrefabInstance:
