@@ -102,8 +102,9 @@ public class BasicUI : MonoBehaviour
 
     void HandleCaught()
     {
-        alertText.text = "FISH CAUGHT!";
-        alertText.color = Color.green;
+        alertText.text = "";
+        // alertText.text = "FISH CAUGHT!";
+        // alertText.color = Color.green;
     }
 
     void HandleEscaped()
