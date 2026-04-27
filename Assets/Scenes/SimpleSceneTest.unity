@@ -1383,7 +1383,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &340892473
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2180,8 +2180,8 @@ RectTransform:
   m_Father: {fileID: 1947567041}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 98, y: -3}
   m_SizeDelta: {x: 80, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &613838070
@@ -2985,7 +2985,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &935045287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3317,7 +3317,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1004750627
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3541,7 +3541,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5679271941359360942, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: useSimpleLine
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5679271941359360942, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: fishingManager
@@ -3882,14 +3882,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishingManager
   activeFish: {fileID: 0}
-  currentDrip: 10
+  currentDrip: 0
   hookTimer: 0
-  castingManager: {fileID: 1637651798}
+  castingManager: {fileID: 0}
   usePrototypeFishSequence: 1
   bypassCastingManager: 1
-  fallbackFish: {fileID: 1256478411}
-  fishSequence:
-  - {fileID: 1256478411}
+  fallbackFish: {fileID: 0}
+  fishSequence: []
 --- !u!1 &1256478405 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9baafd032641a43b19c40bada1625073, type: 3}
@@ -3970,7 +3969,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishMovement
   lineRangeManager: {fileID: 356036559}
-  inputState: {fileID: 708269776}
   fishManager: {fileID: 1940631099}
   arrivalThreshold: 0.1
 --- !u!4 &1256478414 stripped
@@ -4712,7 +4710,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1566663199}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -5156,7 +5154,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishMovement
   lineRangeManager: {fileID: 356036559}
-  inputState: {fileID: 708269776}
   fishManager: {fileID: 1940631099}
   arrivalThreshold: 0.1
 --- !u!1001 &1677912750
