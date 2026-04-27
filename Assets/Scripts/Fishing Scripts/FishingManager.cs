@@ -13,7 +13,7 @@ public class FishingManager : MonoBehaviour
     public static event Action DripTooLow; // when player doesn't have enough "drip" to catch the next fish
     public static event Action OnEscaped; // when fish escapes due to hook window timing out, player drip being too low, line breaking from high tension, or fish moving out of line range
     public static event Action OnCaught; // when player successfully catches the fish by reeling to 100% progress, the fish will be presented to camera and player can interact to confirm catch (via !OnCatchConfirmationEnd) to return to idle
-    public static event Action OnCatchConfirmationEnd; // when player confirms catch by pressing interact or clicking, which will trigger !onReturnToIdle to reset everything for the next catch
+    // public static event Action OnCatchConfirmationEnd; // when player confirms catch by pressing interact or clicking, which will trigger !onReturnToIdle to reset everything for the next catch
     public static event Action OnReturnToIdle;
 
     public static event Action<FishingGameState> OnFishingGameStateChanged; // for triggering state-specific animations
