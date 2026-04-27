@@ -6,8 +6,6 @@ public class FishMovement : MonoBehaviour
 {
 
     [SerializeField] private LineRangeManager lineRangeManager;
-    [SerializeField] private PlayerInputState inputState;
-
 
     public static event Action LeavingLineRange;
     public static event Action EnteringLineRange;
@@ -54,20 +52,15 @@ public class FishMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        if (inputState != null)
-        {
-            inputState.ReelLeftPerformed += TurnLeft;
-            inputState.ReelRightPerformed += TurnRight;
-        }
+
+        PlayerInputState.Instance.ReelLeftPerformed += TurnLeft;
+        PlayerInputState.Instance.ReelRightPerformed += TurnRight;
     }
 
     private void OnDisable()
     {
-        if (inputState != null)
-        {
-            inputState.ReelLeftPerformed -= TurnLeft;
-            inputState.ReelRightPerformed -= TurnRight;
-        }
+        PlayerInputState.Instance.ReelLeftPerformed -= TurnLeft;
+        PlayerInputState.Instance.ReelRightPerformed -= TurnRight;
     }
     // Update is called once per frame
     void Update()
@@ -105,9 +98,7 @@ public class FishMovement : MonoBehaviour
         }
         transform.LookAt(targetPosition);
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, swimmingSpeed * Time.deltaTime);
-
     }
-
     public void TurnLeft()
     {
         if (!GetComponent<Fish>().isActiveFish) return;
@@ -131,7 +122,6 @@ public class FishMovement : MonoBehaviour
             transform.LookAt(targetPosition);
         }
     }
-
     public bool IsInLineRange()
     {
         return transform.position.x >= xLineLeftRange && transform.position.x <= xLineRightRange;
@@ -145,6 +135,4 @@ public class FishMovement : MonoBehaviour
     {
         return transform.position.x > xLineRightWarningRange && transform.position.x <= xLineRightRange;
     }
-
-
 }
