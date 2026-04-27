@@ -16,7 +16,6 @@ public class FishReelingAnimations : MonoBehaviour
         FishingManager.OnEscaped += HandleResetToIdle;
         // FishingManager.OnReturnToIdle += HandleResetToIdle;
     }
-
     void OnDestroy()
     {
         FishingManager.OnBite -= HandleBite;
@@ -26,35 +25,21 @@ public class FishReelingAnimations : MonoBehaviour
         FishingManager.OnCatchConfirmationEnd -= HandleResetToIdle;
         // FishingManager.OnReturnToIdle -= HandleResetToIdle;
     }
-
-    void Update()
-    {
-    }
-
     void HandleBite()
     {
         animator.SetTrigger("Bite");
     }
-
     void HandleReelAttempt()
     {
         animator.SetBool("IsReeling", true);    // swimming fast animation 
     }
-
     void HandleCaught()
     {
         animator.SetBool("IsCaught", true);     // makes fish static for catch presentation
     }
-
     void HandleResetToIdle()
     {
         animator.SetBool("IsReeling", false);
         animator.SetBool("IsCaught", false);
     }
-
-    // void HandleEscaped()             // would this be from both tension AND line breaking
-    // {
-    //     animator.SetTrigger("Escaped");
-    //     animator.SetBool("IsReeling", false);
-    // }
 }
