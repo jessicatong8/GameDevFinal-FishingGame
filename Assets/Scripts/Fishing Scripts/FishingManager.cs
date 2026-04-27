@@ -124,6 +124,7 @@ public class FishingManager : MonoBehaviour
             DripTooLow?.Invoke();
             return false;
         }
+        activeFish.isActiveFish = true;
 
         // DebugLogger.Instance.LogMethodCall("FishingManager.EnterCastingState", "-> !OnCast\nCasting line with fish: " + activeFish.fishName);
         OnCast?.Invoke();
@@ -295,6 +296,7 @@ public class FishingManager : MonoBehaviour
         DebugLogger.Instance.LogMethodCall("FishingManager.ReturnToIdle", reason);
 
         SetFishingGameState(FishingGameState.Idle);
+        activeFish.isActiveFish = false;
         activeFish = null;
         timer = 0f;
         OnReturnToIdle?.Invoke();

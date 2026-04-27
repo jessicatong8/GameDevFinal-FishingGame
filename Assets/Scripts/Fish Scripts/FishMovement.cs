@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class FishMovement : MonoBehaviour
@@ -7,11 +6,9 @@ public class FishMovement : MonoBehaviour
 
     [SerializeField] private LineRangeManager lineRangeManager;
 
-    public static event Action LeavingLineRange;
-    public static event Action EnteringLineRange;
+    // public static event Action LeavingLineRange;
+    // public static event Action EnteringLineRange;
 
-    public FishingManager fishManager;
-    private Animator animator;
     private Vector3 position;
     private Vector3 targetPosition;
     private float swimmingSpeed;
@@ -35,14 +32,7 @@ public class FishMovement : MonoBehaviour
         xLineLeftRange = lineRangeManager.xLineLeftRange;
         xLineRightRange = lineRangeManager.xLineRightRange;
 
-        // FishingManager.OnCast += HandleCast;
-        // FishingManager.OnBite += HandleBite;
-        // FishingManager.OnReelingActive += HandleReelingActive;
-        // FishingManager.OnReelingInactive += HandleReelingInactive;
-        // FishingManager.OnCaught += HandleCaught;
-        // FishingManager.OnLineBreak += HandleLineBreak;
-        // FishingManager.OnWiggle += HandleWiggleStart;
-        // FishingManager.OffWiggle += HandleWiggleEnd;
+
         position = transform.position;
         swimmingSpeed = GetComponent<Fish>().swimmingSpeed;
         SetTargetPosition(position);
@@ -101,9 +91,14 @@ public class FishMovement : MonoBehaviour
     }
     public void TurnLeft()
     {
-        if (!GetComponent<Fish>().isActiveFish) return;
+        // Debug.Log("Reel Left Input Received");
+        if (!GetComponent<Fish>().isActiveFish)
+        {
+            // Debug.Log("No active fish, ignoring input.");
+            return;
+        }
 
-        Debug.Log("Reel Left Input Received");
+
         if (direction != -1)
         {
             direction = -1;
@@ -114,7 +109,14 @@ public class FishMovement : MonoBehaviour
 
     public void TurnRight()
     {
-        if (!GetComponent<Fish>().isActiveFish) return;
+        // Debug.Log("Reel Right Input Received");
+
+        if (!GetComponent<Fish>().isActiveFish)
+        {
+            // Debug.Log("No active fish, ignoring input.");
+            return;
+        }
+
         if (direction != 1)
         {
             direction = 1;

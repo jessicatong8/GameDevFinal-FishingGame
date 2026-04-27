@@ -77,7 +77,7 @@ public class PlayerInputState : MonoBehaviour
             Instance = null;
         }
     }
-    
+
     public InputStates GetCurrentInputState()
     {
         return currentState;
@@ -178,7 +178,7 @@ public class PlayerInputState : MonoBehaviour
 
         if (currentState == InputStates.Fishing || fishingManagerInstance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
         {
-            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnConfirmCatch","-> !ConfirmCatchPerformed");
+            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnConfirmCatch", "-> !ConfirmCatchPerformed");
             FishingManager.Instance.ReturnToIdle("Catch Confirmed");
         }
     }
@@ -223,6 +223,8 @@ public class PlayerInputState : MonoBehaviour
         {
             if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
             {
+                // Debug.Log("OnReelLeft called with value: " + value);
+
                 ReelLeftPerformed?.Invoke();
             }
 
@@ -237,6 +239,8 @@ public class PlayerInputState : MonoBehaviour
         {
             if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
             {
+                // Debug.Log("OnReelRight called with value: " + value);
+
                 ReelRightPerformed?.Invoke();
             }
         }
