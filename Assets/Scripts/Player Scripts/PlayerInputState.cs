@@ -23,8 +23,13 @@ public class PlayerInputState : MonoBehaviour
     public event Action JumpPerformed;
     public event Action HookPerformed;
     public event Action MashPerformed;
+
+    public event Action ReelLeftPerformed;
+    public event Action ReelRightPerformed;
+
     public event Action AbortPerformed;
     public event Action DebugPerformed;
+
 
     public InputStates CurrentState => currentState;
     [SerializeField] private FishingManager fishingManager;
@@ -158,6 +163,33 @@ public class PlayerInputState : MonoBehaviour
             // {
             //     DebugLogger.Instance.Log("PlayerInputState: Not in reeling state, cannot perform mash action. Current fishing state: " + fishingManager.CurrentFishingGameState);
             // }
+        }
+    }
+
+    public void OnReelLeft(InputValue value)
+    {
+        if (!value.isPressed) { return; }
+
+        if (currentState == InputStates.Fishing)
+        {
+            if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
+            {
+                ReelLeftPerformed?.Invoke();
+            }
+
+        }
+    }
+
+    public void OnReelRight(InputValue value)
+    {
+        if (!value.isPressed) { return; }
+
+        if (currentState == InputStates.Fishing)
+        {
+            if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
+            {
+                ReelRightPerformed?.Invoke();
+            }
         }
     }
 
