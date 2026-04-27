@@ -27,9 +27,7 @@ public class TensionManager : MonoBehaviour
     {
         FishingManager.OnHook += HandleHooked;
         PlayerInputState.MashPerformed += HandleMashPerformed;
-        FishingManager.OnCaught += HandleCaught;
-        // FishingManager.OnCaught += HandleResetToIdle;
-        // FishingManager.OnCatchConfirmationEnd += HandleResetToIdle;
+        FishingManager.OnCaught += HandleResetToIdle;
         FishingManager.OnEscaped += HandleResetToIdle;
         FishingManager.OnReturnToIdle += HandleResetToIdle;
     }
@@ -37,9 +35,7 @@ public class TensionManager : MonoBehaviour
     {
         FishingManager.OnHook -= HandleHooked;
         PlayerInputState.MashPerformed -= HandleMashPerformed;
-        FishingManager.OnCaught -= HandleCaught;
-        // FishingManager.OnCaught -= HandleResetToIdle;
-        // FishingManager.OnCatchConfirmationEnd += HandleResetToIdle;
+        FishingManager.OnCaught -= HandleResetToIdle;
         FishingManager.OnEscaped -= HandleResetToIdle;
         FishingManager.OnReturnToIdle -= HandleResetToIdle;
     }
@@ -58,7 +54,6 @@ public class TensionManager : MonoBehaviour
             // DebugLogger.Instance.Log("Current Tension: " + tension);
         }
     }
-
     private void HandleHooked()
     {
         // DebugLogger.Instance.LogMethodCall("TensionManager: HandleHooked");
@@ -78,31 +73,20 @@ public class TensionManager : MonoBehaviour
 
         outOfZoneTimer = 0f;
     }
-
-    private void HandleCaught()
-    {
-        mashTriggeredThisFrame = false;
-        isReeling = false;
-    }
-
     private void UpdateTension(bool mashedThisFrame)
     {
         if (mashedThisFrame)
         {
-
             float increment = activeFish.reelingSpeed / TARGET_MASH_RATE;
             tension += increment;
             tension = Mathf.Min(tension, maxTension);
-
         }
         else
         {
             tension -= tensionDropRate * Time.deltaTime;
             tension = Mathf.Max(tension, 0);
         }
-
     }
-
     private void UpdateEscapeTimer()
     {
         if (IsInSafeZone())
@@ -119,7 +103,6 @@ public class TensionManager : MonoBehaviour
             FishingManager.Instance.EscapeFishing("Tension too high, line snapped");
         }
     }
-
 
     private void HandleResetToIdle()
     {
