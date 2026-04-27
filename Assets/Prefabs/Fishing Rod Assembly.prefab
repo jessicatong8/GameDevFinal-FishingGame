@@ -51,6 +51,7 @@ MonoBehaviour:
   fishingRodAssembly: {fileID: 3380109793904160769}
   fishingLineChildPath: Fishing Line
   fishingHookChildPath: Fishing Hook
+  castPointChildPath: CastPoint
 --- !u!114 &5173272281680408460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,6 +66,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RodHighlighter
   rodRenderer: {fileID: 8351783768612136871}
   highlightMaterial: {fileID: 2100000, guid: 86b2616ed4d79734ca59b98fc78e3408, type: 2}
+  lowTensionColor: {r: 0, g: 1, b: 0, a: 1}
+  midTensionColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  highTensionColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &5487100418549315351
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,15 +496,30 @@ MonoBehaviour:
   startSegmentLength: 0.02
   currentTargetLength: 0
   maxSegmentLength: 0.4
+  waterLayerMask:
+    serializedVersion: 2
+    m_Bits: 16
+  castFlightSpeed: 18
+  castDistanceMin: 8
+  castDistanceMax: 12
+  castAngleRange: 18
+  waterSurfaceOffset: 0.03
+  bobRadius: 0.35
+  bobMoveSpeed: 1.5
+  bobTargetArrivalThreshold: 0.05
   Gravity: {x: 0, y: -9.81, z: 0}
   Iterations: 1000
   tensionConstant: 1000
-  SecondHasRigidbody: 1
+  SecondHasRigidbody: 0
   LerpSpeed: 1.5
   Delay: 2.5
-  hookVisual: {fileID: 7138115809967784365}
+  hookVisual: {fileID: 5487100418549315351}
   hideLineWhenUnequipped: 1
   hideHookWhenUnequipped: 1
+  useSimpleLine: 0
+  fishingManager: {fileID: 0}
+  fishMouthAnchorNames:
+  - Main1
 --- !u!1 &9152973535008319095
 GameObject:
   m_ObjectHideFlags: 0

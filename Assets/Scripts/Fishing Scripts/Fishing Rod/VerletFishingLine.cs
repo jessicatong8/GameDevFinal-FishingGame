@@ -5,7 +5,7 @@ using UnityEngine;
 
 // Based from this repo: https://github.com/Kevin-Kwan/Unity3D-FishingRodMotion?tab=readme-ov-file
 // Inspiration from https://www.reddit.com/r/Unity3D/comments/1kx1hp/best_way_to_do_fishing_line/
-public class VerletLine : MonoBehaviour
+public class VerletFishingLine : MonoBehaviour
 {
     [Header("Line Settings")]
     public Transform StartPoint;
@@ -24,6 +24,19 @@ public class VerletLine : MonoBehaviour
     public float currentTargetLength = 0.03f;
     public float maxSegmentLength = 1f;
 
+    [Header("Cast Flight")]
+    [SerializeField] private LayerMask waterLayerMask;
+    [SerializeField] private float castFlightSpeed = 18f;
+    [SerializeField] private float castDistanceMin = 8f;
+    [SerializeField] private float castDistanceMax = 12f;
+    [SerializeField] private float castAngleRange = 18f;
+    [SerializeField] private float waterSurfaceOffset = 0.03f;
+
+    [Header("Water Bobbing")]
+    [SerializeField] private float bobRadius = 0.35f;
+    [SerializeField] private float bobMoveSpeed = 1.5f;
+    [SerializeField] private float bobTargetArrivalThreshold = 0.05f;
+
     // line gravity and physics settings
     [Header("Physics Settings")]
     public Vector3 Gravity = new Vector3(0, -9.81f, 0);
@@ -35,6 +48,11 @@ public class VerletLine : MonoBehaviour
     public float LerpSpeed = 1f;
     public float Delay = 2f;
     private bool isChangingLength = false;
+    private bool isCastingToWater;
+    private bool isBobbingOnWater;
+    private Vector3 castTargetPosition;
+    private Vector3 bobCenterPosition;
+    private Vector3 bobTargetPosition;
 
     [Header("Equip State")]
     [SerializeField] private GameObject hookVisual;
@@ -106,6 +124,7 @@ public class VerletLine : MonoBehaviour
         FishingManager.OnEscaped -= DetachFromFish;
         FishingManager.OnReturnToIdle -= DetachFromFish;
         FishingManager.OnCast -= DetachFromFish;
+        StopCastMotion();
     }
 
     void Update()
@@ -125,6 +144,15 @@ public class VerletLine : MonoBehaviour
                 SegmentLength = currentTargetLength;
                 isChangingLength = false;
             }
+        }
+
+        if (isCastingToWater)
+        {
+            UpdateCastFlight();
+        }
+        else if (isBobbingOnWater)
+        {
+            UpdateWaterBob();
         }
     }
 
@@ -228,6 +256,7 @@ public class VerletLine : MonoBehaviour
 
     private void HandleHooked()
     {
+        StopCastMotion();
         TryAttachToActiveFishMouth();
     }
 
@@ -301,8 +330,16 @@ public class VerletLine : MonoBehaviour
 
     private void DetachFromFish()
     {
+        StopCastMotion();
         attachedFishOnLine = null;
         lockEndToTransform = lockEndBeforeAttach;
+    }
+
+    private void StopCastMotion()
+    {
+        isCastingToWater = false;
+        isBobbingOnWater = false;
+        StopAllCoroutines();
     }
 
     // Performs Verlet integration to update the position of a particle.
@@ -331,8 +368,36 @@ public class VerletLine : MonoBehaviour
             return;
         }
 
-        StopAllCoroutines();
-        StartCoroutine(IncreaseLengthAfterDelay(Delay));
+        StopCastMotion();
+        currentTargetLength = startSegmentLength;
+        SegmentLength = startSegmentLength;
+        isChangingLength = false;
+
+        if (StartPoint == null || EndPoint == null)
+        {
+            return;
+        }
+
+        lockEndBeforeAttach = lockEndToTransform;
+        lockEndToTransform = true;
+        EndPoint.position = StartPoint.position;
+
+        Vector3 castOrigin = StartPoint.position;
+        Vector3 castDirection = GetCastDirection();
+        float castDistance = Random.Range(castDistanceMin, castDistanceMax);
+        Vector3 fallbackTarget = castOrigin + castDirection * castDistance;
+
+        if (TryGetWaterLandingPoint(castOrigin, castDirection, castDistance, out Vector3 waterLandingPoint))
+        {
+            castTargetPosition = waterLandingPoint;
+            isCastingToWater = true;
+            StartCoroutine(MoveHookToWater(castTargetPosition));
+            return;
+        }
+
+        castTargetPosition = fallbackTarget;
+        isCastingToWater = true;
+        StartCoroutine(MoveHookToTarget(castTargetPosition));
     }
 
     public void TriggerReel()
@@ -342,8 +407,118 @@ public class VerletLine : MonoBehaviour
             return;
         }
 
+        StopCastMotion();
+
         currentTargetLength = startSegmentLength;
         isChangingLength = true;
+    }
+
+    private Vector3 GetCastDirection()
+    {
+        if (StartPoint == null)
+        {
+            return Vector3.forward;
+        }
+
+        Vector3 forward = Vector3.ProjectOnPlane(StartPoint.forward, Vector3.up);
+        if (forward.sqrMagnitude < 0.001f)
+        {
+            forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
+        }
+
+        if (forward.sqrMagnitude < 0.001f)
+        {
+            forward = Vector3.forward;
+        }
+
+        forward.Normalize();
+        float angleOffset = Random.Range(-castAngleRange, castAngleRange);
+        return Quaternion.AngleAxis(angleOffset, Vector3.up) * forward;
+    }
+
+    private bool TryGetWaterLandingPoint(Vector3 origin, Vector3 direction, float distance, out Vector3 landingPoint)
+    {
+        landingPoint = origin + direction * distance;
+
+        if (waterLayerMask.value == 0)
+        {
+            return false;
+        }
+
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, distance, waterLayerMask, QueryTriggerInteraction.Collide))
+        {
+            landingPoint = hit.point + Vector3.up * waterSurfaceOffset;
+            return true;
+        }
+
+        return false;
+    }
+
+    private IEnumerator MoveHookToWater(Vector3 targetPosition)
+    {
+        while (isCastingToWater && EndPoint != null && Vector3.Distance(EndPoint.position, targetPosition) > 0.02f)
+        {
+            EndPoint.position = Vector3.MoveTowards(EndPoint.position, targetPosition, castFlightSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        if (!isCastingToWater || EndPoint == null)
+        {
+            yield break;
+        }
+
+        EndPoint.position = targetPosition;
+        isCastingToWater = false;
+        BeginWaterBob(targetPosition);
+    }
+
+    private IEnumerator MoveHookToTarget(Vector3 targetPosition)
+    {
+        while (isCastingToWater && EndPoint != null && Vector3.Distance(EndPoint.position, targetPosition) > 0.02f)
+        {
+            EndPoint.position = Vector3.MoveTowards(EndPoint.position, targetPosition, castFlightSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        if (!isCastingToWater || EndPoint == null)
+        {
+            yield break;
+        }
+
+        EndPoint.position = targetPosition;
+        isCastingToWater = false;
+    }
+
+    private void BeginWaterBob(Vector3 waterPoint)
+    {
+        bobCenterPosition = waterPoint;
+        bobTargetPosition = waterPoint;
+        isBobbingOnWater = true;
+    }
+
+    private void UpdateCastFlight()
+    {
+        if (EndPoint == null)
+        {
+            isCastingToWater = false;
+        }
+    }
+
+    private void UpdateWaterBob()
+    {
+        if (EndPoint == null)
+        {
+            isBobbingOnWater = false;
+            return;
+        }
+
+        if (Vector3.Distance(EndPoint.position, bobTargetPosition) <= bobTargetArrivalThreshold)
+        {
+            Vector2 randomOffset = Random.insideUnitCircle * bobRadius;
+            bobTargetPosition = bobCenterPosition + new Vector3(randomOffset.x, 0f, randomOffset.y);
+        }
+
+        EndPoint.position = Vector3.MoveTowards(EndPoint.position, bobTargetPosition, bobMoveSpeed * Time.deltaTime);
     }
 
     public void SetEquippedFromController(bool equipped)

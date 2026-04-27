@@ -15,7 +15,7 @@ public class FishingRig : MonoBehaviour
     private GameObject fishingLineObject;
     private GameObject fishingHookObject;
     private Transform castPointTransform;
-    private VerletLine fishingLine;
+    private VerletFishingLine fishingLine;
 
     private void Awake()
     {
@@ -78,10 +78,10 @@ public class FishingRig : MonoBehaviour
         fishingHookObject = hookTransform != null ? hookTransform.gameObject : null;
         castPointTransform = castTransform;
 
-        fishingLine = lineTransform != null ? lineTransform.GetComponentInChildren<VerletLine>(true) : null;
+        fishingLine = lineTransform != null ? lineTransform.GetComponentInChildren<VerletFishingLine>(true) : null;
         if (fishingLine == null)
         {
-            fishingLine = fishingRodAssembly.GetComponentInChildren<VerletLine>(true);
+            fishingLine = fishingRodAssembly.GetComponentInChildren<VerletFishingLine>(true);
             fishingLineObject = fishingLine != null ? fishingLine.gameObject : fishingLineObject;
         }
 

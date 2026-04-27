@@ -9,13 +9,19 @@ public class PlayerFishing : MonoBehaviour
     private Animator animator;
     [SerializeField] private FishingManager fishingManager;
     [SerializeField] private FishingRig fishingRig;
+    [SerializeField] private float castReleaseDelay = 0.25f;
 
     public bool IsFishing;
+    private bool castReleased;
 
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
         animator = GetComponentInChildren<Animator>();
+        if (fishingRig == null)
+        {
+            fishingRig = GetComponentInChildren<FishingRig>(true);
+        }
     }
 
     private void Start()
@@ -57,14 +63,43 @@ public class PlayerFishing : MonoBehaviour
 
     private void BeginCast()
     {
+        castReleased = false;
         animator?.SetTrigger("cast");
+        StartCoroutine(ReleaseCastFallback());
     }
 
     // TODO: Call this from an animation event at the frame where the cast should release.
     public void ReleaseCast()
     {
+        if (castReleased)
+        {
+            return;
+        }
+
+        castReleased = true;
         DebugLogger.Instance.LogMethodCall("PlayerFishing.ReleaseCast");
+        if (fishingRig == null)
+        {
+            fishingRig = GetComponentInChildren<FishingRig>(true);
+        }
+
+        if (fishingRig == null)
+        {
+            DebugLogger.Instance.LogWarning("PlayerFishing.ReleaseCast: no FishingRig found, so the cast line cannot move.");
+            return;
+        }
+
         fishingRig?.TriggerCast();
+    }
+
+    private System.Collections.IEnumerator ReleaseCastFallback()
+    {
+        yield return new WaitForSeconds(castReleaseDelay);
+
+        if (IsFishing && !castReleased)
+        {
+            ReleaseCast();
+        }
     }
 
     // Begin Reeling/Mashing Process
@@ -76,6 +111,7 @@ public class PlayerFishing : MonoBehaviour
 
     private void HandleFishingEnded()
     {
+        castReleased = false;
         if (!IsFishing)
         {
             DebugLogger.Instance.LogWarning("HandleFishingEnded called but player is not in fishing state.");
