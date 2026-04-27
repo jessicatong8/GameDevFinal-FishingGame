@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class FishMovement : MonoBehaviour
 {
-
     public static event Action LeavingLineRange;
     public static event Action EnteringLineRange;
-
-    private Animator animator;
     public FishingManager fishManager;
+    private Animator animator;
     private Vector3 position;
     private Vector3 targetPosition;
     private float swimmingSpeed;
@@ -19,15 +17,8 @@ public class FishMovement : MonoBehaviour
     public float xRightBoundary = 15f;
     public float xLineLeftRange = -5f;
     public float xLineRightRange = 5f;
-
     public float arrivalThreshold = 0.1f;
-
-
     private int direction = 1; // 1 for right, -1 for left
-
-
-
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -51,10 +42,8 @@ public class FishMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Debug.Log("Current Position: " + transform.position);
         SwimTowardTarget();
         CheckInLineRange();
-
     }
 
     public Vector3 SetTargetPosition(Vector3 position)
@@ -86,6 +75,7 @@ public class FishMovement : MonoBehaviour
             SetTargetPosition(transform.position);
             return;
         }
+        transform.LookAt(targetPosition);
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, swimmingSpeed * Time.deltaTime);
 
     }

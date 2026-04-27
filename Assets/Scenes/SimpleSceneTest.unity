@@ -1244,7 +1244,6 @@ MonoBehaviour:
   environmentLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  inputState: {fileID: 708269776}
   targetHeightOffset: 0.1
   minPitch: -30
   maxPitch: 60
@@ -1699,7 +1698,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 413610375}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -2168,7 +2167,7 @@ RectTransform:
   m_Father: {fileID: 1947567041}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2962,7 +2961,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &935045287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3273,6 +3272,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9baafd032641a43b19c40bada1625073, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1256478413}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9baafd032641a43b19c40bada1625073, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1256478415}
   m_SourcePrefab: {fileID: 100100000, guid: 9baafd032641a43b19c40bada1625073, type: 3}
 --- !u!1 &1004750626
 GameObject:
@@ -3499,7 +3501,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4253978373294293960, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4668563310377310221, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: m_Enabled
@@ -3525,6 +3527,10 @@ PrefabInstance:
       propertyPath: lockEndToTransform
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5749844108527728980, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 330585545}
     - target: {fileID: 5749844108527728980, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: m_Actions
       value: 
@@ -3747,9 +3753,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d63a22c1fdf8d4d599d58557de606008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressManager
-  inputState: {fileID: 708269776}
-  tensionManager: {fileID: 1419121292}
-  fishingManager: {fileID: 1940631099}
 --- !u!4 &1152363079
 Transform:
   m_ObjectHideFlags: 0
@@ -3815,6 +3818,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1255574780}
+  - component: {fileID: 1255574781}
   m_Layer: 0
   m_Name: Fishing Managers
   m_TagString: Untagged
@@ -3840,6 +3844,27 @@ Transform:
   - {fileID: 1152363079}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1255574781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255574779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4438ed6e048fd43409050c15f076fd99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishingManager
+  activeFish: {fileID: 0}
+  currentDrip: 10
+  hookTimer: 0
+  castingManager: {fileID: 1637651798}
+  usePrototypeFishSequence: 1
+  bypassCastingManager: 1
+  fallbackFish: {fileID: 1256478411}
+  fishSequence:
+  - {fileID: 1256478411}
 --- !u!1 &1256478405 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9baafd032641a43b19c40bada1625073, type: 3}
@@ -3879,7 +3904,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 189e1e8fe4ab5472b90696e958954aec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishMovement
-  fishManager: {fileID: 0}
+  fishManager: {fileID: 1940631099}
 --- !u!114 &1256478411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3929,6 +3954,23 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9baafd032641a43b19c40bada1625073, type: 3}
   m_PrefabInstance: {fileID: 967829982}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1256478415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256478405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deb439b6a9afac847b9deacd99b41a99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishCaught
+  distanceFromCamera: 1.5
+  localOffset: {x: 0, y: 0, z: 10}
+  disableFishMovement: 1
+  disableAnimator: 1
+  freezeRigidbody: 1
 --- !u!1 &1313077786
 GameObject:
   m_ObjectHideFlags: 0
@@ -4478,8 +4520,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4634f455c0fe4ba7b8ebfaa74a42ff2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TensionManager
-  inputState: {fileID: 708269776}
-  fishingManager: {fileID: 1940631099}
 --- !u!4 &1419121293
 Transform:
   m_ObjectHideFlags: 0
@@ -4633,9 +4673,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7efe73f7d5db2c64daf4a2107299584f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebugCanvasUI
-  inputState: {fileID: 708269776}
-  tensionManager: {fileID: 1419121292}
-  fishingManager: {fileID: 1940631099}
   debugTextDisplay: {fileID: 1575987598}
   showDebugUI: 1
   updateRate: 0.1
@@ -5626,13 +5663,12 @@ MonoBehaviour:
   activeFish: {fileID: 0}
   currentDrip: 10
   hookTimer: 2
-  inputState: {fileID: 708269776}
+  castingManager: {fileID: 1637651798}
   usePrototypeFishSequence: 1
   bypassCastingManager: 1
   fallbackFish: {fileID: 1256478411}
   fishSequence:
   - {fileID: 1256478411}
-  castingManager: {fileID: 1637651798}
 --- !u!4 &1940631100
 Transform:
   m_ObjectHideFlags: 0
@@ -5717,7 +5753,7 @@ RectTransform:
   m_Father: {fileID: 504026898}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

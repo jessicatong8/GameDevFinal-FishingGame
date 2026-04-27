@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
-
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInputState))]
 
@@ -13,16 +11,15 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 1.2f;
     public float gravity = -20f;
     [SerializeField] private float rotationSharpness = 12f;
+
     private CharacterController characterController;
-    private PlayerInputState inputStateScript;
+    private Vector3 lastMoveDirection = Vector3.forward;
     private float verticalVelocity;
     private bool jumpRequested;
-    private Vector3 lastMoveDirection = Vector3.forward;
 
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
-        inputStateScript = GetComponent<PlayerInputState>();
     }
 
     private void Start()
@@ -36,18 +33,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        if (inputStateScript != null)
-        {
-            // inputStateScript.JumpPerformed += HandleJumpPerformed;
-        }
+        PlayerInputState.JumpPerformed += HandleJumpPerformed;
     }
 
     private void OnDisable()
     {
-        if (inputStateScript != null)
-        {
-            inputStateScript.JumpPerformed -= HandleJumpPerformed;
-        }
+        PlayerInputState.JumpPerformed -= HandleJumpPerformed;
     }
 
     private void HandleJumpPerformed()
@@ -58,16 +49,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (characterController == null || cameraTransform == null || inputStateScript == null)
+        if (characterController == null || cameraTransform == null || PlayerInputState.Instance == null)
         {
-            DebugLogger.Instance.LogWarning("PlayerMovement: Missing required components. Please ensure CharacterController, Camera Transform, and PlayerInputState are assigned. CharacterController: " + characterController + ", Camera Transform: " + cameraTransform + ", PlayerInputState: " + inputStateScript);
+            DebugLogger.Instance.LogWarning("PlayerMovement: Missing required components. Please ensure CharacterController, Camera Transform, and PlayerInputState are in the scene. CharacterController: " + characterController + ", Camera Transform: " + cameraTransform + ", PlayerInputState.Instance: " + PlayerInputState.Instance);
             return;
         }
 
-        if (inputStateScript.CurrentState != PlayerInputState.InputStates.Gameplay) { return; }
+        if (PlayerInputState.Instance.CurrentState != PlayerInputState.InputStates.Gameplay) { return; }
 
         // constantly read movement input from player input state
-        Vector2 moveInput = inputStateScript.MovementInputData;
+        Vector2 moveInput = PlayerInputState.Instance.MovementInputData;
 
         // constantly read camera movement input from player input state
         Vector3 cameraRight = cameraTransform.right;
@@ -81,6 +72,7 @@ public class PlayerMovement : MonoBehaviour
         if (moveDirection.sqrMagnitude > 0.0001f)
         {
             lastMoveDirection = moveDirection.normalized;
+            // animator parameters for movement can be set here based on moveDirection and/or its magnitude
         }
 
         Quaternion targetRotation = Quaternion.LookRotation(lastMoveDirection, Vector3.up);

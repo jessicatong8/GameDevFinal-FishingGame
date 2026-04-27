@@ -3,10 +3,10 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class PlayerCamera : MonoBehaviour
 {
+    public static PlayerCamera Instance { get; private set; } // Singleton instance for easy access from other scripts
     [Header("References")]
     public Transform target;
     public LayerMask environmentLayerMask;
-    [SerializeField] private PlayerInputState inputState;
 
     [Header("Camera Orbit (Exploration)")]
     public float targetHeightOffset = 1.6f;
@@ -44,8 +44,12 @@ public class PlayerCamera : MonoBehaviour
     // public float cameraCollisionRadius = 0.3f;
     // public float cameraCollisionBuffer = 0.2f;
     public float cameraCollisionRadius = 0.2f;
-    public float cameraCollisionBuffer = 0.05f; 
+    public float cameraCollisionBuffer = 0.05f;
 
+    public void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         pitch = 20f; // Start at a slight angle
@@ -57,7 +61,13 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
-        bool isFishing = inputState != null && inputState.GetCurrentInputState() == PlayerInputState.InputStates.Fishing;
+        if (PlayerInputState.Instance == null)
+        {
+            DebugLogger.Instance.LogError("PlayerCamera: PlayerInputState.Instance is null. Make sure PlayerInputState is in the scene.");
+            return;
+        }
+
+        bool isFishing = PlayerInputState.Instance.GetCurrentInputState() == PlayerInputState.InputStates.Fishing;
 
         if (isFishing)
         {
@@ -81,12 +91,12 @@ public class PlayerCamera : MonoBehaviour
         else
         {
             // Standard Orbit Controls (Active when NOT fishing)
-            Vector2 lookInput = inputState.LookInputData;
+            Vector2 lookInput = PlayerInputState.Instance.LookInputData;
             yaw += lookInput.x * yawSensitivity;
             pitch -= lookInput.y * pitchSensitivity;
             pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
 
-            float zoomInput = inputState.ZoomInputData;
+            float zoomInput = PlayerInputState.Instance.ZoomInputData;
             distance = Mathf.Clamp(distance - scrollZoomSpeed * zoomInput * Time.deltaTime, minDistance, maxDistance);
 
             // Return to standard heights

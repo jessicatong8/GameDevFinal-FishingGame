@@ -367,6 +367,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Confirm Catch",
+                    "type": "Button",
+                    "id": "5f661519-b4fd-47eb-908f-1494a85c08c0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Abort",
                     "type": "Button",
                     "id": "52113cda-a8d5-4090-9728-067b7e379f74",
@@ -407,6 +416,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Mash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "27565139-247a-4240-a15c-bacde261d13d",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Confirm Catch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

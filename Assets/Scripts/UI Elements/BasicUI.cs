@@ -48,7 +48,7 @@ public class BasicUI : MonoBehaviour
 
         UpdateProgressSlider(0);
         UpdateTensionSlider(0);
-        UpdateTensionSliderMax(0);
+        UpdateTensionSliderMax(100);
 
         if (fishingManager != null)
         {
@@ -87,7 +87,7 @@ public class BasicUI : MonoBehaviour
         alertText.color = Color.white;
         UpdateProgressSlider(0);
         UpdateTensionSlider(0);
-        UpdateTensionSliderMax(0);
+        UpdateTensionSliderMax(100);
     }
 
     void HandleBite()
@@ -117,7 +117,7 @@ public class BasicUI : MonoBehaviour
         HandleFishingGameStateChanged(FishingManager.FishingGameState.Idle);
         UpdateProgressSlider(0);
         UpdateTensionSlider(0);
-        UpdateTensionSliderMax(0);
+        UpdateTensionSliderMax(100);
     }
 
     void HandleFishingGameStateChanged(FishingManager.FishingGameState state)

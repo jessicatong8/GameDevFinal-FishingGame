@@ -9,10 +9,10 @@ using System;
 /// </summary>
 public class DebugCanvasUI : MonoBehaviour
 {
-    [SerializeField] private PlayerInputState inputState;
-    [SerializeField] private TensionManager tensionManager;
-    [SerializeField] private FishingManager fishingManager;
     [SerializeField] private TextMeshProUGUI debugTextDisplay;
+    private PlayerInputState inputState;
+    private TensionManager tensionManager;
+    private FishingManager fishingManager;
 
     [SerializeField] private bool showDebugUI = true;
     [SerializeField] private float updateRate = 0.1f; // Update every 0.1 seconds
@@ -29,12 +29,9 @@ public class DebugCanvasUI : MonoBehaviour
 
     private void Start()
     {
-        if (inputState == null)
-            inputState = FindFirstObjectByType<PlayerInputState>();
-        if (tensionManager == null)
-            tensionManager = FindFirstObjectByType<TensionManager>();
-        if (fishingManager == null)
-            fishingManager = FindFirstObjectByType<FishingManager>();
+        inputState = PlayerInputState.Instance;
+        fishingManager = FishingManager.Instance;
+        tensionManager = FindFirstObjectByType<TensionManager>();
 
         canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup == null)
@@ -49,7 +46,7 @@ public class DebugCanvasUI : MonoBehaviour
 
         if (inputState != null)
         {
-            inputState.DebugPerformed += ToggleDebugUI;
+            PlayerInputState.DebugPerformed += ToggleDebugUI;
         }
         else
         {
@@ -63,7 +60,7 @@ public class DebugCanvasUI : MonoBehaviour
     {
         if (inputState != null)
         {
-            inputState.DebugPerformed -= ToggleDebugUI;
+            PlayerInputState.DebugPerformed -= ToggleDebugUI;
         }
     }
 

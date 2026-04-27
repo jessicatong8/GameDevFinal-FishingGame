@@ -2,57 +2,52 @@ using UnityEngine;
 
 public class TensionManager : MonoBehaviour
 {
-    [SerializeField] private PlayerInputState inputState;
-    [SerializeField] private FishingManager fishingManager;
-    Fish activeFish;
+    private Fish activeFish;
     private const float TARGET_MASH_RATE = 3f; // expected mashes per second
 
 
     private bool isReeling;
     private bool mashTriggeredThisFrame;
+    // TENSION VARIABLES
     private float tension;
     private float maxTension = 100; 
     private float tensionDropRate;
-
+    // TENSION ZONES
     private float safeZoneLower;
     private float safeZoneUpper;
-    private float escapeTime; // how many seconds you have of exceeding safe tension before the fish escapes
-    private float outOfZoneTimer;
+    // ESCAPE VARIABLES
+    private float outOfZoneTimer; // counts how long tension has been out of the safe zone
+    private float escapeTime; // if outOfZoneTimer exceeds escapeTime, fish escapes
 
-
-
+    void Start()
+    {
+        tension = 0f;
+    }
     private void OnEnable()
     {
-        inputState.MashPerformed += HandleMashPerformed;
         FishingManager.OnHook += HandleHooked;
-        FishingManager.OnCaught += HandleResetToIdle;
+        PlayerInputState.MashPerformed += HandleMashPerformed;
+        FishingManager.OnCaught += HandleCaught;
+        // FishingManager.OnCaught += HandleResetToIdle;
+        // FishingManager.OnCatchConfirmationEnd += HandleResetToIdle;
         FishingManager.OnEscaped += HandleResetToIdle;
         FishingManager.OnReturnToIdle += HandleResetToIdle;
     }
-
     private void OnDisable()
     {
-        if (inputState != null)
-        {
-            inputState.MashPerformed -= HandleMashPerformed;
-        }
-
         FishingManager.OnHook -= HandleHooked;
-        FishingManager.OnCaught -= HandleResetToIdle;
+        PlayerInputState.MashPerformed -= HandleMashPerformed;
+        FishingManager.OnCaught -= HandleCaught;
+        // FishingManager.OnCaught -= HandleResetToIdle;
+        // FishingManager.OnCatchConfirmationEnd += HandleResetToIdle;
         FishingManager.OnEscaped -= HandleResetToIdle;
         FishingManager.OnReturnToIdle -= HandleResetToIdle;
     }
-
     private void HandleMashPerformed()
     {
         // DebugLogger.Instance.LogMethodCall("TensionManager: HandleMashPerformed");
         mashTriggeredThisFrame = true;
     }
-    void Start()
-    {
-        tension = 0f;
-    }
-
     void Update()
     {
         if (isReeling)
@@ -67,7 +62,7 @@ public class TensionManager : MonoBehaviour
     private void HandleHooked()
     {
         // DebugLogger.Instance.LogMethodCall("TensionManager: HandleHooked");
-        activeFish = fishingManager.activeFish;
+        activeFish = FishingManager.Instance.activeFish;
         if (activeFish == null)
         {
             DebugLogger.Instance.LogError("TensionManager: No active fish found.");
@@ -82,8 +77,12 @@ public class TensionManager : MonoBehaviour
         escapeTime = activeFish.tensionEscapeTime;
 
         outOfZoneTimer = 0f;
+    }
 
-
+    private void HandleCaught()
+    {
+        mashTriggeredThisFrame = false;
+        isReeling = false;
     }
 
     private void UpdateTension(bool mashedThisFrame)
@@ -117,8 +116,7 @@ public class TensionManager : MonoBehaviour
         if (outOfZoneTimer >= escapeTime)
         {
             outOfZoneTimer = 0f;
-            // DebugLogger.Instance.Log("Fish Escaped - Tension too high for too long");
-            fishingManager.EscapeFishing("Tension too high, line snapped");
+            FishingManager.Instance.EscapeFishing("Tension too high, line snapped");
         }
     }
 

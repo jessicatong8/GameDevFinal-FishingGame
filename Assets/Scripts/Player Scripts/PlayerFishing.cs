@@ -6,7 +6,6 @@ public class PlayerFishing : MonoBehaviour
 {
     [Header("References")]
     private PlayerMovement playerMovement;
-    private PlayerInputState inputState;
     private Animator animator;
     [SerializeField] private FishingManager fishingManager;
     [SerializeField] private FishingRig fishingRig;
@@ -16,21 +15,19 @@ public class PlayerFishing : MonoBehaviour
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
-        inputState = GetComponent<PlayerInputState>();
-
         animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
     {
-        inputState.SetState(PlayerInputState.InputStates.Gameplay);
+        PlayerInputState.Instance.SetState(PlayerInputState.InputStates.Gameplay);
         DebugLogger.Instance.Log("PlayerFishing: Starting in Gameplay state.");
         SetFishingActive(false);
     }
 
     private void OnEnable()
     {
-        inputState.InteractPerformed += HandleInteract;
+        PlayerInputState.InteractPerformed += HandleInteract;
 
         FishingManager.OnHook += BeginReeling;
         FishingManager.OnReturnToIdle += HandleFishingEnded;
@@ -38,8 +35,7 @@ public class PlayerFishing : MonoBehaviour
 
     private void OnDisable()
     {
-
-        inputState.InteractPerformed -= HandleInteract;
+        PlayerInputState.InteractPerformed -= HandleInteract;
 
         FishingManager.OnHook -= BeginReeling;
         FishingManager.OnReturnToIdle -= HandleFishingEnded;
@@ -47,9 +43,9 @@ public class PlayerFishing : MonoBehaviour
 
     private void HandleInteract()
     {
-        // Calls TryStartFishing which checks all conditions and returns false if fishing cannot be started
-        // - not on dock
-        // - not in idle state
+        if (IsFishing) { return; }
+
+        // Calls TryStartFishing which checks all conditions and returns false if fishing cannot be started (not on dock or not in idle state)
         if (fishingManager.TryStartFishing())
         {
             // DebugLogger.Instance.Log("PlayerFishing: Fishing started successfully.");
@@ -64,7 +60,7 @@ public class PlayerFishing : MonoBehaviour
         animator?.SetTrigger("cast");
     }
 
-    // Call this from an animation event at the frame where the cast should release.
+    // TODO: Call this from an animation event at the frame where the cast should release.
     public void ReleaseCast()
     {
         DebugLogger.Instance.LogMethodCall("PlayerFishing.ReleaseCast");
@@ -93,8 +89,8 @@ public class PlayerFishing : MonoBehaviour
         IsFishing = fishingActive;
 
         // Set player input state to fishing mode
-        inputState.SetState(fishingActive ? PlayerInputState.InputStates.Fishing : PlayerInputState.InputStates.Gameplay);
-        DebugLogger.Instance.Log($"PlayerFishing: Set fishing active: {fishingActive}. \nCurrent input state: {inputState.GetCurrentInputState()}");
+        PlayerInputState.Instance.SetState(fishingActive ? PlayerInputState.InputStates.Fishing : PlayerInputState.InputStates.Gameplay);
+        DebugLogger.Instance.Log($"PlayerFishing: Set fishing active: {fishingActive}. \nCurrent input state: {PlayerInputState.Instance.GetCurrentInputState()}");
 
         // animator parameter for idle/fishing animation transition
         animator?.SetBool("startFishing", fishingActive);
