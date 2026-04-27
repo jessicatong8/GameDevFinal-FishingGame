@@ -7,9 +7,22 @@ public class CatchPresentationUI : MonoBehaviour
 
     private void Awake()
     {
+        if (catchText == null)
+        {
+            catchText = GetComponentInChildren<TextMeshProUGUI>(true);
+        }
+
         if (catchText != null)
         {
             catchText.gameObject.SetActive(false);
+        }
+    }
+
+    private void OnValidate()
+    {
+        if (catchText == null)
+        {
+            catchText = GetComponentInChildren<TextMeshProUGUI>(true);
         }
     }
 
@@ -31,6 +44,7 @@ public class CatchPresentationUI : MonoBehaviour
     {
         if (catchText == null)
         {
+            DebugLogger.Instance.LogWarning("CatchPresentationUI: catchText is not assigned. Add a TextMeshProUGUI child or assign the field in the inspector.");
             return;
         }
 

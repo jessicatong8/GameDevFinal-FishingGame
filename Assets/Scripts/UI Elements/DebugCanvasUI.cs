@@ -132,7 +132,8 @@ public class DebugCanvasUI : MonoBehaviour
             debugText += "<b><color=#FFFF00>REELING STATE</color></b>\n";
 
             bool isReeling = fishingManager != null && fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling;
-            if (!isReeling)
+            bool isInCatchPresentation = fishingManager != null && fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation;
+            if (!isReeling && !isInCatchPresentation)
             {
                 debugText += "<color=#808080>Not reeling</color>\n";
                 debugText += "\n";
@@ -157,6 +158,9 @@ public class DebugCanvasUI : MonoBehaviour
 
                 debugText += $"Line?: <color=#00FFFF>{fishingManager.CurrentReelLineRangeState}</color>\n";
                 debugText += "Wiggle?: <color=#808080>TODO</color>\n";
+
+                debugText += "\n"; 
+                debugText += "InCatchPresentation: " + (isInCatchPresentation ? "<color=#00FF00>Yes</color>" : "<color=#FF0000>No</color>") + "\n";
             }
             else
             {
