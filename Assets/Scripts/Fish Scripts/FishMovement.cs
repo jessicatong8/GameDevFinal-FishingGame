@@ -5,20 +5,26 @@ using UnityEngine;
 public class FishMovement : MonoBehaviour
 {
 
+    [SerializeField] private LineRangeManager lineRangeManager;
+    [SerializeField] private PlayerInputState inputState;
+
+
     public static event Action LeavingLineRange;
     public static event Action EnteringLineRange;
 
-    private Animator animator;
     public FishingManager fishManager;
     private Vector3 position;
     private Vector3 targetPosition;
     private float swimmingSpeed;
 
     // will likely have to adjust these based on the camera view 
-    public float xLeftBoundary = -15f;
-    public float xRightBoundary = 15f;
-    public float xLineLeftRange = -5f;
-    public float xLineRightRange = 5f;
+    private float xLeftBoundary = -15f;
+    private float xRightBoundary = 15f;
+
+    private float xLineLeftWarningRange;
+    private float xLineRightWarningRange;
+    private float xLineLeftRange;
+    private float xLineRightRange;
 
     public float arrivalThreshold = 0.1f;
 
@@ -31,7 +37,10 @@ public class FishMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        animator = GetComponent<Animator>();
+        xLineLeftWarningRange = lineRangeManager.xLineLeftWarningRange;
+        xLineRightWarningRange = lineRangeManager.xLineRightWarningRange;
+        xLineLeftRange = lineRangeManager.xLineLeftRange;
+        xLineRightRange = lineRangeManager.xLineRightRange;
 
         // FishingManager.OnCast += HandleCast;
         // FishingManager.OnBite += HandleBite;
@@ -48,12 +57,29 @@ public class FishMovement : MonoBehaviour
 
     }
 
+    private void OnEnable()
+    {
+        if (inputState != null)
+        {
+            inputState.ReelLeftPerformed += TurnLeft;
+            inputState.ReelRightPerformed += TurnRight;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (inputState != null)
+        {
+            inputState.ReelLeftPerformed -= TurnLeft;
+            inputState.ReelRightPerformed -= TurnRight;
+        }
+    }
     // Update is called once per frame
     void Update()
     {
         // Debug.Log("Current Position: " + transform.position);
         SwimTowardTarget();
-        CheckInLineRange();
+        // CheckInLineRange();
 
     }
 
@@ -90,16 +116,41 @@ public class FishMovement : MonoBehaviour
 
     }
 
-    private void CheckInLineRange()
+    public void TurnLeft()
     {
-        if (transform.position.x < xLineLeftRange || transform.position.x > xLineRightRange)
+        if (!GetComponent<Fish>().isActiveFish) return;
+
+        Debug.Log("Reel Left Input Received");
+        if (direction != -1)
         {
-            LeavingLineRange?.Invoke();
-        }
-        else
-        {
-            EnteringLineRange?.Invoke();
+            direction = -1;
+            SetTargetPosition(transform.position);
         }
     }
+
+    public void TurnRight()
+    {
+        if (!GetComponent<Fish>().isActiveFish) return;
+        if (direction != 1)
+        {
+            direction = 1;
+            SetTargetPosition(transform.position);
+        }
+    }
+
+    public bool IsInLineRange()
+    {
+        return transform.position.x >= xLineLeftRange && transform.position.x <= xLineRightRange;
+    }
+
+    public bool IsInLeftWarningRange()
+    {
+        return transform.position.x >= xLineLeftWarningRange && transform.position.x < xLineLeftRange;
+    }
+    public bool IsInRightWarningRange()
+    {
+        return transform.position.x > xLineRightWarningRange && transform.position.x <= xLineRightRange;
+    }
+
 
 }

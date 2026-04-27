@@ -8,6 +8,8 @@ public class Fish : MonoBehaviour
     public float rarity;
     public float dripThreshold = 0f;
 
+    public bool isActiveFish;
+
 
     public float wiggleOnTimer;
     public float wiggleOffTimer;

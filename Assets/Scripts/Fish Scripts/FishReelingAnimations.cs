@@ -4,24 +4,28 @@ public class FishReelingAnimations : MonoBehaviour
 {
     private Animator animator;
     public FishingManager fishManager;
+    private Fish fish;
 
     void Start()
     {
         animator = GetComponent<Animator>();
+        fish = GetComponent<Fish>();
 
         FishingManager.OnBite += HandleBite;
-        FishingManager.OnHook += HandleReelAttempt;
+        FishingManager.OnHook += HandleHook;
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnEscaped += HandleEscaped;
+        FishingManager.OnReturnToIdle += HandleEscaped;
 
     }
 
     void OnDestroy()
     {
         FishingManager.OnBite -= HandleBite;
-        FishingManager.OnHook -= HandleReelAttempt;
+        FishingManager.OnHook -= HandleHook;
         FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnEscaped -= HandleEscaped;
+        FishingManager.OnReturnToIdle -= HandleEscaped;
     }
 
     void Update()
@@ -30,30 +34,34 @@ public class FishReelingAnimations : MonoBehaviour
 
     void HandleBite()
     {
-        animator.SetTrigger("Bite");
+        if (fish.isActiveFish)
+        {
+            animator.SetTrigger("Bite");
+        }
     }
 
-    void HandleReelAttempt()
+    void HandleHook()
     {
-        animator.SetBool("IsReeling", true);
+        if (fish.isActiveFish)
+        {
+            animator.SetBool("IsHooked", true);
+        }
+
     }
 
     void HandleCaught()
     {
-        animator.SetTrigger("Caught");
-    }
 
-    void HandleLineBreak()
-    {
-        animator.SetTrigger("Escaped");
-        animator.SetBool("IsReeling", false);
+        animator.SetTrigger("Caught");
+
     }
 
     void HandleEscaped()
     {
-        animator.SetTrigger("Escaped");
-        animator.SetBool("IsReeling", false);
-    }
 
+        animator.SetTrigger("Escaped");
+        animator.SetBool("IsHooked", false);
+
+    }
 
 }

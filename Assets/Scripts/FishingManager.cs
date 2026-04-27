@@ -91,7 +91,7 @@ public class FishingManager : MonoBehaviour
         // DebugLogger.Instance.LogMethodCall("FishingManager.TryStartFishing");
         if (!IsPlayerInFishingArea() || currentFishingGameState != FishingGameState.Idle)
         {
-            DebugLogger.Instance.LogMethodCall("FishingManager.TryStartFishing","IsPlayerInFishingArea: " + IsPlayerInFishingArea() + " (should be true)" + "\nCurrentState: " + currentFishingGameState + " (should be Idle)");
+            DebugLogger.Instance.LogMethodCall("FishingManager.TryStartFishing", "IsPlayerInFishingArea: " + IsPlayerInFishingArea() + " (should be true)" + "\nCurrentState: " + currentFishingGameState + " (should be Idle)");
             return false;
         }
         return EnterCastingState(); // returns true on success and false on failure (e.g. no fish in spot, drip too low)
@@ -103,8 +103,9 @@ public class FishingManager : MonoBehaviour
         if (currentFishingGameState == FishingGameState.HookWindow)
         {
             // DebugLogger.Instance.Log("HandleHookPerformed check passed.");
-            DebugLogger.Instance.LogMethodCall("FishingManager.HandleHookPerformed","-> !OnHook\nHook successful");
+            DebugLogger.Instance.LogMethodCall("FishingManager.HandleHookPerformed", "-> !OnHook\nHook successful");
             OnHook?.Invoke();
+            // activeFish.isActiveFish = true;
             EnterReelingState();
         }
     }
@@ -136,6 +137,8 @@ public class FishingManager : MonoBehaviour
 
         // DebugLogger.Instance.LogMethodCall("FishingManager.EnterCastingState", "-> !OnCast\nCasting line with fish: " + activeFish.fishName);
         OnCast?.Invoke();
+
+        activeFish.isActiveFish = true;
 
         SetFishingGameState(FishingGameState.Casting);
         timer = UnityEngine.Random.Range(minHookDelay, maxHookDelay);
@@ -246,21 +249,21 @@ public class FishingManager : MonoBehaviour
 
     // private void HandleReeling()
     // {
-        // tensionManager = GetComponent<TensionManager>();
-        // progressManager = GetComponent<ProgressManager>();
-        // if (tensionManager.GetCurrentTension() > activeFish.maxTension)
-        // {
-        //     EscapeFishing("Fish escaped due to line break from high tension.");
-        //     return;
-        // }
-        // ;
-        // if (progressManager.IsProgressComplete())
-        // {
-        //     OnCaught?.Invoke();
-        //     AdvanceFishSequenceOnCatch();
-        //     ReturnToIdle(activeFish.fishName + " caught.");
-        //     return;
-        // }
+    // tensionManager = GetComponent<TensionManager>();
+    // progressManager = GetComponent<ProgressManager>();
+    // if (tensionManager.GetCurrentTension() > activeFish.maxTension)
+    // {
+    //     EscapeFishing("Fish escaped due to line break from high tension.");
+    //     return;
+    // }
+    // ;
+    // if (progressManager.IsProgressComplete())
+    // {
+    //     OnCaught?.Invoke();
+    //     AdvanceFishSequenceOnCatch();
+    //     ReturnToIdle(activeFish.fishName + " caught.");
+    //     return;
+    // }
     // }
 
     private void SetFishingGameState(FishingGameState requestedState)
@@ -294,6 +297,8 @@ public class FishingManager : MonoBehaviour
     {
         DebugLogger.Instance.LogMethodCall("FishingManager.ReturnToIdle", reason);
         SetFishingGameState(FishingGameState.Idle);
+
+        activeFish.isActiveFish = false;
 
         activeFish = null;
 
