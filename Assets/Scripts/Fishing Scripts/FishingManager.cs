@@ -283,14 +283,14 @@ public class FishingManager : MonoBehaviour
 
     public void CompleteCatchConfirmation()
     {
-        DebugLogger.Instance.LogMethodCall("FishingManager.CompleteCatchConfirmation", "");
-        OnCatchConfirmationEnd?.Invoke();
+        // DebugLogger.Instance.LogMethodCall("FishingManager.CompleteCatchConfirmation", "");
+        // OnCatchConfirmationEnd?.Invoke();
         AdvanceFishSequenceOnCatch();
         string fishName = activeFish != null ? activeFish.fishName : "Unknown fish";
         ReturnToIdle(fishName + " caught.");
     }
 
-    private void ReturnToIdle(string reason)
+    public void ReturnToIdle(string reason)
     {
         DebugLogger.Instance.LogMethodCall("FishingManager.ReturnToIdle", reason);
 

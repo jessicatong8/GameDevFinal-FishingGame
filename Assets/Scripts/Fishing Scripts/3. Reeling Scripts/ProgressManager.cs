@@ -19,8 +19,8 @@ public class ProgressManager : MonoBehaviour
     {
         FishingManager.OnHook += HandleHooked;
         PlayerInputState.MashPerformed += HandleMashPerformed;
-        FishingManager.OnCaught += HandleCaught;
-        FishingManager.OnCatchConfirmationEnd += HandleResetToIdle;
+        FishingManager.OnCaught += HandleResetToIdle;
+        // FishingManager.OnCatchConfirmationEnd += HandleResetToIdle;
         FishingManager.OnEscaped += HandleResetToIdle;
         FishingManager.OnReturnToIdle += HandleResetToIdle;
     }
@@ -29,10 +29,10 @@ public class ProgressManager : MonoBehaviour
     {
         FishingManager.OnHook -= HandleHooked;
         PlayerInputState.MashPerformed -= HandleMashPerformed;
-        FishingManager.OnCaught -= HandleCaught;
-        FishingManager.OnCatchConfirmationEnd -= HandleResetToIdle;
+        FishingManager.OnCaught -= HandleResetToIdle;
+        // FishingManager.OnCatchConfirmationEnd -= HandleResetToIdle;
         FishingManager.OnEscaped -= HandleResetToIdle;
-        FishingManager.OnReturnToIdle -= HandleResetToIdle;
+        FishingManager.OnReturnToIdle -= HandleResetToIdle;     // for aborts
     }
     private void HandleHooked()
     {
@@ -43,11 +43,6 @@ public class ProgressManager : MonoBehaviour
         }
         // progress = 0f;
         isReeling = true;
-    }
-    private void HandleCaught()
-    {
-        mashTriggeredThisFrame = false;
-        isReeling = false;
     }
     private void HandleMashPerformed()
     {

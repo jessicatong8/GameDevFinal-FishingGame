@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FishReelingAnimations : MonoBehaviour
@@ -12,9 +13,9 @@ public class FishReelingAnimations : MonoBehaviour
         FishingManager.OnBite += HandleBite;
         FishingManager.OnHook += HandleReelAttempt;
         FishingManager.OnCaught += HandleCaught;
-        FishingManager.OnCatchConfirmationEnd += HandleResetToIdle;
         FishingManager.OnEscaped += HandleResetToIdle;
-        // FishingManager.OnReturnToIdle += HandleResetToIdle;
+        // FishingManager.OnCatchConfirmationEnd += HandleResetToIdle;
+        FishingManager.OnReturnToIdle += HandleResetToIdle; // for aborts
     }
     void OnDestroy()
     {
@@ -22,8 +23,8 @@ public class FishReelingAnimations : MonoBehaviour
         FishingManager.OnHook -= HandleReelAttempt;
         FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnEscaped -= HandleResetToIdle; // can include optional escape animation instead
-        FishingManager.OnCatchConfirmationEnd -= HandleResetToIdle;
-        // FishingManager.OnReturnToIdle -= HandleResetToIdle;
+        // FishingManager.OnCatchConfirmationEnd -= HandleResetToIdle;
+        FishingManager.OnReturnToIdle -= HandleResetToIdle; // for aborts
     }
     void HandleBite()
     {
