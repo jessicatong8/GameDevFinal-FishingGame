@@ -10,7 +10,7 @@ public class TensionUI : MonoBehaviour
     [Header("UI Objects")]
     [SerializeField] private GameObject uiPanel;
     [SerializeField] private Slider tensionSlider;
-    [SerializeField] private RectTransform safeZoneOverlay;
+    [SerializeField] private RectTransform safeZone;
 
     private void Awake()
     {
@@ -52,11 +52,11 @@ public class TensionUI : MonoBehaviour
         float left = fish.safeZoneCenter - halfWidth;
         float right = fish.safeZoneCenter + halfWidth;
 
-        safeZoneOverlay.anchorMin = new Vector2(left, 0);
-        safeZoneOverlay.anchorMax = new Vector2(right, 1);
+        safeZone.anchorMin = new Vector2(left, 0);
+        safeZone.anchorMax = new Vector2(right, 1);
 
-        safeZoneOverlay.offsetMin = Vector2.zero;
-        safeZoneOverlay.offsetMax = Vector2.zero;
+        safeZone.offsetMin = Vector2.zero;
+        safeZone.offsetMax = Vector2.zero;
     }
 
     private void Update()
@@ -67,6 +67,6 @@ public class TensionUI : MonoBehaviour
         }
 
         float currentTension = tensionManager.GetCurrentTension();
-        tensionSlider.value = currentTension;
+        tensionSlider.value = currentTension/100;
     }
 }

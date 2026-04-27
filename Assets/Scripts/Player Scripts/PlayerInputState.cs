@@ -19,6 +19,7 @@ public class PlayerInputState : MonoBehaviour
     public float ZoomInputData { get; private set; }
 
     public event Action InteractPerformed;
+    //jcommented for compiler errors
     public event Action JumpPerformed;
     public event Action HookPerformed;
     public event Action MashPerformed;
@@ -116,16 +117,16 @@ public class PlayerInputState : MonoBehaviour
         }
     }
 
-    // public void OnJump(InputValue value)
-    // {
-    //     if (!value.isPressed) { return; }
+    public void OnJump(InputValue value)
+    {
+         if (!value.isPressed) { return; }
 
-    //     if (currentState == InputStates.Gameplay)
-    //     {
-    //         // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnJump","-> !JumpPerformed");
-    //         JumpPerformed?.Invoke();
-    //     }
-    // }
+         if (currentState == InputStates.Gameplay)
+         {
+             // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnJump","-> !JumpPerformed");
+             JumpPerformed?.Invoke();
+         }
+    }
 
     public void OnHook(InputValue value)
     {

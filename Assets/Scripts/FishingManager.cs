@@ -20,7 +20,8 @@ public class FishingManager : MonoBehaviour
     public static event Action OnReturnToIdle;
 
     public static event Action<FishingGameState> OnFishingGameStateChanged; // for triggering state-specific animations
-    public static event Action<Reeling_LineRangeState> OnReelLineRangeStateChanged; // for triggering line range related animations/effects during reeling
+    //commented for compiler errors
+    //public static event Action<Reeling_LineRangeState> OnReelLineRangeStateChanged; // for triggering line range related animations/effects during reeling
     public float hookTimer;
 
     public enum FishingGameState
