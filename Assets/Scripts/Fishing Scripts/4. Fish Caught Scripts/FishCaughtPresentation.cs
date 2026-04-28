@@ -83,9 +83,8 @@ public class FishCaughtPresentation : MonoBehaviour
             DebugLogger.Instance.LogWarning("FishCaughtPresentation: RestoreFish called but catch presentation was not applied. Skipping restore.");
             return;
         }
-
-        DebugLogger.Instance.LogMethodCall("FishCaughtPresentation: RestoreFish");
-        DebugLogger.Instance.Log("Restoring fish to normal state.");
+        // DebugLogger.Instance.LogMethodCall("FishCaughtPresentation: RestoreFish");
+        // DebugLogger.Instance.Log("Restoring fish to normal state.");
 
         if (disableFishMovement && fishMovement != null)
         {
