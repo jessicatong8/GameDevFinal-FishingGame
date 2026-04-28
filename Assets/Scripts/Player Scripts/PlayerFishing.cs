@@ -142,10 +142,13 @@ public class PlayerFishing : MonoBehaviour
 
         // animator parameter for idle/fishing animation transition
         // animator?.SetBool("startFishing", fishingActive);
-        if (fishingActive)
+        if (fishingActive && PlayerAnimator.Instance != null && PlayerAnimator.Instance.animator != null)
         {
             PlayerAnimator.Instance.animator?.SetTrigger("startFishing");
+
+
         }
+
         // enable/disable fishing visuals and player movement
         fishingRig?.SetActive(fishingActive);
 

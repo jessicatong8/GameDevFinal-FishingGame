@@ -5,7 +5,7 @@ using System;
 public class FishingManager : MonoBehaviour
 {
     // Manage fishing gamestates and event broadcasting for the fishing.
-    private static FishingManager instance; 
+    private static FishingManager instance;
     public static FishingManager Instance
     {
         get
@@ -300,11 +300,22 @@ public class FishingManager : MonoBehaviour
         DebugLogger.Instance.LogMethodCall("FishingManager.ReturnToIdle", reason);
 
         SetFishingGameState(FishingGameState.Idle);
-        activeFish.isActiveFish = false;
-        activeFish = null;
+        if (activeFish != null)
+        {
+            activeFish.isActiveFish = false;
+            activeFish = null;
+        }
+        else
+        {
+            DebugLogger.Instance.LogWarning("FishingManager.ReturnToIdle called with no active fish.");
+        }
+
         timer = 0f;
-        PlayerAnimator.Instance.animator.SetBool("isReeling", false);
-        PlayerAnimator.Instance.animator.SetTrigger("stopFishing");
+        if (PlayerAnimator.Instance != null && PlayerAnimator.Instance.animator != null)
+        {
+            PlayerAnimator.Instance.animator.SetBool("isReeling", false);
+            PlayerAnimator.Instance.animator.SetTrigger("stopFishing");
+        }
 
         OnReturnToIdle?.Invoke();
 
