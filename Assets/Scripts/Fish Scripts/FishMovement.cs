@@ -4,7 +4,7 @@ using UnityEngine;
 public class FishMovement : MonoBehaviour
 {
 
-    [SerializeField] private LineRangeManager lineRangeManager;
+    // [SerializeField] private LineRangeManager lineRangeManager;
 
     // public static event Action LeavingLineRange;
     // public static event Action EnteringLineRange;
@@ -17,20 +17,20 @@ public class FishMovement : MonoBehaviour
     private float xLeftBoundary = -15f;
     private float xRightBoundary = 15f;
 
-    private float xLineLeftWarningRange;
-    private float xLineRightWarningRange;
-    private float xLineLeftRange;
-    private float xLineRightRange;
+    private float xLineLeftWarningRange = -4f;
+    private float xLineRightWarningRange = 4f;
+    private float xLineLeftRange = -5f;
+    private float xLineRightRange = 5f;
 
     public float arrivalThreshold = 0.1f;
     private int direction = 1; // 1 for right, -1 for left
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        xLineLeftWarningRange = lineRangeManager.xLineLeftWarningRange;
-        xLineRightWarningRange = lineRangeManager.xLineRightWarningRange;
-        xLineLeftRange = lineRangeManager.xLineLeftRange;
-        xLineRightRange = lineRangeManager.xLineRightRange;
+        // xLineLeftWarningRange = lineRangeManager.xLineLeftWarningRange;
+        // xLineRightWarningRange = lineRangeManager.xLineRightWarningRange;
+        // xLineLeftRange = lineRangeManager.xLineLeftRange;
+        // xLineRightRange = lineRangeManager.xLineRightRange;
 
 
         position = transform.position;
@@ -131,7 +131,8 @@ public class FishMovement : MonoBehaviour
 
     public bool IsInLeftWarningRange()
     {
-        return transform.position.x >= xLineLeftWarningRange && transform.position.x < xLineLeftRange;
+
+        return transform.position.x <= xLineLeftWarningRange && transform.position.x > xLineLeftRange;
     }
     public bool IsInRightWarningRange()
     {
