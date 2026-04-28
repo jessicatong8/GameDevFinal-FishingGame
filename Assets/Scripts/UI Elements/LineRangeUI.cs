@@ -8,7 +8,7 @@ public class LineRangeUI : MonoBehaviour
     [SerializeField] private GameObject LeftArrow;
     [SerializeField] private GameObject RightArrow;
 
-    [SerializeField] private GameObject WarningZone;
+    [SerializeField] private GameObject WarningUI;
     [SerializeField] private GameObject SafeZone;
 
     Fish activeFish;
@@ -49,7 +49,7 @@ public class LineRangeUI : MonoBehaviour
 
         // LeftArrow.SetActive(true);
         // RightArrow.SetActive(true);
-        // WarningZone.SetActive(true);
+        // WarningUI.SetActive(true);
         SafeZone.SetActive(true);
 
 
@@ -62,28 +62,26 @@ public class LineRangeUI : MonoBehaviour
 
         LeftArrow.SetActive(false);
         RightArrow.SetActive(false);
-        WarningZone.SetActive(false);
+        WarningUI.SetActive(false);
         SafeZone.SetActive(false);
-
-
     }
 
     private void HandleLeftWarning()
     {
         RightArrow.SetActive(true);
-        WarningZone.SetActive(true);
+        WarningUI.SetActive(true);
 
     }
     private void HandleRightWarning()
     {
         LeftArrow.SetActive(true);
-        WarningZone.SetActive(true);
+        WarningUI.SetActive(true);
     }
-    private void HandleInLineRange()
+    private void HandleInInnerLineRange()
     {
         LeftArrow.SetActive(false);
         RightArrow.SetActive(false);
-        WarningZone.SetActive(false);
+        WarningUI.SetActive(false);
     }
 
 
@@ -94,19 +92,19 @@ public class LineRangeUI : MonoBehaviour
         {
             return;
         }
-        if (activeFish.GetComponent<FishMovement>().IsInLeftWarningRange())
+        if (LineRangeManager.Instance.IsInLeftWarningRange())
         {
             // Debug.Log("In Left Warning Range");
             HandleLeftWarning();
         }
-        else if (activeFish.GetComponent<FishMovement>().IsInRightWarningRange())
+        else if (LineRangeManager.Instance.IsInRightWarningRange())
         {
             // Debug.Log("In Right Warning Range");
             HandleRightWarning();
         }
-        else if (activeFish.GetComponent<FishMovement>().IsInLineRange())
+        else if (LineRangeManager.Instance.IsInInnerLineRange())
         {
-            HandleInLineRange();
+            HandleInInnerLineRange();
         }
 
     }
