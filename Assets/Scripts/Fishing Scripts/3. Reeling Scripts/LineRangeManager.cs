@@ -22,7 +22,6 @@ public class LineRangeManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
     }
 

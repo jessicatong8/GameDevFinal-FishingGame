@@ -1,10 +1,8 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerInputState))]
-[RequireComponent(typeof(PlayerMovement))]
 public class PlayerFishing : MonoBehaviour
 {
-    private static PlayerFishing instance; 
+    // Handles player input and state transitions related to fishing, as well as triggering animations and visuals for casting and reeling.
     public static PlayerFishing Instance
     {
         get
@@ -17,26 +15,28 @@ public class PlayerFishing : MonoBehaviour
         }
         private set => instance = value;
     } // Singleton instance for easy access from other scripts.
+    public bool IsFishing;
+    private static PlayerFishing instance;
 
-    [Header("References")]
     private Animator animator;
-    [SerializeField] private FishingManager fishingManager;
-    [SerializeField] private FishingRig fishingRig;
+    private FishingRig fishingRig;
     private LineCastingVisuals lineCastingVisuals;
     [SerializeField] private float castReleaseDelay = 0.25f;
-
-    public bool IsFishing;
     private bool castReleased;
-
     private void Awake()
     {
         Instance = this;
         animator = GetComponentInChildren<Animator>();
+        fishingRig = GetComponentInChildren<FishingRig>(true);
         if (fishingRig == null)
         {
-            fishingRig = GetComponentInChildren<FishingRig>(true);
+            DebugLogger.Instance.LogWarning("PlayerFishing: No FishingRig found in children.");
         }
-        ResolveLineCastingVisuals();
+        lineCastingVisuals = GetComponentInChildren<LineCastingVisuals>(true);
+        if (lineCastingVisuals == null)
+        {
+            DebugLogger.Instance.LogWarning("PlayerFishing: No LineCastingVisuals found in children.");
+        }
     }
 
     private void Start()
@@ -67,7 +67,7 @@ public class PlayerFishing : MonoBehaviour
         if (IsFishing) { return; }
 
         // Calls TryStartFishing which checks all conditions and returns false if fishing cannot be started (not on dock or not in idle state)
-        if (fishingManager.TryStartFishing())
+        if (FishingManager.Instance.TryStartFishing())
         {
             // DebugLogger.Instance.Log("PlayerFishing: Fishing started successfully.");
             // TryStartFishing() -> fishingManager takes over (either failing or progressing to EnterCastingState()).
@@ -93,7 +93,6 @@ public class PlayerFishing : MonoBehaviour
 
         castReleased = true;
         DebugLogger.Instance.LogMethodCall("PlayerFishing.ReleaseCast");
-        ResolveLineCastingVisuals();
 
         if (lineCastingVisuals == null)
         {
@@ -117,8 +116,8 @@ public class PlayerFishing : MonoBehaviour
     // Begin Reeling/Mashing Process
     private void BeginReeling()
     {
-        animator?.SetTrigger("reel");
-        ResolveLineCastingVisuals();
+        // animator?.SetTrigger("reel");
+        animator?.SetBool("isReeling", true);
         lineCastingVisuals?.TriggerReel();
     }
 
@@ -142,32 +141,15 @@ public class PlayerFishing : MonoBehaviour
         DebugLogger.Instance.Log($"PlayerFishing: Set fishing active: {fishingActive}. \nCurrent input state: {PlayerInputState.Instance.GetCurrentInputState()}");
 
         // animator parameter for idle/fishing animation transition
-        animator?.SetBool("startFishing", fishingActive);
-
+        // animator?.SetBool("startFishing", fishingActive);
+        if (fishingActive)
+        {
+            PlayerAnimator.Instance.animator?.SetTrigger("startFishing");
+        }
         // enable/disable fishing visuals and player movement
         fishingRig?.SetActive(fishingActive);
 
         // if fishing -> movement disabled, if not fishing -> movement enabled
         PlayerMovement.Instance.enabled = !fishingActive;
-    }
-
-    private void ResolveLineCastingVisuals()
-    {
-        if (lineCastingVisuals != null)
-        {
-            return;
-        }
-
-        lineCastingVisuals = GetComponent<LineCastingVisuals>();
-
-        if (lineCastingVisuals == null)
-        {
-            lineCastingVisuals = GetComponentInChildren<LineCastingVisuals>(true);
-        }
-
-        if (lineCastingVisuals == null)
-        {
-            lineCastingVisuals = gameObject.AddComponent<LineCastingVisuals>();
-        }
     }
 }

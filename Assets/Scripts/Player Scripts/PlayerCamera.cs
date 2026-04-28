@@ -2,9 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
 public class PlayerCamera : MonoBehaviour
-{
-    private static PlayerCamera instance; 
-    public static PlayerCamera Instance
+{    public static PlayerCamera Instance
     {
         get
         {
@@ -46,6 +44,7 @@ public class PlayerCamera : MonoBehaviour
     public float alignmentSmoothTime = 0.2f;
     private float rotationVelocity;
 
+    private static PlayerCamera instance; 
     private float pitch;
     private float yaw;
     private float distance;

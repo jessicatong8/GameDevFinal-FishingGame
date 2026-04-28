@@ -303,6 +303,9 @@ public class FishingManager : MonoBehaviour
         activeFish.isActiveFish = false;
         activeFish = null;
         timer = 0f;
+        PlayerAnimator.Instance.animator.SetBool("isReeling", false);
+        PlayerAnimator.Instance.animator.SetTrigger("stopFishing");
+
         OnReturnToIdle?.Invoke();
 
         if (!string.IsNullOrEmpty(reason))
