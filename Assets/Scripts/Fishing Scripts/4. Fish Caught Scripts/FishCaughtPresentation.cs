@@ -8,12 +8,9 @@ public class FishCaughtPresentation : MonoBehaviour
 
     [Header("Optional Freeze")]
     [SerializeField] private bool disableFishMovement = true;
-    [SerializeField] private bool disableAnimator = true;
-    [SerializeField] private bool freezeRigidbody = true;
-
+    [SerializeField] private bool disableAnimator = false;
     private FishMovement fishMovement;
     private Animator animator;
-    private Rigidbody fishRigidbody;
     private bool isInCatchPresentation;
     private bool catchPresentationApplied;
 
@@ -21,12 +18,10 @@ public class FishCaughtPresentation : MonoBehaviour
     {
         fishMovement = GetComponent<FishMovement>();
         animator = GetComponent<Animator>();
-        fishRigidbody = GetComponent<Rigidbody>();
-        if (fishMovement == null || animator == null || fishRigidbody == null)
-        {
-            DebugLogger.Instance.LogWarning("FishCaughtPresentation: Missing components. FishMovement: " + fishMovement + ", Animator: " + animator + ", Rigidbody: " + fishRigidbody);
-        }
-
+        // if (fishMovement == null || animator == null)
+        // {
+        //     DebugLogger.Instance.LogWarning("FishCaughtPresentation: Missing components. FishMovement: " + fishMovement + ", Animator: " + animator");
+        // }
     }
 
     private void OnEnable()
@@ -70,12 +65,12 @@ public class FishCaughtPresentation : MonoBehaviour
     {
         if (disableFishMovement) { fishMovement.enabled = false; }
         if (disableAnimator) { animator.enabled = false; }
-        if (freezeRigidbody)
-        {
-            fishRigidbody.isKinematic = true;
-            fishRigidbody.linearVelocity = Vector3.zero;
-            fishRigidbody.angularVelocity = Vector3.zero;
-        }
+        // if (freezeRigidbody)
+        // {
+        //     fishRigidbody.isKinematic = true;
+        //     fishRigidbody.linearVelocity = Vector3.zero;
+        //     fishRigidbody.angularVelocity = Vector3.zero;
+        // }
 
         Transform targetAnchor = PlayerCamera.Instance.transform;
         Vector3 targetPosition = targetAnchor.position + targetAnchor.forward;
@@ -100,12 +95,6 @@ public class FishCaughtPresentation : MonoBehaviour
 
         DebugLogger.Instance.LogMethodCall("FishCaughtPresentation: RestoreFish");
         DebugLogger.Instance.Log("Restoring fish to normal state.");
-
-        if (freezeRigidbody && fishRigidbody != null)
-        {
-            fishRigidbody.isKinematic = false;
-            fishRigidbody.detectCollisions = true;
-        }
 
         if (disableFishMovement && fishMovement != null)
         {
