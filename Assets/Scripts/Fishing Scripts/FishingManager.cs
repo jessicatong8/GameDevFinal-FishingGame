@@ -17,7 +17,7 @@ public class FishingManager : MonoBehaviour
     public static event Action OnReturnToIdle;
 
     public static event Action<FishingGameState> OnFishingGameStateChanged; // for triggering state-specific animations
-    public static event Action<Reeling_LineRangeState> OnReelLineRangeStateChanged; // for triggering line range related animations/effects during reeling
+
     public Fish activeFish;
     public int currentDrip; // will get from player or overarching score
     public float hookTimer;
@@ -30,16 +30,9 @@ public class FishingManager : MonoBehaviour
         CatchPresentation
     }
 
-    public enum Reeling_LineRangeState
-    {
-        InLineRange,
-        ExitingLineRange,
-        OutOfLineRange
-    }
 
     public CastingManager castingManager;
     public FishingGameState CurrentFishingGameState => currentFishingGameState;
-    public Reeling_LineRangeState CurrentReelLineRangeState => currentLineRangeState;
 
     [SerializeField] private bool usePrototypeFishSequence = true;
     [SerializeField] private bool bypassCastingManager = true;
@@ -48,7 +41,6 @@ public class FishingManager : MonoBehaviour
     [SerializeField] private Fish[] fishSequence;
     // Starting Fishing States 
     private FishingGameState currentFishingGameState = FishingGameState.Idle;
-    private Reeling_LineRangeState currentLineRangeState = Reeling_LineRangeState.InLineRange;
 
     private float timer;    // general purpose timer used for casting and hook window states
     private float minHookDelay = 1.5f;
