@@ -62,12 +62,6 @@ public class FishCaughtPresentation : MonoBehaviour
     {
         if (disableFishMovement) { fishMovement.enabled = false; }
         if (disableAnimator) { animator.enabled = false; }
-        // if (freezeRigidbody)
-        // {
-        //     fishRigidbody.isKinematic = true;
-        //     fishRigidbody.linearVelocity = Vector3.zero;
-        //     fishRigidbody.angularVelocity = Vector3.zero;
-        // }
 
         Transform targetAnchor = PlayerCamera.Instance.transform;
         Vector3 targetPosition = targetAnchor.position + targetAnchor.forward;

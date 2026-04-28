@@ -46,6 +46,7 @@ public class TensionUI : MonoBehaviour
         uiPanel.SetActive(false);
     }
 
+    //change to get from tension manager 
     private void SetupSafeZone()
     {
         Fish fish = fishingManager.activeFish;

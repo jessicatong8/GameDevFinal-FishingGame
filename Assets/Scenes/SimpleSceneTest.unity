@@ -2251,7 +2251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.98952734, b: 0.4292453, a: 1}
+  m_Color: {r: 1, g: 0.87711674, b: 0.3066038, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4221,7 +4221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb439b6a9afac847b9deacd99b41a99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishCaught
-  localOffset: {x: 0, y: 0, z: 2}
+  localOffset: {x: 0, y: 0, z: 4}
   rotationSpeed: 40
   disableFishMovement: 1
   disableAnimator: 0
@@ -4910,9 +4910,9 @@ RectTransform:
   m_Father: {fileID: 1739418596}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -275, y: 100}
-  m_SizeDelta: {x: -550, y: -200}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 130.5, y: 100}
+  m_SizeDelta: {x: 261, y: -200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1566663201
 MonoBehaviour:
