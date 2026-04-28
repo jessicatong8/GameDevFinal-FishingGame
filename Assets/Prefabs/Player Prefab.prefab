@@ -261,9 +261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerFishing
   fishingManager: {fileID: 0}
   fishingRig: {fileID: 4253978373294293960}
-  fishingRodAssembly: {fileID: 2062146973033697430}
-  fishingLineChildPath: Fishing Line
-  fishingHookChildPath: Fishing Hook
+  castReleaseDelay: 0.25
   IsFishing: 0
 --- !u!114 &4668563310377310221
 MonoBehaviour:
@@ -305,10 +303,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 550201626188214245, guid: c1e7e3c9fe3257f4ea9f080e7208ec3b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 550201626188214245, guid: c1e7e3c9fe3257f4ea9f080e7208ec3b, type: 3}
-      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 550201626188214245, guid: c1e7e3c9fe3257f4ea9f080e7208ec3b, type: 3}
@@ -367,21 +361,12 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 6937076851019070361, guid: c1e7e3c9fe3257f4ea9f080e7208ec3b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 1926119808773011176, guid: c1e7e3c9fe3257f4ea9f080e7208ec3b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1e7e3c9fe3257f4ea9f080e7208ec3b, type: 3}
---- !u!1 &2062146973033697430 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9125692521742896380, guid: c1e7e3c9fe3257f4ea9f080e7208ec3b, type: 3}
-  m_PrefabInstance: {fileID: 7078197640663309418}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2092221997416066827 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9165915488117633889, guid: c1e7e3c9fe3257f4ea9f080e7208ec3b, type: 3}
@@ -392,7 +377,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6427733474791661474, guid: c1e7e3c9fe3257f4ea9f080e7208ec3b, type: 3}
   m_PrefabInstance: {fileID: 7078197640663309418}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2062146973033697430}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f458d00b3c54c1f4fa29f3c6bf83b67e, type: 3}
