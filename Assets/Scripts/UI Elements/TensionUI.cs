@@ -67,6 +67,6 @@ public class TensionUI : MonoBehaviour
         }
 
         float currentTension = tensionManager.GetCurrentTension();
-        tensionSlider.value = currentTension/100;
+        tensionSlider.value = currentTension;
     }
 }

@@ -10,7 +10,7 @@ public class TensionManager : MonoBehaviour
     private bool mashTriggeredThisFrame;
     // TENSION VARIABLES
     private float tension;
-    private float maxTension = 100; 
+    private float maxTension = 100;
     private float tensionDropRate;
     // TENSION ZONES
     private float safeZoneLower;
@@ -67,8 +67,8 @@ public class TensionManager : MonoBehaviour
         tensionDropRate = activeFish.tensionDropRate;
         tension = activeFish.safeZoneCenter * maxTension; // start in the middle of the safe zone
 
-        safeZoneLower = maxTension * (activeFish.safeZoneCenter - activeFish.safeZoneWidth / 2f);
-        safeZoneUpper = maxTension * (activeFish.safeZoneCenter + activeFish.safeZoneWidth / 2f);
+        safeZoneLower = activeFish.safeZoneCenter - activeFish.safeZoneWidth / 2f;
+        safeZoneUpper = activeFish.safeZoneCenter + activeFish.safeZoneWidth / 2f;
         escapeTime = activeFish.tensionEscapeTime;
 
         outOfZoneTimer = 0f;

@@ -22,8 +22,8 @@ public class Fish : MonoBehaviour
 
     public float reelingSpeed = 12f;
     public float tensionDropRate = 5f;
-    public float safeZoneCenter = 0.5f;
-    public float safeZoneWidth = 0.6f;
+    public float safeZoneCenter = 50f;
+    public float safeZoneWidth = 60f;
     public float burstStrength = 0.3f;
     public float tensionEscapeTime = 3f; // how long the player can stay out of the safe tension zone before the fish escapes
 }
