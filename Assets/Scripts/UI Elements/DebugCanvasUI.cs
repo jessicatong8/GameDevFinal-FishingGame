@@ -156,10 +156,10 @@ public class DebugCanvasUI : MonoBehaviour
                 // else
                 //     debugText += "<color=#00FF00>TENSION GOOD!</color>\n";
 
-                debugText += $"Line?: <color=#00FFFF>{fishingManager.CurrentReelLineRangeState}</color>\n";
+                // debugText += $"Line?: <color=#00FFFF>{fishingManager.CurrentReelLineRangeState}</color>\n";
                 debugText += "Wiggle?: <color=#808080>TODO</color>\n";
 
-                debugText += "\n"; 
+                debugText += "\n";
                 debugText += "InCatchPresentation: " + (isInCatchPresentation ? "<color=#00FF00>Yes</color>" : "<color=#FF0000>No</color>") + "\n";
             }
             else
