@@ -51,14 +51,11 @@ public class TensionUI : MonoBehaviour
     {
         Fish fish = fishingManager.activeFish;
 
-        // float halfWidth = fish.safeZoneWidth / 2f;
         safeZoneLeft = tensionManager.GetSafeZoneLower();
         safeZoneRight = tensionManager.GetSafeZoneUpper();
-        // float left = fish.safeZoneCenter - halfWidth;
-        // float right = fish.safeZoneCenter + halfWidth;
 
-        safeZone.anchorMin = new Vector2(safeZoneLeft, 0);
-        safeZone.anchorMax = new Vector2(safeZoneRight, 1);
+        safeZone.anchorMin = new Vector2(safeZoneLeft/100, 0);
+        safeZone.anchorMax = new Vector2(safeZoneRight/100, 1);
 
         safeZone.offsetMin = Vector2.zero;
         safeZone.offsetMax = Vector2.zero;

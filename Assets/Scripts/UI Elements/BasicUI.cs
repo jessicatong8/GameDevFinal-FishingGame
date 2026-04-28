@@ -47,8 +47,7 @@ public class BasicUI : MonoBehaviour
         }
 
         UpdateProgressSlider(0);
-        UpdateTensionSlider(0);
-        UpdateTensionSliderMax(100);
+
 
         if (fishingManager != null)
         {
@@ -63,7 +62,6 @@ public class BasicUI : MonoBehaviour
     void Update()
     {
         UpdateProgressSlider(progressManager.GetCurrentProgress());
-        UpdateTensionSlider(tensionManager.GetCurrentTension());
     }
 
     void UpdateProgressSlider(float val)
@@ -71,23 +69,13 @@ public class BasicUI : MonoBehaviour
         progressSlider.value = val;
     }
 
-    void UpdateTensionSlider(float val)
-    {
-        tensionSlider.value = val;
-    }
-
-    void UpdateTensionSliderMax(float val)
-    {
-        tensionSlider.maxValue = Mathf.Max(val, 0f);
-    }
 
     void HandleCast()
     {
         alertText.text = "Casting";
         alertText.color = Color.white;
         UpdateProgressSlider(0);
-        UpdateTensionSlider(0);
-        UpdateTensionSliderMax(100);
+        
     }
 
     void HandleBite()
@@ -119,8 +107,6 @@ public class BasicUI : MonoBehaviour
     {
         HandleFishingGameStateChanged(FishingManager.FishingGameState.Idle);
         UpdateProgressSlider(0);
-        UpdateTensionSlider(0);
-        UpdateTensionSliderMax(100);
     }
 
     void HandleFishingGameStateChanged(FishingManager.FishingGameState state)
