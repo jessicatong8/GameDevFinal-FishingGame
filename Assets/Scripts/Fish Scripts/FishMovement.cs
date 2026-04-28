@@ -43,14 +43,14 @@ public class FishMovement : MonoBehaviour
     private void OnEnable()
     {
 
-        PlayerInputState.Instance.ReelLeftPerformed += TurnLeft;
-        PlayerInputState.Instance.ReelRightPerformed += TurnRight;
+        // PlayerInputState.Instance.ReelLeftPerformed += TurnLeft;
+        // PlayerInputState.Instance.ReelRightPerformed += TurnRight;
     }
 
     private void OnDisable()
     {
-        PlayerInputState.Instance.ReelLeftPerformed -= TurnLeft;
-        PlayerInputState.Instance.ReelRightPerformed -= TurnRight;
+        // PlayerInputState.Instance.ReelLeftPerformed -= TurnLeft;
+        // PlayerInputState.Instance.ReelRightPerformed -= TurnRight;
     }
     // Update is called once per frame
     void Update()
