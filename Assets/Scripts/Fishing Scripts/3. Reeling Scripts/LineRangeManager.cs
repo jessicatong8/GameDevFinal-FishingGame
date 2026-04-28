@@ -6,11 +6,11 @@ public class LineRangeManager : MonoBehaviour
 
     FishMovement activeFishMovement;
 
-    public float xLineLeftWarningRange = -4f;
-    public float xLineRightWarningRange = 4f;
+    public float xLineLeftWarningRange = -6f;
+    public float xLineRightWarningRange = 6f;
 
-    public float xLineLeftRange = -5f;
-    public float xLineRightRange = 5f;
+    public float xLineLeftRange = -8f;
+    public float xLineRightRange = 8f;
 
     private bool isInReelingState;
 
