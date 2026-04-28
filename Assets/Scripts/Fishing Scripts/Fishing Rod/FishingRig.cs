@@ -22,25 +22,6 @@ public class FishingRig : MonoBehaviour
         ResolveReferences();
     }
 
-    public void SetRoot(GameObject root)
-    {
-        fishingRodAssembly = root;
-        ResolveReferences();
-    }
-
-    public void SetChildPaths(string linePath, string hookPath)
-    {
-        fishingLineChildPath = linePath;
-        fishingHookChildPath = hookPath;
-        ResolveReferences();
-    }
-
-    public void SetCastPoint(Transform castPoint)
-    {
-        castPointTransform = castPoint;
-        ApplyCastPointToLine();
-    }
-
     public void SetActive(bool active)
     {
         fishingRodAssembly?.SetActive(active);
@@ -48,17 +29,6 @@ public class FishingRig : MonoBehaviour
         fishingHookObject?.SetActive(active);
         fishingLine?.SetEquippedFromController(active);
         ApplyCastPointToLine();
-    }
-
-    public void TriggerCast()
-    {
-        ApplyCastPointToLine();
-        fishingLine?.TriggerCast();
-    }
-
-    public void TriggerReel()
-    {
-        fishingLine?.TriggerReel();
     }
 
     private void ResolveReferences()
