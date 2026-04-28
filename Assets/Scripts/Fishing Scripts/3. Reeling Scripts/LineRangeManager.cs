@@ -1,12 +1,10 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class LineRangeManager : MonoBehaviour
 {
-    [SerializeField] private PlayerInput playerInput;
+    public static LineRangeManager Instance { get; private set; }
 
-    [SerializeField] private FishingManager fishingManager;
-    Fish activeFish;
+    FishMovement activeFishMovement;
 
     public float xLineLeftWarningRange = -4f;
     public float xLineRightWarningRange = 4f;
@@ -14,7 +12,19 @@ public class LineRangeManager : MonoBehaviour
     public float xLineLeftRange = -5f;
     public float xLineRightRange = 5f;
 
+    private bool isInReelingState;
 
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Debug.LogWarning("Duplicate LineRangeManager found. Destroying extra instance.");
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
 
     private void OnEnable()
     {
@@ -32,30 +42,49 @@ public class LineRangeManager : MonoBehaviour
 
     private void HandleHooked()
     {
-        activeFish = fishingManager.activeFish;
-        if (activeFish == null)
+        activeFishMovement = FishingManager.Instance.activeFish.GetComponent<FishMovement>();
+        if (activeFishMovement == null)
         {
             DebugLogger.Instance.LogError("LineRangeManager: No active fish found.");
             return;
+        }
+        isInReelingState = true;
+    }
+
+    void Update()
+    {
+        if (!isInReelingState || activeFishMovement == null)
+            return;
+
+        if (activeFishMovement.IsOutOfLineRange())
+        {
+            DebugLogger.Instance.Log("Fish is out of line range!");
+            FishingManager.Instance.EscapeFishing("Fish escaped because if went out of the line range");
         }
     }
 
     private void HandleResetToIdle()
     {
-        activeFish = null;
+        activeFishMovement = null;
+        isInReelingState = false;
     }
 
-    public bool IsInLineRange()
+    public bool IsInInnerLineRange()
     {
-        return activeFish.GetComponent<FishMovement>().IsInLineRange();
+        return activeFishMovement.IsInInnerLineRange();
+    }
+
+    public bool IsOutOfLineRange()
+    {
+        return activeFishMovement.IsOutOfLineRange();
     }
 
     public bool IsInLeftWarningRange()
     {
-        return activeFish.GetComponent<FishMovement>().IsInLeftWarningRange();
+        return activeFishMovement.IsInLeftWarningRange();
     }
     public bool IsInRightWarningRange()
     {
-        return activeFish.GetComponent<FishMovement>().IsInRightWarningRange();
+        return activeFishMovement.IsInRightWarningRange();
     }
 }

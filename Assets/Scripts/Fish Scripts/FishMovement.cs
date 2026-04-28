@@ -1,13 +1,7 @@
-using System;
 using UnityEngine;
 
 public class FishMovement : MonoBehaviour
 {
-
-    // [SerializeField] private LineRangeManager lineRangeManager;
-
-    // public static event Action LeavingLineRange;
-    // public static event Action EnteringLineRange;
 
     private Vector3 position;
     private Vector3 targetPosition;
@@ -17,20 +11,20 @@ public class FishMovement : MonoBehaviour
     private float xLeftBoundary = -15f;
     private float xRightBoundary = 15f;
 
-    private float xLineLeftWarningRange = -4f;
-    private float xLineRightWarningRange = 4f;
-    private float xLineLeftRange = -5f;
-    private float xLineRightRange = 5f;
+    private float xLineLeftWarningRange;
+    private float xLineRightWarningRange;
+    private float xLineLeftRange;
+    private float xLineRightRange;
 
     public float arrivalThreshold = 0.1f;
     private int direction = 1; // 1 for right, -1 for left
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
-        // xLineLeftWarningRange = lineRangeManager.xLineLeftWarningRange;
-        // xLineRightWarningRange = lineRangeManager.xLineRightWarningRange;
-        // xLineLeftRange = lineRangeManager.xLineLeftRange;
-        // xLineRightRange = lineRangeManager.xLineRightRange;
+        xLineLeftWarningRange = LineRangeManager.Instance.xLineLeftWarningRange;
+        xLineRightWarningRange = LineRangeManager.Instance.xLineRightWarningRange;
+        xLineLeftRange = LineRangeManager.Instance.xLineLeftRange;
+        xLineRightRange = LineRangeManager.Instance.xLineRightRange;
 
 
         position = transform.position;
@@ -42,7 +36,7 @@ public class FishMovement : MonoBehaviour
 
     private void OnEnable()
     {
-
+        FishingManager.OnHook += HandleHooked;
         PlayerInputState.Instance.ReelLeftPerformed += TurnLeft;
         PlayerInputState.Instance.ReelRightPerformed += TurnRight;
     }
@@ -89,6 +83,19 @@ public class FishMovement : MonoBehaviour
         transform.LookAt(targetPosition);
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, swimmingSpeed * Time.deltaTime);
     }
+
+    private void HandleHooked()
+    {
+        if (!GetComponent<Fish>().isActiveFish)
+        {
+            // Debug.Log("No active fish, ignoring input.");
+            return;
+        }
+        position = new Vector3(0, transform.position.y, transform.position.z);
+        transform.position = position;
+        SetTargetPosition(position);
+    }
+
     public void TurnLeft()
     {
         // Debug.Log("Reel Left Input Received");
@@ -124,9 +131,9 @@ public class FishMovement : MonoBehaviour
             transform.LookAt(targetPosition);
         }
     }
-    public bool IsInLineRange()
+    public bool IsInInnerLineRange()
     {
-        return transform.position.x >= xLineLeftRange && transform.position.x <= xLineRightRange;
+        return transform.position.x > xLineLeftWarningRange && transform.position.x < xLineRightWarningRange;
     }
 
     public bool IsInLeftWarningRange()
@@ -137,5 +144,10 @@ public class FishMovement : MonoBehaviour
     public bool IsInRightWarningRange()
     {
         return transform.position.x > xLineRightWarningRange && transform.position.x <= xLineRightRange;
+    }
+
+    public bool IsOutOfLineRange()
+    {
+        return transform.position.x <= xLineLeftRange || transform.position.x >= xLineRightRange;
     }
 }
