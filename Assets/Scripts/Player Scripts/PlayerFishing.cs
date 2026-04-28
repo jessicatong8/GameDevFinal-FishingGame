@@ -4,11 +4,25 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMovement))]
 public class PlayerFishing : MonoBehaviour
 {
+    private static PlayerFishing instance; 
+    public static PlayerFishing Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindFirstObjectByType<PlayerFishing>();
+            }
+            return instance;
+        }
+        private set => instance = value;
+    } // Singleton instance for easy access from other scripts.
+
     [Header("References")]
-    private PlayerMovement playerMovement;
     private Animator animator;
     [SerializeField] private FishingManager fishingManager;
     [SerializeField] private FishingRig fishingRig;
+    private LineCastingVisuals lineCastingVisuals;
     [SerializeField] private float castReleaseDelay = 0.25f;
 
     public bool IsFishing;
@@ -16,12 +30,13 @@ public class PlayerFishing : MonoBehaviour
 
     private void Awake()
     {
-        playerMovement = GetComponent<PlayerMovement>();
+        Instance = this;
         animator = GetComponentInChildren<Animator>();
         if (fishingRig == null)
         {
             fishingRig = GetComponentInChildren<FishingRig>(true);
         }
+        ResolveLineCastingVisuals();
     }
 
     private void Start()
@@ -78,18 +93,15 @@ public class PlayerFishing : MonoBehaviour
 
         castReleased = true;
         DebugLogger.Instance.LogMethodCall("PlayerFishing.ReleaseCast");
-        if (fishingRig == null)
-        {
-            fishingRig = GetComponentInChildren<FishingRig>(true);
-        }
+        ResolveLineCastingVisuals();
 
-        if (fishingRig == null)
+        if (lineCastingVisuals == null)
         {
-            DebugLogger.Instance.LogWarning("PlayerFishing.ReleaseCast: no FishingRig found, so the cast line cannot move.");
+            DebugLogger.Instance.LogWarning("PlayerFishing.ReleaseCast: no LineCastingVisuals found, so the cast line cannot move.");
             return;
         }
 
-        fishingRig?.TriggerCast();
+        lineCastingVisuals.ReleaseCast();
     }
 
     private System.Collections.IEnumerator ReleaseCastFallback()
@@ -106,7 +118,8 @@ public class PlayerFishing : MonoBehaviour
     private void BeginReeling()
     {
         animator?.SetTrigger("reel");
-        fishingRig?.TriggerReel();
+        ResolveLineCastingVisuals();
+        lineCastingVisuals?.TriggerReel();
     }
 
     private void HandleFishingEnded()
@@ -135,6 +148,26 @@ public class PlayerFishing : MonoBehaviour
         fishingRig?.SetActive(fishingActive);
 
         // if fishing -> movement disabled, if not fishing -> movement enabled
-        playerMovement.enabled = !fishingActive;
+        PlayerMovement.Instance.enabled = !fishingActive;
+    }
+
+    private void ResolveLineCastingVisuals()
+    {
+        if (lineCastingVisuals != null)
+        {
+            return;
+        }
+
+        lineCastingVisuals = GetComponent<LineCastingVisuals>();
+
+        if (lineCastingVisuals == null)
+        {
+            lineCastingVisuals = GetComponentInChildren<LineCastingVisuals>(true);
+        }
+
+        if (lineCastingVisuals == null)
+        {
+            lineCastingVisuals = gameObject.AddComponent<LineCastingVisuals>();
+        }
     }
 }
