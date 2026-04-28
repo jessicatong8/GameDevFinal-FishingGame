@@ -4221,11 +4221,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb439b6a9afac847b9deacd99b41a99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishCaught
-  localOffset: {x: 0, y: 0, z: 10}
-  rotationSpeed: 20
+  localOffset: {x: 0, y: 0, z: 2}
+  rotationSpeed: 40
   disableFishMovement: 1
-  disableAnimator: 1
-  freezeRigidbody: 1
+  disableAnimator: 0
+  freezeRigidbody: 0
 --- !u!1 &1313077786
 GameObject:
   m_ObjectHideFlags: 0

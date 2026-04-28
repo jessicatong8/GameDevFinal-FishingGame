@@ -20,6 +20,11 @@ public class DebugLogger : MonoBehaviour
         {
             if (instance == null)
             {
+                if (!Application.isPlaying)
+                {
+                    return null;
+                }
+
                 GameObject go = new GameObject("DebugLogger");
                 instance = go.AddComponent<DebugLogger>();
             }
@@ -38,7 +43,14 @@ public class DebugLogger : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        if (instance == this)
+        {
+            instance = null;
+        }
     }
 
     public void LogMethodCall(string methodName, string additionalInfo = "")
