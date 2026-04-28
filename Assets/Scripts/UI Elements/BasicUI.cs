@@ -10,7 +10,7 @@ public class BasicUI : MonoBehaviour
 
 
     public Slider progressSlider;
-    public Slider tensionSlider;
+    //public Slider tensionSlider;
     public TextMeshProUGUI alertText;
 
     private CanvasGroup overlayCanvasGroup;

@@ -65,7 +65,7 @@ public class TensionManager : MonoBehaviour
         }
         isReeling = true;
         tensionDropRate = activeFish.tensionDropRate;
-        tension = activeFish.safeZoneCenter * maxTension; // start in the middle of the safe zone
+        tension = activeFish.safeZoneCenter; // start in the middle of the safe zone
 
         safeZoneLower = activeFish.safeZoneCenter - activeFish.safeZoneWidth / 2f;
         safeZoneUpper = activeFish.safeZoneCenter + activeFish.safeZoneWidth / 2f;
@@ -120,8 +120,7 @@ public class TensionManager : MonoBehaviour
     public bool IsInSafeZone() => tension >= safeZoneLower && tension <= safeZoneUpper;
     public bool IsTensionTooHigh() => tension > safeZoneUpper;
     public bool IsTensionTooLow() => tension < safeZoneLower;
-    public float GetSafeZoneLower() => safeZoneLower;
-    public float GetSafeZoneUpper() => safeZoneUpper;
+
 
 
 }
