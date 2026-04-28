@@ -3,7 +3,20 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class PlayerCamera : MonoBehaviour
 {
-    public static PlayerCamera Instance { get; private set; } // Singleton instance for easy access from other scripts
+    private static PlayerCamera instance; 
+    public static PlayerCamera Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindFirstObjectByType<PlayerCamera>();
+            }
+            return instance;
+        }
+        private set => instance = value;
+    } // Singleton instance for easy access from other scripts.
+    
     [Header("References")]
     public Transform target;
     public LayerMask environmentLayerMask;

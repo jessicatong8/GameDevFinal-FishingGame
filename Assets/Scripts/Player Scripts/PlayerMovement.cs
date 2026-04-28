@@ -4,6 +4,20 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private static PlayerMovement instance;
+    public static PlayerMovement Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindFirstObjectByType<PlayerMovement>();
+            }
+            return instance;
+        }
+        private set => instance = value;
+    } // Singleton instance for easy access from other scripts.
+
     [Header("Camera Reference")]
     public Transform cameraTransform;
     [Header("Movement Settings")]
@@ -13,13 +27,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float rotationSharpness = 12f;
 
     private CharacterController characterController;
+    private Animator animator;
     private Vector3 lastMoveDirection = Vector3.forward;
     private float verticalVelocity;
     private bool jumpRequested;
 
     private void Awake()
     {
+        Instance = this;
         characterController = GetComponent<CharacterController>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
@@ -94,6 +111,7 @@ public class PlayerMovement : MonoBehaviour
         verticalVelocity += gravity * Time.deltaTime;
 
         Vector3 finalVelocity = horizontalVelocity + Vector3.up * verticalVelocity;
+        animator?.SetFloat("moveSpeed", moveDirection.magnitude);
         characterController.Move(finalVelocity * Time.deltaTime);
     }
 }

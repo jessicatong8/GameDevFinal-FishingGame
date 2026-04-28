@@ -70,16 +70,24 @@ public class FishMovement : MonoBehaviour
     {
         FishingManager.OnHook += HandleHooked;
         FishingManager.OnReturnToIdle += HandleResetToIdle;
-        PlayerInputState.Instance.ReelLeftPerformed += TurnLeft;
-        PlayerInputState.Instance.ReelRightPerformed += TurnRight;
+
+        if (PlayerInputState.Instance != null)
+        {
+            PlayerInputState.Instance.ReelLeftPerformed += TurnLeft;
+            PlayerInputState.Instance.ReelRightPerformed += TurnRight;
+        }
     }
 
     private void OnDisable()
     {
         FishingManager.OnHook -= HandleHooked;
         FishingManager.OnReturnToIdle -= HandleResetToIdle;
-        PlayerInputState.Instance.ReelLeftPerformed -= TurnLeft;
-        PlayerInputState.Instance.ReelRightPerformed -= TurnRight;
+
+        if (PlayerInputState.Instance != null)
+        {
+            PlayerInputState.Instance.ReelLeftPerformed -= TurnLeft;
+            PlayerInputState.Instance.ReelRightPerformed -= TurnRight;
+        }
     }
 
 
