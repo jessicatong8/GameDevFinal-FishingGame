@@ -44,6 +44,7 @@ public class TensionUI : MonoBehaviour
         uiPanel.SetActive(false);
     }
 
+    //change to get from tension manager 
     private void SetupSafeZone()
     {
         Fish fish = fishingManager.activeFish;
@@ -67,6 +68,6 @@ public class TensionUI : MonoBehaviour
         }
 
         float currentTension = tensionManager.GetCurrentTension();
-        tensionSlider.value = currentTension/100;
+        tensionSlider.value = currentTension;
     }
 }
