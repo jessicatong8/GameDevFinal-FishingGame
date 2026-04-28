@@ -18,10 +18,10 @@ public class FishCaughtPresentation : MonoBehaviour
     {
         fishMovement = GetComponent<FishMovement>();
         animator = GetComponent<Animator>();
-        // if (fishMovement == null || animator == null)
-        // {
-        //     DebugLogger.Instance.LogWarning("FishCaughtPresentation: Missing components. FishMovement: " + fishMovement + ", Animator: " + animator");
-        // }
+        if (fishMovement == null || animator == null)
+        {
+            DebugLogger.Instance.LogWarning("FishCaughtPresentation: Missing components. FishMovement: " + fishMovement + ", Animator: " + animator);
+        }
     }
 
     private void OnEnable()
@@ -52,10 +52,7 @@ public class FishCaughtPresentation : MonoBehaviour
 
     private void HandleCatchConfirmation()
     {
-        if (!isInCatchPresentation)
-        {
-            return;
-        }
+        if (!isInCatchPresentation) { return; }
 
         RestoreFish();
         FishingManager.Instance.CompleteCatchConfirmation();

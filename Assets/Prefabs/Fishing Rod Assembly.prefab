@@ -508,8 +508,8 @@ MonoBehaviour:
   bobMoveSpeed: 1.5
   bobTargetArrivalThreshold: 0.05
   Gravity: {x: 0, y: -9.81, z: 0}
-  Iterations: 1000
-  tensionConstant: 1000
+  Iterations: 12
+  tensionConstant: 10
   SecondHasRigidbody: 0
   LerpSpeed: 1.5
   Delay: 2.5

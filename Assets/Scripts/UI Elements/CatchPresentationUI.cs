@@ -1,6 +1,8 @@
 using TMPro;
 using UnityEngine;
 
+[RequireComponent(typeof(TextMeshProUGUI))]
+
 public class CatchPresentationUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI catchText;
@@ -62,11 +64,7 @@ public class CatchPresentationUI : MonoBehaviour
 
     private void HideCatchText()
     {
-        if (catchText == null)
-        {
-            return;
-        }
-
+        if (catchText == null) { return; }
         catchText.gameObject.SetActive(false);
     }
 }
