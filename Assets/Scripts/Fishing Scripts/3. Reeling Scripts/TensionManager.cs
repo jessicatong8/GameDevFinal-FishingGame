@@ -120,6 +120,8 @@ public class TensionManager : MonoBehaviour
     public bool IsInSafeZone() => tension >= safeZoneLower && tension <= safeZoneUpper;
     public bool IsTensionTooHigh() => tension > safeZoneUpper;
     public bool IsTensionTooLow() => tension < safeZoneLower;
+    public float GetSafeZoneLower() => safeZoneLower;
+    public float GetSafeZoneUpper() => safeZoneUpper;
 
 
 }

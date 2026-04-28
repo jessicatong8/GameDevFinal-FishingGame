@@ -11,6 +11,8 @@ public class TensionUI : MonoBehaviour
     [SerializeField] private GameObject uiPanel;
     [SerializeField] private Slider tensionSlider;
     [SerializeField] private RectTransform safeZone;
+    private float safeZoneLeft;
+    private float safeZoneRight;
 
     private void Awake()
     {
@@ -48,12 +50,14 @@ public class TensionUI : MonoBehaviour
     {
         Fish fish = fishingManager.activeFish;
 
-        float halfWidth = fish.safeZoneWidth / 2f;
-        float left = fish.safeZoneCenter - halfWidth;
-        float right = fish.safeZoneCenter + halfWidth;
+        // float halfWidth = fish.safeZoneWidth / 2f;
+        safeZoneLeft = tensionManager.GetSafeZoneLower();
+        safeZoneRight = tensionManager.GetSafeZoneUpper();
+        // float left = fish.safeZoneCenter - halfWidth;
+        // float right = fish.safeZoneCenter + halfWidth;
 
-        safeZone.anchorMin = new Vector2(left, 0);
-        safeZone.anchorMax = new Vector2(right, 1);
+        safeZone.anchorMin = new Vector2(safeZoneLeft, 0);
+        safeZone.anchorMax = new Vector2(safeZoneRight, 1);
 
         safeZone.offsetMin = Vector2.zero;
         safeZone.offsetMax = Vector2.zero;
