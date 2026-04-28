@@ -47,9 +47,9 @@ public class LineRangeUI : MonoBehaviour
             return;
         }
 
-        // LeftArrow.SetActive(true);
-        // RightArrow.SetActive(true);
-        // WarningUI.SetActive(true);
+        LeftArrow.SetActive(true);
+        RightArrow.SetActive(true);
+        WarningUI.SetActive(true);
         SafeZone.SetActive(true);
 
 
@@ -83,8 +83,6 @@ public class LineRangeUI : MonoBehaviour
         RightArrow.SetActive(false);
         //WarningUI.SetActive(false);
     }
-
-
 
     private void Update()
     {

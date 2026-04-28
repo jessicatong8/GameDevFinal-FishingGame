@@ -5,7 +5,19 @@ using System;
 public class FishingManager : MonoBehaviour
 {
     // Manage fishing gamestates and event broadcasting for the fishing.
-    public static FishingManager Instance { get; private set; } // Singleton instance for easy access from other scripts, such as TensionManager and ProgressManager during the reeling phase.
+    private static FishingManager instance; 
+    public static FishingManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindFirstObjectByType<FishingManager>();
+            }
+            return instance;
+        }
+        private set => instance = value;
+    } // Singleton instance for easy access from other scripts, such as TensionManager and ProgressManager during the reeling phase.
     public static event Action OnCast; // when player initiates fishing by casting the line
     public static event Action OnBite; // after timer when a fish bites line and player can try to hook
     public static event Action OnHook; // when player successfully hooks the fish within the hook window
@@ -291,6 +303,9 @@ public class FishingManager : MonoBehaviour
         activeFish.isActiveFish = false;
         activeFish = null;
         timer = 0f;
+        PlayerAnimator.Instance.animator.SetBool("isReeling", false);
+        PlayerAnimator.Instance.animator.SetTrigger("stopFishing");
+
         OnReturnToIdle?.Invoke();
 
         if (!string.IsNullOrEmpty(reason))

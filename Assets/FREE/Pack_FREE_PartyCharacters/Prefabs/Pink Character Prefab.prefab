@@ -434,6 +434,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2352974409916930473}
   - component: {fileID: 3354072639957532570}
+  - component: {fileID: 786462379023900555}
   m_Layer: 0
   m_Name: Pink Character Prefab
   m_TagString: Untagged
@@ -480,6 +481,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &786462379023900555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3187384679435710046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d093b9ac43e484f46beda059195ca523, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LineCastingVisuals
 --- !u!1 &3199758921364783846
 GameObject:
   m_ObjectHideFlags: 0

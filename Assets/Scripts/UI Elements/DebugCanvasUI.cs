@@ -185,8 +185,8 @@ public class DebugCanvasUI : MonoBehaviour
                 debugText += $"Fish Name: {activeFish.fishName}\n";
                 debugText += $"Object Name: {activeFish.name}\n";
                 debugText += $"Swim Speed: {activeFish.swimmingSpeed:F2}\n";
-                debugText += $"Rarity Weight: {activeFish.rarityWeight}\n";
-                debugText += $"Rarity: {activeFish.rarity:F2}\n";
+                // debugText += $"Rarity Weight: {activeFish.rarityWeight}\n";
+                debugText += $"Level: {activeFish.level:F2}\n";
                 debugText += $"Drip Threshold: {activeFish.dripThreshold:F2}\n";
                 debugText += $"Wiggle On Timer: {activeFish.wiggleOnTimer:F2}\n";
                 debugText += $"Wiggle Off Timer: {activeFish.wiggleOffTimer:F2}\n";
@@ -196,7 +196,7 @@ public class DebugCanvasUI : MonoBehaviour
                 debugText += $"Tension Drop Rate: {activeFish.tensionDropRate:F2}\n";
                 debugText += $"Safe Zone Center: {activeFish.safeZoneCenter:F2}\n";
                 debugText += $"Safe Zone Width: {activeFish.safeZoneWidth:F2}\n";
-                debugText += $"Burst Strength: {activeFish.burstStrength:F2}\n";
+                // debugText += $"Burst Strength: {activeFish.burstStrength:F2}\n";
                 debugText += $"Tension Escape Time: {activeFish.tensionEscapeTime:F2}\n";
             }
 

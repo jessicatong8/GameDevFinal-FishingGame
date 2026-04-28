@@ -2,12 +2,12 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(PlayerInput))]
-[RequireComponent(typeof(PlayerMovement))]
-[RequireComponent(typeof(PlayerFishing))]
+// [RequireComponent(typeof(PlayerInput))]
+// [RequireComponent(typeof(PlayerMovement))]
+// [RequireComponent(typeof(PlayerFishing))]
 public class PlayerInputState : MonoBehaviour
 {
-    private static PlayerInputState instance;
+    private static PlayerInputState instance; 
     public static PlayerInputState Instance
     {
         get
@@ -16,11 +16,11 @@ public class PlayerInputState : MonoBehaviour
             {
                 instance = FindFirstObjectByType<PlayerInputState>();
             }
-
             return instance;
         }
         private set => instance = value;
     } // Singleton instance for easy access from other scripts.
+
     public enum InputStates
     {
         Gameplay,
@@ -50,10 +50,6 @@ public class PlayerInputState : MonoBehaviour
 
 
     public InputStates CurrentState => currentState;
-    [SerializeField] private FishingManager fishingManager;
-    private PlayerMovement movementScript;
-    // private PlayerFishing fishingScript;
-
 
     public void Awake()
     {
@@ -62,12 +58,7 @@ public class PlayerInputState : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
-        // DebugLogger.Instance.Log($"PlayerInputState initialized with state: {currentState}");
-        movementScript = GetComponent<PlayerMovement>();
-        // fishingScript = GetComponent<PlayerFishing>();
-        // menuScript = GetComponent<PlayerMenu>();
     }
 
     private void OnDestroy()
@@ -92,10 +83,10 @@ public class PlayerInputState : MonoBehaviour
         switch (currentState)
         {
             case InputStates.Gameplay:
-                movementScript.enabled = true;
+                PlayerMovement.Instance.enabled = true;
                 break;
             case InputStates.Fishing:
-                movementScript.enabled = false;
+                PlayerMovement.Instance.enabled = false;
                 break;
             default:
                 DebugLogger.Instance.LogWarning("PlayerInputState: Unhandled state: " + currentState);
@@ -186,12 +177,11 @@ public class PlayerInputState : MonoBehaviour
     public void OnHook(InputValue value)
     {
         if (!value.isPressed) { return; }
-
-        if (currentState == InputStates.Fishing && fishingManager != null)
+        if (currentState == InputStates.Fishing)
         {
-            if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.HookWindow)
+            if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.HookWindow)
             {
-                // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnHook", "-> !HookPerformed\nHookWindow success");
+                DebugLogger.Instance.LogMethodCall("PlayerInputState.OnHook", "-> !HookPerformed\nHookWindow success");
                 HookPerformed?.Invoke();
             }
         }
@@ -201,9 +191,9 @@ public class PlayerInputState : MonoBehaviour
     {
         if (!value.isPressed) { return; }
 
-        if (currentState == InputStates.Fishing && fishingManager != null)
+        if (currentState == InputStates.Fishing)
         {
-            if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
+            if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
             {
                 // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnMash","-> !MashPerformed");
                 MashPerformed?.Invoke();
@@ -218,13 +208,11 @@ public class PlayerInputState : MonoBehaviour
     public void OnReelLeft(InputValue value)
     {
         if (!value.isPressed) { return; }
-
         if (currentState == InputStates.Fishing)
         {
-            if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
+            if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
             {
                 // Debug.Log("OnReelLeft called with value: " + value);
-
                 ReelLeftPerformed?.Invoke();
             }
 
@@ -234,13 +222,11 @@ public class PlayerInputState : MonoBehaviour
     public void OnReelRight(InputValue value)
     {
         if (!value.isPressed) { return; }
-
         if (currentState == InputStates.Fishing)
         {
-            if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
+            if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
             {
                 // Debug.Log("OnReelRight called with value: " + value);
-
                 ReelRightPerformed?.Invoke();
             }
         }

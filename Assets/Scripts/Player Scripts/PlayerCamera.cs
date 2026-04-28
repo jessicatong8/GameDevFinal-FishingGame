@@ -2,8 +2,19 @@ using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
 public class PlayerCamera : MonoBehaviour
-{
-    public static PlayerCamera Instance { get; private set; } // Singleton instance for easy access from other scripts
+{    public static PlayerCamera Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindFirstObjectByType<PlayerCamera>();
+            }
+            return instance;
+        }
+        private set => instance = value;
+    } // Singleton instance for easy access from other scripts.
+    
     [Header("References")]
     public Transform target;
     public LayerMask environmentLayerMask;
@@ -33,6 +44,7 @@ public class PlayerCamera : MonoBehaviour
     public float alignmentSmoothTime = 0.2f;
     private float rotationVelocity;
 
+    private static PlayerCamera instance; 
     private float pitch;
     private float yaw;
     private float distance;
