@@ -41,10 +41,16 @@ public class LineRangeManager : MonoBehaviour
 
     private void HandleHooked()
     {
+        if (FishingManager.Instance == null || FishingManager.Instance.activeFish == null)
+        {
+            DebugLogger.Instance.LogError("LineRangeManager: No active fish available when hooked.");
+            return;
+        }
+
         activeFishMovement = FishingManager.Instance.activeFish.GetComponent<FishMovement>();
         if (activeFishMovement == null)
         {
-            DebugLogger.Instance.LogError("LineRangeManager: No active fish found.");
+            DebugLogger.Instance.LogError("LineRangeManager: Active fish has no FishMovement component.");
             return;
         }
         isInReelingState = true;

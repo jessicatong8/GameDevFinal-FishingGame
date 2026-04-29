@@ -298,12 +298,25 @@ public class FishingManager : MonoBehaviour
     public void ReturnToIdle(string reason)
     {
         DebugLogger.Instance.LogMethodCall("FishingManager.ReturnToIdle", reason);
-        if (activeFish != null) activeFish.isActiveFish = false;
-        activeFish = null;
-        timer = 0f;
+
         SetFishingGameState(FishingGameState.Idle);
-        PlayerAnimator.Instance.animator.SetBool("isReeling", false);
-        PlayerAnimator.Instance.animator.SetTrigger("stopFishing");
+        if (activeFish != null)
+        {
+            activeFish.isActiveFish = false;
+            activeFish = null;
+        }
+        else
+        {
+            DebugLogger.Instance.LogWarning("FishingManager.ReturnToIdle called with no active fish.");
+        }
+
+        timer = 0f;
+        if (PlayerAnimator.Instance != null && PlayerAnimator.Instance.animator != null)
+        {
+            PlayerAnimator.Instance.animator.SetBool("isReeling", false);
+            PlayerAnimator.Instance.animator.SetTrigger("stopFishing");
+        }
+
         OnReturnToIdle?.Invoke();
         DebugLogger.Instance.LogMethodCall("XXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
