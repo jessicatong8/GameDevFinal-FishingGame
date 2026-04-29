@@ -17,7 +17,6 @@ public class PlayerFishing : MonoBehaviour
     } // Singleton instance for easy access from other scripts.
     public bool IsFishing;
     private static PlayerFishing instance;
-
     private Animator animator;
     private FishingRig fishingRig;
     private LineCastingVisuals lineCastingVisuals;
@@ -26,7 +25,11 @@ public class PlayerFishing : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponentInChildren<Animator>(true);
+        if (animator == null)
+        {
+            DebugLogger.Instance.LogWarning("PlayerFishing: No PlayerAnimator with an Animator component found in children.");
+        }
         fishingRig = GetComponentInChildren<FishingRig>(true);
         if (fishingRig == null)
         {
@@ -138,18 +141,22 @@ public class PlayerFishing : MonoBehaviour
 
         // Set player input state to fishing mode
         PlayerInputState.Instance.SetState(fishingActive ? PlayerInputState.InputStates.Fishing : PlayerInputState.InputStates.Gameplay);
-        DebugLogger.Instance.Log($"PlayerFishing: Set fishing active: {fishingActive}. \nCurrent input state: {PlayerInputState.Instance.GetCurrentInputState()}");
+        // DebugLogger.Instance.Log($"PlayerFishing: Set fishing active: {fishingActive}. \nCurrent input state: {PlayerInputState.Instance.GetCurrentInputState()}");
 
         // animator parameter for idle/fishing animation transition
         // animator?.SetBool("startFishing", fishingActive);
         if (fishingActive)
         {
-            PlayerAnimator.Instance.animator?.SetTrigger("startFishing");
+            if (animator != null)
+            {
+                animator.SetTrigger("startFishing");
+            }
+            else
+            {
+                DebugLogger.Instance.LogWarning("PlayerFishing: Animator is null!");
+            }
         }
-        // enable/disable fishing visuals and player movement
         fishingRig?.SetActive(fishingActive);
-
-        // if fishing -> movement disabled, if not fishing -> movement enabled
         PlayerMovement.Instance.enabled = !fishingActive;
     }
 }
