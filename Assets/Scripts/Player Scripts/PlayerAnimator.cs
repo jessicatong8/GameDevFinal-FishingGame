@@ -20,10 +20,6 @@ public class PlayerAnimator : MonoBehaviour
     public void Awake()
     {
         Instance = this;
-        animator = GetComponentInChildren<Animator>();
-        if (animator == null)        {
-            DebugLogger.Instance.LogWarning("PlayerAnimator: No Animator found in children.");
-        }
+        if (animator == null) animator = GetComponent<Animator>();
     }
-
 }
