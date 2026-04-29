@@ -5,7 +5,7 @@ using System;
 public class FishingManager : MonoBehaviour
 {
     // Manage fishing gamestates and event broadcasting for the fishing.
-    private static FishingManager instance; 
+    private static FishingManager instance;
     public static FishingManager Instance
     {
         get
@@ -265,7 +265,7 @@ public class FishingManager : MonoBehaviour
 
         FishingGameState previousState = currentFishingGameState;
         currentFishingGameState = requestedState;
-        DebugLogger.Instance.LogMethodCall("FishingManager.SetFishingGameState", $"{previousState} -> {currentFishingGameState}");
+        // DebugLogger.Instance.LogMethodCall("FishingManager.SetFishingGameState", $"{previousState} -> {currentFishingGameState}");
         OnFishingGameStateChanged?.Invoke(currentFishingGameState);
     }
 
@@ -298,20 +298,15 @@ public class FishingManager : MonoBehaviour
     public void ReturnToIdle(string reason)
     {
         DebugLogger.Instance.LogMethodCall("FishingManager.ReturnToIdle", reason);
-
-        SetFishingGameState(FishingGameState.Idle);
-        activeFish.isActiveFish = false;
+        if (activeFish != null) activeFish.isActiveFish = false;
         activeFish = null;
         timer = 0f;
+        SetFishingGameState(FishingGameState.Idle);
         PlayerAnimator.Instance.animator.SetBool("isReeling", false);
         PlayerAnimator.Instance.animator.SetTrigger("stopFishing");
-
         OnReturnToIdle?.Invoke();
+        DebugLogger.Instance.LogMethodCall("XXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
-        if (!string.IsNullOrEmpty(reason))
-        {
-            DebugLogger.Instance.Log("Fishing sequence ended: " + reason);
-        }
     }
 
     private void Update()
