@@ -55,8 +55,9 @@ public class FishingManager : MonoBehaviour
     private FishingGameState currentFishingGameState = FishingGameState.Idle;
 
     private float timer;    // general purpose timer used for casting and hook window states
-    private float minHookDelay = 1.5f;
-    private float maxHookDelay = 4f;
+    //edited values slightly for more clear testing
+    private float minHookDelay = 4f;
+    private float maxHookDelay = 8f;
     private int fishSequenceIndex;
 
     private void Awake()
