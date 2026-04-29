@@ -120,7 +120,7 @@ public class FishMovement : MonoBehaviour
         }
 
         currentFishingGameState = FishingGameState.Reeling;
-        position = new Vector3(0, reelingHeight, transform.position.z);
+        position = new Vector3(0, reelingHeight, 5f);
         transform.position = position;
 
         baseSwimmingSpeed = GetComponent<Fish>().reelingSpeed;

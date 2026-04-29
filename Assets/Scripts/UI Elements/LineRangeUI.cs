@@ -62,26 +62,26 @@ public class LineRangeUI : MonoBehaviour
 
         LeftArrow.SetActive(false);
         RightArrow.SetActive(false);
-        // WarningUI.SetActive(false);
+        WarningUI.SetActive(false);
         SafeZone.SetActive(false);
     }
 
     private void HandleLeftWarning()
     {
         RightArrow.SetActive(true);
-        //WarningUI.SetActive(true);
+        WarningUI.SetActive(true);
 
     }
     private void HandleRightWarning()
     {
         LeftArrow.SetActive(true);
-        //WarningUI.SetActive(true);
+        WarningUI.SetActive(true);
     }
     private void HandleInInnerLineRange()
     {
         LeftArrow.SetActive(false);
         RightArrow.SetActive(false);
-        //WarningUI.SetActive(false);
+        WarningUI.SetActive(false);
     }
 
     private void Update()
