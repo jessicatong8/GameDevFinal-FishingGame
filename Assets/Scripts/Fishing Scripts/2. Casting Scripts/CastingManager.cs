@@ -14,8 +14,6 @@ public class CastingManager : MonoBehaviour
         private set => instance = value;
     }
 
-    [SerializeField] private Fish[] fishSequence;
-    private int fishSequenceIndex;
     Fish activeFish;
 
     private float biteTimer;
@@ -27,21 +25,11 @@ public class CastingManager : MonoBehaviour
     public float maxHookWindow = 3f;
 
 
-
     private void Awake()
     {
         Instance = this;
     }
 
-    private void OnEnable()
-    {
-        FishingManager.OnCaught += HandleCaught;
-    }
-
-    private void OnDisable()
-    {
-        FishingManager.OnCaught -= HandleCaught;
-    }
 
     private void SetBiteTimer()
     {
@@ -52,7 +40,6 @@ public class CastingManager : MonoBehaviour
     {
         hookTimer = Random.Range(minHookWindow, maxHookWindow);
     }
-
 
 
     private bool IsPlayerInFishingArea()
@@ -81,7 +68,7 @@ public class CastingManager : MonoBehaviour
 
     private bool EnterCastingState()
     {
-        activeFish = GetFishFromSequence();
+        activeFish = FishManager.Instance.GetNextFishFromSequence();
         if (activeFish == null)
         {
             DebugLogger.Instance.Log("No fish available to catch. Cannot start fishing.");
@@ -99,30 +86,7 @@ public class CastingManager : MonoBehaviour
     }
 
 
-    private Fish GetFishFromSequence()
-    {
-        if (fishSequence == null || fishSequence.Length == 0)
-        {
-            DebugLogger.Instance.LogWarning("FishingManager: Fish sequence is null or empty, but usePrototypeFishSequence is true. Please assign fish to the sequence in the inspector.");
-            return null;
-        }
-
-
-        if (fishSequenceIndex < fishSequence.Length)
-        {
-            Fish nextFish = fishSequence[fishSequenceIndex];
-            if (nextFish != null)
-            {
-                return nextFish;
-            }
-
-        }
-        return null;
-    }
-
-
-
-    private void TickCastingState()
+    private void UpdateCastingTimer()
     {
         biteTimer -= Time.deltaTime;
         if (biteTimer <= 0)
@@ -132,7 +96,7 @@ public class CastingManager : MonoBehaviour
         }
     }
 
-    private void TickHookWindowState()
+    private void UpdateHookWindowTimer()
     {
         hookTimer -= Time.deltaTime;
         if (hookTimer <= 0)
@@ -142,21 +106,16 @@ public class CastingManager : MonoBehaviour
     }
 
 
-    private void HandleCaught()
-    {
-        fishSequenceIndex++;
-    }
-
     private void Update()
 
     {
         if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Casting)
         {
-            TickCastingState();
+            UpdateCastingTimer();
         }
         else if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.HookWindow)
         {
-            TickHookWindowState();
+            UpdateHookWindowTimer();
         }
 
     }

@@ -698,7 +698,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fdce958e5917d4effad60cf0830061d0, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2496525859392228606, guid: fdce958e5917d4effad60cf0830061d0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1132,7 +1132,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fdce958e5917d4effad60cf0830061d0, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2072,7 +2072,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fdce958e5917d4effad60cf0830061d0, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3559,6 +3559,53 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1256478415}
   m_SourcePrefab: {fileID: 100100000, guid: 9baafd032641a43b19c40bada1625073, type: 3}
+--- !u!1 &974665384
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 974665385}
+  - component: {fileID: 974665386}
+  m_Layer: 0
+  m_Name: FishManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &974665385
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974665384}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1255574780}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &974665386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974665384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 288fd84e428f24b299f2e5bedc6cc11d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishManager
+  fishSequence:
+  - {fileID: 1256478411}
+  - {fileID: 1652712460}
 --- !u!1 &989545184
 GameObject:
   m_ObjectHideFlags: 0
@@ -4062,7 +4109,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fdce958e5917d4effad60cf0830061d0, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4775,7 +4822,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1255574780}
   m_Layer: 0
-  m_Name: Fishing Managers
+  m_Name: Managers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4795,10 +4842,11 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1940631100}
+  - {fileID: 974665385}
+  - {fileID: 1552009964}
   - {fileID: 1419121293}
   - {fileID: 1152363079}
   - {fileID: 356036558}
-  - {fileID: 1552009964}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1256478405 stripped
@@ -5589,8 +5637,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0044bf9d8e024008a4cc8225fef8836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CastingManager
-  fishSequence:
-  - {fileID: 1256478411}
+  minBiteDelay: 2
+  maxBiteDelay: 5
+  minHookWindow: 1.54
+  maxHookWindow: 3
 --- !u!1001 &1563618796
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6364,7 +6414,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fdce958e5917d4effad60cf0830061d0, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
