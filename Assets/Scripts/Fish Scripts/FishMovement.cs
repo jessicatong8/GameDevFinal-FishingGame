@@ -42,7 +42,7 @@ public class FishMovement : MonoBehaviour
         // CatchPresentation
     }
     private FishingGameState currentFishingGameState = FishingGameState.Idle;
-    private PlayerInputState playerInputState;
+    // private PlayerInputState playerInputState;
 
     void Start()
     {
@@ -59,13 +59,7 @@ public class FishMovement : MonoBehaviour
         wobbleOffset = Random.Range(0f, 100f);
         ApplySpeedVariation();
         IdleSetTargetPosition(position);
-        // DebugLogger.Instance.Log("Initial Position: " + position);
 
-        playerInputState = PlayerInputState.Instance;
-        if (playerInputState == null)
-        {
-            DebugLogger.Instance.LogError("FishMovement: PlayerInputState instance not found!");
-        }
     }
 
     private void OnEnable()
@@ -73,22 +67,17 @@ public class FishMovement : MonoBehaviour
         FishingManager.OnHook += HandleHooked;
         FishingManager.OnReturnToGameplay += HandleResetToGameplay;
 
-        if (playerInputState != null)
-        {
-            playerInputState.ReelLeftPerformed += TurnLeft;
-            playerInputState.ReelRightPerformed += TurnRight;
-        }
+        PlayerInputState.Instance.ReelLeftPerformed += TurnLeft;
+        PlayerInputState.Instance.ReelRightPerformed += TurnRight;
     }
     private void OnDisable()
     {
         FishingManager.OnHook -= HandleHooked;
         FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
 
-        if (playerInputState != null)
-        {
-            playerInputState.ReelLeftPerformed -= TurnLeft;
-            playerInputState.ReelRightPerformed -= TurnRight;
-        }
+        PlayerInputState.Instance.ReelLeftPerformed -= TurnLeft;
+        PlayerInputState.Instance.ReelRightPerformed -= TurnRight;
+
     }
     private void Update()
     {
