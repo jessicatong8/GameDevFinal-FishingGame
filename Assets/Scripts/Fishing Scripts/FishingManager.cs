@@ -126,15 +126,6 @@ public class FishingManager : MonoBehaviour
         // Wait for player to interact before advancing sequence and returning to idle
     }
 
-    public void CompleteCatchConfirmation()
-    {
-        // DebugLogger.Instance.LogMethodCall("FishingManager.CompleteCatchConfirmation", "");
-        // OnCatchConfirmationEnd?.Invoke();
-        // AdvanceFishSequenceOnCatch();
-        // string fishName = activeFish != null ? activeFish.fishName : "Unknown fish";
-        // ReturnToIdle(fishName + " caught.");
-    }
-
     // All fishing outcomes (abort, escape, successful catch) resolve here to reset states and trigger animations
     public void ReturnToGameplay(string reason)
     {

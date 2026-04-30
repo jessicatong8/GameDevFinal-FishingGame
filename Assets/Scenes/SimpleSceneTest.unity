@@ -3606,6 +3606,7 @@ MonoBehaviour:
   fishSequence:
   - {fileID: 1256478411}
   - {fileID: 1652712460}
+  fishSequenceIndex: 0
 --- !u!1 &989545184
 GameObject:
   m_ObjectHideFlags: 0
@@ -4904,11 +4905,7 @@ MonoBehaviour:
   swimmingSpeed: 4
   rarityWeight: 0
   level: 0
-  dripThreshold: 0
   isActiveFish: 0
-  wiggleOnTimer: 0
-  wiggleOffTimer: 0
-  wiggleStrength: 0
   reelingSpeed: 5
   tensionDropRate: 5
   safeZoneCenter: 50
@@ -6209,17 +6206,13 @@ MonoBehaviour:
   swimmingSpeed: 4
   rarityWeight: 0
   level: 0
-  dripThreshold: 0
   isActiveFish: 0
-  wiggleOnTimer: 0
-  wiggleOffTimer: 0
-  wiggleStrength: 0
-  reelingSpeed: 12
+  reelingSpeed: 7
   tensionDropRate: 5
-  safeZoneCenter: 0.7
-  safeZoneWidth: 0.4
+  safeZoneCenter: 50
+  safeZoneWidth: 40
   burstStrength: 0.3
-  tensionEscapeTime: 3
+  tensionEscapeTime: 10
 --- !u!95 &1652712461
 Animator:
   serializedVersion: 7
@@ -6267,6 +6260,22 @@ MonoBehaviour:
   idleWobbleAmplitude: 0.02
   reelingWobbleAmplitude: 0.008
   wobbleFrequency: 2
+--- !u!114 &1652712464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1652712458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deb439b6a9afac847b9deacd99b41a99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishCaughtPresentation
+  localOffset: {x: 0, y: 0, z: 4}
+  rotationSpeed: 20
+  disableFishMovement: 1
+  disableAnimator: 0
 --- !u!1001 &1677912750
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7744,6 +7753,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ce724615a4ffd4d5791d0f0a392180d0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1652712463}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ce724615a4ffd4d5791d0f0a392180d0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1652712464}
   m_SourcePrefab: {fileID: 100100000, guid: ce724615a4ffd4d5791d0f0a392180d0, type: 3}
 --- !u!1 &2066904520
 GameObject:

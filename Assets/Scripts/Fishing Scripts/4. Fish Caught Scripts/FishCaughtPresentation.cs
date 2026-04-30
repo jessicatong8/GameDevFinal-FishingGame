@@ -55,7 +55,7 @@ public class FishCaughtPresentation : MonoBehaviour
         if (!isInCatchPresentation) return;
         animator.SetBool("isPresenting", false);
         RestoreFish();
-        FishingManager.Instance.CompleteCatchConfirmation();
+        FishingManager.Instance.ReturnToGameplay("Fish caught was confirmed.");
     }
 
     private void PlaceFishInFrontOfCamera()

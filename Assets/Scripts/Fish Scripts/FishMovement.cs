@@ -93,7 +93,8 @@ public class FishMovement : MonoBehaviour
     private void HandleResetToGameplay()
     {
         // currentFishingGameState = FishingGameState.Idle;
-        position = new Vector3(transform.position.x, idleHeight, transform.position.z);
+        position = new Vector3(transform.position.x, idleHeight, transform.position.z); // TODO randomize where fish respawn in
+        transform.eulerAngles = new Vector3(0, direction * 90f, 0);
         transform.position = position;
 
         baseSwimmingSpeed = GetComponent<Fish>().swimmingSpeed; // reset the base speed
