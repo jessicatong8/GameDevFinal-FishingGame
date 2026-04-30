@@ -107,6 +107,7 @@ public class PlayerFishing : MonoBehaviour
         animator.SetBool("isReeling", false);
         animator.SetTrigger("stopFishing");
         animator.SetBool("isPresenting", false);
+        animator.ResetTrigger("stopFishing");
     }
     private void HandleFishPresentation()
     {
