@@ -10,16 +10,12 @@ public class Fish : MonoBehaviour
 
     public bool isActiveFish;
 
-
     public float wiggleOnTimer;
     public float wiggleOffTimer;
     public float wiggleStrength;
 
-
-
-    [Header("Stats for tension and progress when reeling")]
-
-
+    [Header("Reeling - Tension/Progress Settings")]
+    // public float maxTension = 100f;
     public float reelingSpeed = 5f; //how fast the fish swims when in reeling state
     public float tensionDropRate = 5f;
     public float safeZoneCenter = 50f;
