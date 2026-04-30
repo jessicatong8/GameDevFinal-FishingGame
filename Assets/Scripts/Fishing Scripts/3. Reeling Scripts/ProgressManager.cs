@@ -48,7 +48,7 @@ public class ProgressManager : MonoBehaviour
     private void HandleResetToGameplay()
     {
         mashTriggeredThisFrame = false;
-        progress = 0f;     
+        progress = 0f;
         isReeling = false;
         activeFish = null;
     }
@@ -56,7 +56,7 @@ public class ProgressManager : MonoBehaviour
     {
         if (mashedThisFrame && activeFish != null)
         {
-            float increment = activeFish.reelingSpeed / TARGET_MASH_RATE;
+            float increment = activeFish.reelingProgressRate / TARGET_MASH_RATE;
             progress += increment;
             progress = Mathf.Min(progress, 100f);
         }

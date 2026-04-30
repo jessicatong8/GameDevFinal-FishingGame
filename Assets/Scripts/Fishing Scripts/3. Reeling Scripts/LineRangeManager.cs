@@ -37,12 +37,14 @@ public class LineRangeManager : MonoBehaviour
     private void OnEnable()
     {
         FishingManager.OnHook += HandleHooked;
+        FishingManager.OnCaught += HandleResetToGameplay;
         FishingManager.OnReturnToGameplay += HandleResetToGameplay;
     }
 
     private void OnDisable()
     {
         FishingManager.OnHook -= HandleHooked;
+        FishingManager.OnCaught -= HandleResetToGameplay;
         FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
     }
 

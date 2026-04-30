@@ -67,7 +67,7 @@ public class TensionManager : MonoBehaviour
     {
         if (mashedThisFrame)
         {
-            float increment = activeFish.reelingSpeed / TARGET_MASH_RATE;
+            float increment = activeFish.tensionIncreaseRate / TARGET_MASH_RATE;
             tension += increment;
             tension = Mathf.Min(tension, maxTension);
         }

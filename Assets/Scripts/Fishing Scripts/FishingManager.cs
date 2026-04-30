@@ -19,12 +19,13 @@ public class FishingManager : MonoBehaviour
     public static event Action OnCast; // when player initiates fishing by casting the line
     public static event Action OnBite; // after timer when a fish bites line and player can try to hook
     public static event Action OnHook; // when player successfully hooks the fish within the hook window
-    public static event Action NoFishInSpot;
-    public static event Action DripTooLow; // when player doesn't have enough "drip" to catch the next fish
+
     public static event Action OnEscaped; // when fish escapes due to hook window timing out, player drip being too low, line breaking from high tension, or fish moving out of line range
     public static event Action OnCaught; // when player successfully catches the fish by reeling to 100% progress, the fish will be presented to camera and player can interact to confirm catch (via !OnCatchConfirmationEnd) to return to idle
     // public static event Action OnCatchConfirmationEnd; // when player confirms catch by pressing interact or clicking, which will trigger !onReturnToGameplay to reset everything for the next catch
     public static event Action OnReturnToGameplay;
+
+    public static event Action OnGameWin; // when player catches all fish and wins the game
 
     public static event Action<FishingGameState> OnFishingGameStateChanged; // for triggering state-specific animations
 
@@ -34,12 +35,13 @@ public class FishingManager : MonoBehaviour
     public enum FishingGameState
     {
         Gameplay, // default state when not fishing
-        Casting,
-        HookWindow,
-        Reeling,
-        CatchPresentation
+        Casting, // After player initiates fishing by casting but before the fish bites
+        HookWindow, // After fish bites and is within the window where player can hook, but hasn't successfully hooked yet
+        Reeling, // After player successfully hooks and is trying to reel the fish in but hasn't caught the fish yet
+        CatchPresentation // After player successfully reels to 100% progress and the fish is caught and presented to the camera, waiting for player to confirm catch before returning to idle
     }
-    // public CastingManager castingManager;
+
+
     public FishingGameState CurrentFishingGameState => currentFishingGameState;
     private FishingGameState currentFishingGameState = FishingGameState.Gameplay;
     private void Awake()
@@ -112,14 +114,7 @@ public class FishingManager : MonoBehaviour
         OnCaught?.Invoke();
         // Wait for player to interact before advancing sequence and returning to idle
     }
-    public void CompleteCatchConfirmation()
-    {
-        // DebugLogger.Instance.LogMethodCall("FishingManager.CompleteCatchConfirmation", "");
-        // OnCatchConfirmationEnd?.Invoke();
-        // AdvanceFishSequenceOnCatch();
-        // string fishName = activeFish != null ? activeFish.fishName : "Unknown fish";
-        // ReturnToIdle(fishName + " caught.");
-    }
+
     // All fishing outcomes (abort, escape, successful catch) resolve here to reset states and trigger animations
     public void ReturnToGameplay(string reason)
     {
@@ -137,4 +132,31 @@ public class FishingManager : MonoBehaviour
         }
         OnReturnToGameplay?.Invoke();
     }
+
+    public void InvokeGameWin()
+    {
+        OnGameWin?.Invoke();
+        // load new win and retry scene?
+    }
+
+    // private void Update()
+    // {
+    //     switch (currentFishingGameState)
+    //     {
+    //         case FishingGameState.Gameplay:
+    //             break;
+
+    //         case FishingGameState.Casting:
+    //             // TickCastingState();
+    //             break;
+
+    //         case FishingGameState.HookWindow:
+    //             // TickHookWindowState();
+    //             break;
+
+    //         case FishingGameState.Reeling:
+    //             // HandleReeling(); // Now handled by ProgressManager and TensionManager
+    //             break;
+    //     }
+    // }
 }
