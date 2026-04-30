@@ -39,37 +39,28 @@ public class FishingManager : MonoBehaviour
         Reeling,
         CatchPresentation
     }
-
-
     // public CastingManager castingManager;
     public FishingGameState CurrentFishingGameState => currentFishingGameState;
-
     private FishingGameState currentFishingGameState = FishingGameState.Gameplay;
-
-
     private void Awake()
     {
         Instance = this;
     }
-
     private void OnEnable()
     {
         PlayerInputState.HookPerformed += InvokeHooked;
         PlayerInputState.AbortPerformed += HandleAbortPerformed;
     }
-
     private void OnDisable()
     {
         PlayerInputState.HookPerformed -= InvokeHooked;
         PlayerInputState.AbortPerformed -= HandleAbortPerformed;
     }
-
     private void EnterReelingState()
     {
         SetFishingGameState(FishingGameState.Reeling);
 
     }
-
     private void SetFishingGameState(FishingGameState requestedState)
     {
         if (currentFishingGameState == requestedState) return;
@@ -79,7 +70,6 @@ public class FishingManager : MonoBehaviour
         // DebugLogger.Instance.LogMethodCall("FishingManager.SetFishingGameState", $"{previousState} -> {currentFishingGameState}");
         OnFishingGameStateChanged?.Invoke(currentFishingGameState);
     }
-
     public void InvokeCast()
     {
         SetFishingGameState(FishingGameState.Casting);
@@ -90,7 +80,6 @@ public class FishingManager : MonoBehaviour
         SetFishingGameState(FishingGameState.HookWindow);
         OnBite?.Invoke();
     }
-
     private void HandleAbortPerformed()
     {
         if (currentFishingGameState != FishingGameState.Gameplay)
@@ -98,7 +87,6 @@ public class FishingManager : MonoBehaviour
             ReturnToGameplay("Fishing aborted by player input.");
         }
     }
-
     public void InvokeHooked()
     {
         DebugLogger.Instance.Log("HandleHookPerformed called. Current input state: " + PlayerInputState.Instance.CurrentState);
@@ -110,15 +98,12 @@ public class FishingManager : MonoBehaviour
             EnterReelingState();
         }
     }
-
-
     public void EscapeFishing(string reason)
     {
         DebugLogger.Instance.LogMethodCall("FishingManager.EscapeFishing", "-> !OnEscaped");
         OnEscaped?.Invoke();
         ReturnToGameplay(reason);
     }
-
     public void CaughtFish()
     {
         string fishName = activeFish != null ? activeFish.fishName : "Unknown fish";
@@ -127,7 +112,6 @@ public class FishingManager : MonoBehaviour
         OnCaught?.Invoke();
         // Wait for player to interact before advancing sequence and returning to idle
     }
-
     public void CompleteCatchConfirmation()
     {
         // DebugLogger.Instance.LogMethodCall("FishingManager.CompleteCatchConfirmation", "");
@@ -136,7 +120,6 @@ public class FishingManager : MonoBehaviour
         // string fishName = activeFish != null ? activeFish.fishName : "Unknown fish";
         // ReturnToIdle(fishName + " caught.");
     }
-
     // All fishing outcomes (abort, escape, successful catch) resolve here to reset states and trigger animations
     public void ReturnToGameplay(string reason)
     {
@@ -152,34 +135,6 @@ public class FishingManager : MonoBehaviour
         {
             DebugLogger.Instance.LogWarning("FishingManager.ReturnToGameplay called with no active fish.");
         }
-
-        if (PlayerAnimator.Instance != null && PlayerAnimator.Instance.animator != null)
-        {
-            PlayerAnimator.Instance.animator.SetBool("isReeling", false);
-            PlayerAnimator.Instance.animator.SetTrigger("stopFishing");
-        }
-
         OnReturnToGameplay?.Invoke();
-    }
-
-    private void Update()
-    {
-        switch (currentFishingGameState)
-        {
-            case FishingGameState.Gameplay:
-                break;
-
-            case FishingGameState.Casting:
-                // TickCastingState();
-                break;
-
-            case FishingGameState.HookWindow:
-                // TickHookWindowState();
-                break;
-
-            case FishingGameState.Reeling:
-                // HandleReeling(); // Now handled by ProgressManager and TensionManager
-                break;
-        }
     }
 }

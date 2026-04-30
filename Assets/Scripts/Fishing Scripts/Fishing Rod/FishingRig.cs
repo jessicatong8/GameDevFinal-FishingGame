@@ -64,7 +64,6 @@ public class FishingRig : MonoBehaviour
         {
             return;
         }
-
         fishingLine.StartPoint = castPointTransform;
     }
 }
