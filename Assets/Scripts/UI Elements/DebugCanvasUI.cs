@@ -55,7 +55,6 @@ public class DebugCanvasUI : MonoBehaviour
 
     private void ToggleDebugUI()
     {
-        // Debug.Log($"Toggling Debug UI {showDebugUI} -> {!showDebugUI}");
         showDebugUI = !showDebugUI;
         Debug.Log($"Debug UI {(showDebugUI ? "shown" : "hidden")}");
         debugPanel.SetActive(showDebugUI);
@@ -74,8 +73,13 @@ public class DebugCanvasUI : MonoBehaviour
 
     private void UpdateDebugDisplay()
     {
-        if (!showDebugUI || debugTextDisplay == null) return;
-
+        // Should not update debug text if UI is hidden or if text component is missing
+        if (!showDebugUI) return;
+        if (debugTextDisplay == null)
+        {
+            DebugLogger.Instance.LogError("DebugCanvasUI: No TextMeshProUGUI assigned for debug display!");
+            return;
+        }
         string debugText = "";
         if (showPlayerStateSection)
         {

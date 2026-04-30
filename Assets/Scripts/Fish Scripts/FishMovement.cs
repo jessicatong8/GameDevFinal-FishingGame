@@ -201,38 +201,30 @@ public class FishMovement : MonoBehaviour
     {
         return baseSpeed * Random.Range(1f - variation, 1f + variation);
     }
-
     public void TurnLeft()
     {
-
-        if (!GetComponent<Fish>().isActiveFish)
+        if (GetComponent<Fish>().isActiveFish)
         {
-            Debug.Log(GetComponent<Fish>().fishName + " is not the active fish, ignoring input.");
-            return;
-        }
-
-        if (direction != -1)
-        {
-            Debug.Log("Turning Left");
-            direction = -1;
-            ReelingSetTargetPosition(transform.position);
-            transform.LookAt(targetPosition);
+            if (direction != -1)
+            {
+                Debug.Log("Turning Left");
+                direction = -1;
+                ReelingSetTargetPosition(transform.position);
+                transform.LookAt(targetPosition);
+            }
         }
     }
-
     public void TurnRight()
     {
-        if (!GetComponent<Fish>().isActiveFish)
+        if (GetComponent<Fish>().isActiveFish)
         {
-            Debug.Log(GetComponent<Fish>().fishName + " is not the active fish, ignoring input.");
-            return;
-        }
-
-        if (direction != 1)
-        {
-            direction = 1;
-            ReelingSetTargetPosition(transform.position);
-            transform.LookAt(targetPosition);
+            if (direction != 1)
+            {
+                Debug.Log("Turning Right");
+                direction = 1;
+                ReelingSetTargetPosition(transform.position);
+                transform.LookAt(targetPosition);
+            }
         }
     }
     public bool IsInInnerLineRange()

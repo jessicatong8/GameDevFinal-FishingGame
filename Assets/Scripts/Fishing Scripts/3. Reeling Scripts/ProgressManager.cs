@@ -6,14 +6,14 @@ public class ProgressManager : MonoBehaviour
     [SerializeField] private bool autoCatchForTesting = false; // Set to true to automatically fill progress for testing purposes.
     private const float TARGET_MASH_RATE = 3f; // expected mashes per second
     private bool mashTriggeredThisFrame;
-    private float progress = 70f; // TODO SET TO 0f after testing
+    private float progress = 0f;
     private bool isReeling;
 
     Fish activeFish;
 
     void Start()
     {
-        progress = 70f; // TODO SET TO 0f after testing
+        if (autoCatchForTesting) progress = 70f; 
     }
     private void OnEnable()
     {
@@ -41,7 +41,6 @@ public class ProgressManager : MonoBehaviour
         {
             DebugLogger.Instance.LogError("ProgressManager: No active fish found.");
         }
-        // progress = 0f;
         isReeling = true;
     }
     private void HandleMashPerformed()
@@ -51,16 +50,16 @@ public class ProgressManager : MonoBehaviour
     private void HandleResetToGameplay()
     {
         mashTriggeredThisFrame = false;
-        progress = 0f;     // TODO SET TO 0f after testing
+        progress = 0f;     
         isReeling = false;
         activeFish = null;
     }
     private void UpdateProgress(bool mashedThisFrame)
     {
-            if (mashedThisFrame && activeFish != null)
+        if (mashedThisFrame && activeFish != null)
         {
             float increment = activeFish.reelingSpeed / TARGET_MASH_RATE;
-            progress += increment; 
+            progress += increment;
             progress = Mathf.Min(progress, 100f);
         }
         if (progress >= 100f)
@@ -82,11 +81,6 @@ public class ProgressManager : MonoBehaviour
     {
         if (isReeling)
         {
-            if (autoCatchForTesting)
-            {
-                progress = 70f;
-                return;
-            }
             UpdateProgress(mashTriggeredThisFrame);
             mashTriggeredThisFrame = false;
         }
