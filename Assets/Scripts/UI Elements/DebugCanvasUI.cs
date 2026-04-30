@@ -140,27 +140,33 @@ public class DebugCanvasUI : MonoBehaviour
             }
             else if (tensionManager != null && fishingManager != null)
             {
-                double currentTension = tensionManager.GetCurrentTension();
-                // float maxTension = tensionManager.GetCurrentMaxTension();
-                bool isInTensionSafeZone = tensionManager.IsInSafeZone();
-                // bool isTensionTooHigh = tensionManager.IsTensionTooHigh();
-                // bool isTensionTooLow = tensionManager.IsTensionTooLow();
+                if (isReeling)
+                {
+                    double currentTension = tensionManager.GetCurrentTension();
+                    // float maxTension = tensionManager.GetCurrentMaxTension();
+                    bool isInTensionSafeZone = tensionManager.IsInSafeZone();
+                    // bool isTensionTooHigh = tensionManager.IsTensionTooHigh();
+                    // bool isTensionTooLow = tensionManager.IsTensionTooLow();
 
-                // debugText += $"Tension: {currentTension:F2} / {maxTension:F2}\n";
-                string tensionSafeZoneIndicator = isInTensionSafeZone ? "<color=#00FF00>SAFE</color>" : "<color=#FF0000>OUT OF ZONE</color>";
-                debugText += $"Tension Zone?: {tensionSafeZoneIndicator}\n";
-                // if (isTensionTooHigh)
-                //     debugText += "<color=#FF0000>TENSION TOO HIGH!</color>\n";
-                // else if (isTensionTooLow)
-                //     debugText += "<color=#FFA500>TENSION TOO LOW!</color>\n";
-                // else
-                //     debugText += "<color=#00FF00>TENSION GOOD!</color>\n";
+                    // debugText += $"Tension: {currentTension:F2} / {maxTension:F2}\n";
+                    string tensionSafeZoneIndicator = isInTensionSafeZone ? "<color=#00FF00>SAFE</color>" : "<color=#FF0000>OUT OF ZONE</color>";
+                    debugText += $"Tension Zone?: {tensionSafeZoneIndicator}\n";
+                    // if (isTensionTooHigh)
+                    //     debugText += "<color=#FF0000>TENSION TOO HIGH!</color>\n";
+                    // else if (isTensionTooLow)
+                    //     debugText += "<color=#FFA500>TENSION TOO LOW!</color>\n";
+                    // else
+                    //     debugText += "<color=#00FF00>TENSION GOOD!</color>\n";
 
-                // debugText += $"Line?: <color=#00FFFF>{fishingManager.CurrentReelLineRangeState}</color>\n";
-                debugText += "Wiggle?: <color=#808080>TODO</color>\n";
+                    // debugText += $"Line?: <color=#00FFFF>{fishingManager.CurrentReelLineRangeState}</color>\n";
+                    debugText += "Wiggle?: <color=#808080>TODO</color>\n";
 
-                debugText += "\n";
-                debugText += "InCatchPresentation: " + (isInCatchPresentation ? "<color=#00FF00>Yes</color>" : "<color=#FF0000>No</color>") + "\n";
+                    debugText += "\n";
+                }
+                if (isInCatchPresentation)
+                {
+                    debugText += "InCatchPresentation: " + (isInCatchPresentation ? "<color=#00FF00>Yes</color>" : "<color=#FF0000>No</color>") + "\n";
+                }
             }
             else
             {
