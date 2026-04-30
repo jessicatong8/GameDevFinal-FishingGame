@@ -3,14 +3,15 @@ using UnityEngine.UI;
 
 public class TensionUI : MonoBehaviour
 {
-
+    [Header("Managers")]
     [SerializeField] private TensionManager tensionManager;
     [SerializeField] private FishingManager fishingManager;
 
-    [Header("UI Objects")]
+    [Header("UI")]
     [SerializeField] private GameObject uiPanel;
     [SerializeField] private Slider tensionSlider;
     [SerializeField] private Transform safeZone;
+
     private float safeZoneLeft;
     private float safeZoneRight;
 
