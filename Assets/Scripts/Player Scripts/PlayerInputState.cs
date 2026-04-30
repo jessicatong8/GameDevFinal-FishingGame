@@ -59,6 +59,7 @@ public class PlayerInputState : MonoBehaviour
             return;
         }
         Instance = this;
+        SetState(InputStates.Gameplay);
     }
 
     private void OnDestroy()
@@ -152,7 +153,7 @@ public class PlayerInputState : MonoBehaviour
         if (currentState == InputStates.Gameplay)
         {
             // In gameplay: starts fishing if possible. In fishing: allows catch confirmation listeners to respond.
-            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnInteract", "-> !InteractPerformed");
+            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnInteract", "-> !InteractPerformed");
             InteractPerformed?.Invoke();
         }
     }
@@ -181,7 +182,7 @@ public class PlayerInputState : MonoBehaviour
         {
             if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.HookWindow)
             {
-                DebugLogger.Instance.LogMethodCall("PlayerInputState.OnHook", "-> !HookPerformed\nHookWindow success");
+                // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnHook", "-> !HookPerformed\nHookWindow success");
                 HookPerformed?.Invoke();
             }
         }

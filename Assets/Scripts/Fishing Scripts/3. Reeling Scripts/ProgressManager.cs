@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ProgressManager : MonoBehaviour
 {
-
+    [SerializeField] private bool autoCatchForTesting = false; // Set to true to automatically fill progress for testing purposes.
     private const float TARGET_MASH_RATE = 3f; // expected mashes per second
     private bool mashTriggeredThisFrame;
     private float progress = 0f; // TODO SET TO 0f after testing
@@ -82,6 +82,12 @@ public class ProgressManager : MonoBehaviour
     {
         if (isReeling)
         {
+            if (autoCatchForTesting)
+            {
+                progress = 100f;
+                FishingManager.Instance.CaughtFish();
+                return;
+            }
             UpdateProgress(mashTriggeredThisFrame);
             mashTriggeredThisFrame = false;
         }
