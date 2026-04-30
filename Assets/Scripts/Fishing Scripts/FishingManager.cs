@@ -118,6 +118,7 @@ public class FishingManager : MonoBehaviour
     // All fishing outcomes (abort, escape, successful catch) resolve here to reset states and trigger animations
     public void ReturnToGameplay(string reason)
     {
+        if (currentFishingGameState == FishingGameState.Gameplay) return;
         DebugLogger.Instance.LogMethodCall("FishingManager.ReturnToGameplay", reason);
 
         SetFishingGameState(FishingGameState.Gameplay);
