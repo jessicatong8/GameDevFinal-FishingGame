@@ -11,6 +11,7 @@ public class DebugCanvasUI : MonoBehaviour
 {
     private PlayerInputState inputState;
     private TensionManager tensionManager;
+    private ProgressManager progressManager;
     private FishingManager fishingManager;
     private GameObject debugPanel;
     private TextMeshProUGUI debugTextDisplay;
@@ -30,6 +31,7 @@ public class DebugCanvasUI : MonoBehaviour
         inputState = PlayerInputState.Instance;
         fishingManager = FishingManager.Instance;
         tensionManager = FindFirstObjectByType<TensionManager>();
+        progressManager = FindFirstObjectByType<ProgressManager>();
         debugPanel = transform.Find("Debug Panel").gameObject;
         if (debugPanel == null)
         {
@@ -101,7 +103,6 @@ public class DebugCanvasUI : MonoBehaviour
             // ===== FISHING STATUS =====
             debugText += "<b><color=#FFFF00>FISHING STATUS</color></b>\n";
             bool isFishing = fishingManager.CurrentFishingGameState != FishingManager.FishingGameState.Gameplay;
-            bool isReeling = fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling;
             bool isInCatchPresentation = fishingManager != null && fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation;
 
             if (!isFishing && !isInCatchPresentation)
@@ -113,10 +114,6 @@ public class DebugCanvasUI : MonoBehaviour
             {
                 if (isFishing)
                 {
-                    // if (isReeling)
-                    // {
-                    //     debugText += "<color=#00FF00>Currently Reeling!</color>\n";
-                    // }
                     // TENSION
                     double currentTension = tensionManager.GetCurrentTension();
                     float maxTension = 100f;
@@ -129,6 +126,9 @@ public class DebugCanvasUI : MonoBehaviour
                     // LINE RANGE
                     debugText += $"Line?: <color=#00FFFF>{(LineRangeManager.Instance.isInLineRange ? "IN RANGE" : "OUT OF RANGE")}</color>\n";
 
+                    // PROGRESS
+                    debugText += $"Reeling Progress: {progressManager.GetCurrentProgress():F2/100f}%\n";
+                    
                     // WIGGLE
                     debugText += "Wiggle?: <color=#808080>TODO</color>\n";
                     debugText += "\n";
