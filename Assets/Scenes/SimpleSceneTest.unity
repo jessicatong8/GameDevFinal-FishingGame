@@ -3570,7 +3570,7 @@ GameObject:
   - component: {fileID: 974665385}
   - component: {fileID: 974665386}
   m_Layer: 0
-  m_Name: FishManager
+  m_Name: FishSequenceManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3606,7 +3606,6 @@ MonoBehaviour:
   fishSequence:
   - {fileID: 1256478411}
   - {fileID: 1652712460}
-  fishSequenceIndex: 0
 --- !u!1 &989545184
 GameObject:
   m_ObjectHideFlags: 0
@@ -4417,7 +4416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d63a22c1fdf8d4d599d58557de606008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressManager
-  autoCatchForTesting: 1
+  autoCatchForTesting: 0
 --- !u!4 &1152363079
 Transform:
   m_ObjectHideFlags: 0
@@ -4902,11 +4901,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fish
   fishName: AnglerFish
-  swimmingSpeed: 4
-  rarityWeight: 0
-  level: 0
+  level: 1
   isActiveFish: 0
+  swimmingSpeed: 4
   reelingSpeed: 5
+  reelingProgressRate: 40
   tensionDropRate: 5
   safeZoneCenter: 50
   safeZoneWidth: 30
@@ -6203,11 +6202,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fish
   fishName: LionFish
-  swimmingSpeed: 4
-  rarityWeight: 0
   level: 0
   isActiveFish: 0
+  swimmingSpeed: 4
   reelingSpeed: 7
+  reelingProgressRate: 40
   tensionDropRate: 5
   safeZoneCenter: 50
   safeZoneWidth: 40

@@ -1,26 +1,27 @@
 using UnityEngine;
 
-public class FishManager : MonoBehaviour
+public class FishSequenceManager : MonoBehaviour
 {
 
-    private static FishManager instance;
-    public static FishManager Instance
+    private static FishSequenceManager instance;
+    public static FishSequenceManager Instance
     {
         get
         {
             if (instance != null) return instance;
-            instance = FindFirstObjectByType<FishManager>();
+            instance = FindFirstObjectByType<FishSequenceManager>();
             return instance;
         }
         private set => instance = value;
     }
 
     [SerializeField] private Fish[] fishSequence;
-    [SerializeField] private int fishSequenceIndex;
+    // [SerializeField] private int fishSequenceIndex;
 
     private void Awake()
     {
         instance = this;
+        ResetFishData();
     }
 
     private void OnEnable()
@@ -43,27 +44,38 @@ public class FishManager : MonoBehaviour
             return null;
         }
 
+        Debug.Log("fish sequence index: " + FishData.fishSequenceIndex);
 
-        if (fishSequenceIndex < fishSequence.Length)
+        if (FishData.fishSequenceIndex < fishSequence.Length)
         {
-            Fish nextFish = fishSequence[fishSequenceIndex];
+            Fish nextFish = fishSequence[FishData.fishSequenceIndex];
             if (nextFish != null)
             {
                 return nextFish;
             }
 
         }
+
         return null;
     }
 
     private void HandleCaught()
     {
-        fishSequenceIndex++;
+        Debug.Log("A fish was caught, checking for game win.");
+        if (FishData.fishSequenceIndex == fishSequence.Length - 1)
+        {
+            Debug.Log("All fish in sequence have been caught, invoking game win and resetting fish data.");
+            FishingManager.Instance.InvokeGameWin();
+            ResetFishData();
+            return;
+        }
+        FishData.fishSequenceIndex++;
     }
 
     public void ResetFishData()
     {
         FishData.numFishCaught = 0;
+        FishData.fishSequenceIndex = 0;
     }
 
     public void AddFishCaught()

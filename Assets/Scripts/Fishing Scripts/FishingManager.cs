@@ -25,6 +25,8 @@ public class FishingManager : MonoBehaviour
     // public static event Action OnCatchConfirmationEnd; // when player confirms catch by pressing interact or clicking, which will trigger !onReturnToGameplay to reset everything for the next catch
     public static event Action OnReturnToGameplay;
 
+    public static event Action OnGameWin; // when player catches all fish and wins the game
+
     public static event Action<FishingGameState> OnFishingGameStateChanged; // for triggering state-specific animations
 
     public Fish activeFish;
@@ -149,6 +151,12 @@ public class FishingManager : MonoBehaviour
         }
 
         OnReturnToGameplay?.Invoke();
+    }
+
+    public void InvokeGameWin()
+    {
+        OnGameWin?.Invoke();
+        // load new win and retry scene?
     }
 
     // private void Update()

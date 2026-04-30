@@ -1,7 +1,11 @@
+using UnityEditor;
 using UnityEngine;
 
 public class CastingManager : MonoBehaviour
 {
+    // Manages the game after the player casts to select the next fish from the FishSequenceManager and coordinate the timing for when the fish bites and window during which the player must hook the fish
+    // This encompasses the Casting and HookWindow game states
+
     private static CastingManager instance;
     public static CastingManager Instance
     {
@@ -68,7 +72,7 @@ public class CastingManager : MonoBehaviour
 
     private bool EnterCastingState()
     {
-        activeFish = FishManager.Instance.GetNextFishFromSequence();
+        activeFish = FishSequenceManager.Instance.GetNextFishFromSequence();
         if (activeFish == null)
         {
             DebugLogger.Instance.Log("No fish available to catch. Cannot start fishing.");
