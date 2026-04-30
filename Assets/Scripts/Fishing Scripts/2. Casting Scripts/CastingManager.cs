@@ -19,12 +19,12 @@ public class CastingManager : MonoBehaviour
     Fish activeFish;
 
     private float biteTimer;
-    private float minBiteDelay = 2f;
-    private float maxBiteDelay = 5f;
+    public float minBiteDelay = 1f;
+    public float maxBiteDelay = 3f;
 
     private float hookTimer;
-    private float minHookWindow = 1.54f;
-    private float maxHookWindow = 3f;
+    public float minHookWindow = 1.54f;
+    public float maxHookWindow = 3f;
 
 
 
