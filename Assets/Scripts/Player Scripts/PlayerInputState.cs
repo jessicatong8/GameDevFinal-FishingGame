@@ -202,11 +202,11 @@ public class PlayerInputState : MonoBehaviour
                 MashPerformed?.Invoke();
             }
             // acts as confirm catch during catch presentation
-            else if (currentState == InputStates.Fishing && fishingManagerInstance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
-            {
-                // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnMash", "-> !ConfirmCatchPerformed");
-                ConfirmCatchPerformed?.Invoke();
-            }
+            // else if (currentState == InputStates.Fishing && fishingManagerInstance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
+            // {
+            //     // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnMash", "-> !ConfirmCatchPerformed");
+            //     ConfirmCatchPerformed?.Invoke();
+            // }
         }
     }
 
@@ -239,13 +239,15 @@ public class PlayerInputState : MonoBehaviour
     {
         if (!value.isPressed) return;
 
-        if (currentState == InputStates.Fishing)
+        if (currentState == InputStates.Fishing && 
+        fishingManagerInstance.CurrentFishingGameState != FishingManager.FishingGameState.CatchPresentation)
         {
             DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !AbortPerformed");
             AbortPerformed?.Invoke();
         }
         // acts as confirm catch during catch presentation
-        else if (currentState == InputStates.Fishing || fishingManagerInstance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
+        else if (currentState == InputStates.Fishing && 
+        fishingManagerInstance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
         {
             DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !ConfirmCatchPerformed");
             ConfirmCatchPerformed?.Invoke();
