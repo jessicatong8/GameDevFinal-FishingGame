@@ -13,7 +13,7 @@ public class FishAnimation : MonoBehaviour
         FishingManager.OnHook += HandleHooked;
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnEscaped += HandleEscaped;
-        FishingManager.OnReturnToIdle += HandleResetToIdle;
+        FishingManager.OnReturnToGameplay += HandleResetToIdle;
     }
 
     void OnDestroy()
@@ -22,7 +22,7 @@ public class FishAnimation : MonoBehaviour
         FishingManager.OnHook -= HandleHooked;
         FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnEscaped -= HandleEscaped; // can include optional escape animation instead
-        FishingManager.OnReturnToIdle -= HandleResetToIdle;
+        FishingManager.OnReturnToGameplay -= HandleResetToIdle;
     }
 
     void Update()

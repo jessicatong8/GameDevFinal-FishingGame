@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 // [RequireComponent(typeof(PlayerFishing))]
 public class PlayerInputState : MonoBehaviour
 {
-    private static PlayerInputState instance; 
     public static PlayerInputState Instance
     {
         get
@@ -26,8 +25,6 @@ public class PlayerInputState : MonoBehaviour
         Gameplay,
         Fishing
     }
-    [SerializeField] private InputStates currentState = InputStates.Gameplay;
-
     // Gameplay Camera and Movement Inputs 
     public Vector2 MovementInputData { get; private set; }
     public Vector2 LookInputData { get; private set; }
@@ -47,9 +44,10 @@ public class PlayerInputState : MonoBehaviour
     public static event Action AbortPerformed;
     public static event Action DebugPerformed;
     // Menu?
-
-
     public InputStates CurrentState => currentState;
+    [SerializeField] private InputStates currentState = InputStates.Gameplay;
+    private static PlayerInputState instance;
+    private FishingManager fishingManagerInstance;
 
     public void Awake()
     {
@@ -60,6 +58,11 @@ public class PlayerInputState : MonoBehaviour
         }
         Instance = this;
         SetState(InputStates.Gameplay);
+        fishingManagerInstance = FishingManager.Instance;
+        if (fishingManagerInstance == null)
+        {
+            DebugLogger.Instance.LogError("PlayerInputState: No FishingManager instance found in scene.");
+        }
     }
 
     private void OnDestroy()
@@ -97,21 +100,21 @@ public class PlayerInputState : MonoBehaviour
 
     public void OnMove(InputValue value)
     {
-        if (currentState != InputStates.Gameplay) { return; }
+        if (currentState != InputStates.Gameplay) return;
 
         MovementInputData = value.Get<Vector2>();
     }
 
     public void OnLook(InputValue value)
     {
-        if (currentState != InputStates.Gameplay && currentState != InputStates.Fishing) { return; }
+        if (currentState != InputStates.Gameplay && currentState != InputStates.Fishing) return;
 
         LookInputData = value.Get<Vector2>();
     }
 
     public void OnJump(InputValue value)
     {
-        if (!value.isPressed) { return; }
+        if (!value.isPressed) return;
 
         if (currentState == InputStates.Gameplay)
         {
@@ -130,13 +133,13 @@ public class PlayerInputState : MonoBehaviour
 
     public void OnZoomScroll(InputValue value)
     {
-        // if (currentState != InputStates.Menu) { return; }
+        // if (currentState != InputStates.Menu) return; 
         ZoomInputData = value.Get<Vector2>().y;
     }
 
     public void OnZoomToggle(InputValue value)
     {
-        if (!value.isPressed) { return; }
+        if (!value.isPressed) return;
 
         if (currentState == InputStates.Gameplay)
         {
@@ -148,7 +151,7 @@ public class PlayerInputState : MonoBehaviour
 
     public void OnInteract(InputValue value)
     {
-        if (!value.isPressed) { return; }
+        if (!value.isPressed) return;
 
         if (currentState == InputStates.Gameplay)
         {
@@ -160,9 +163,8 @@ public class PlayerInputState : MonoBehaviour
 
     public void OnConfirmCatch(InputValue value)
     {
-        if (!value.isPressed) { return; }
+        if (!value.isPressed) return;
 
-        FishingManager fishingManagerInstance = FishingManager.Instance;
         if (fishingManagerInstance == null)
         {
             return;
@@ -177,7 +179,7 @@ public class PlayerInputState : MonoBehaviour
 
     public void OnHook(InputValue value)
     {
-        if (!value.isPressed) { return; }
+        if (!value.isPressed) return;
         if (currentState == InputStates.Fishing)
         {
             if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.HookWindow)
@@ -190,7 +192,7 @@ public class PlayerInputState : MonoBehaviour
     }
     public void OnMash(InputValue value)
     {
-        if (!value.isPressed) { return; }
+        if (!value.isPressed) return;
 
         if (currentState == InputStates.Fishing)
         {
@@ -199,16 +201,18 @@ public class PlayerInputState : MonoBehaviour
                 // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnMash","-> !MashPerformed");
                 MashPerformed?.Invoke();
             }
-            // else
-            // {
-            //     DebugLogger.Instance.Log("PlayerInputState: Not in reeling state, cannot perform mash action. Current fishing state: " + fishingManager.CurrentFishingGameState);
-            // }
+            // acts as confirm catch during catch presentation
+            else if (currentState == InputStates.Fishing && fishingManagerInstance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
+            {
+                // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnMash", "-> !ConfirmCatchPerformed");
+                ConfirmCatchPerformed?.Invoke();
+            }
         }
     }
 
     public void OnReelLeft(InputValue value)
     {
-        if (!value.isPressed) { return; }
+        if (!value.isPressed) return;
         if (currentState == InputStates.Fishing)
         {
             if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
@@ -222,7 +226,7 @@ public class PlayerInputState : MonoBehaviour
 
     public void OnReelRight(InputValue value)
     {
-        if (!value.isPressed) { return; }
+        if (!value.isPressed) return;
         if (currentState == InputStates.Fishing)
         {
             if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
@@ -232,33 +236,34 @@ public class PlayerInputState : MonoBehaviour
             }
         }
     }
-
     public void OnAbort(InputValue value)
     {
-        if (!value.isPressed) { return; }
+        if (!value.isPressed) return;
 
         if (currentState == InputStates.Fishing)
         {
             DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !AbortPerformed");
             AbortPerformed?.Invoke();
         }
-
+        // acts as confirm catch during catch presentation
+        else if (currentState == InputStates.Fishing || fishingManagerInstance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
+        {
+            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !ConfirmCatchPerformed");
+            ConfirmCatchPerformed?.Invoke();
+        }
     }
-
     public void OnDebug(InputValue value)
     {
-        if (!value.isPressed) { return; }
+        if (!value.isPressed) return;
 
-        DebugLogger.Instance.LogMethodCall("PlayerInputState.OnDebug", "-> !DebugPerformed");
+        // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnDebug", "-> !DebugPerformed");
         DebugPerformed?.Invoke();
     }
-
     private void LateUpdate()
     {
         LookInputData = Vector2.zero;
         ZoomInputData = 0f;
     }
-
     private void ClearInputs()
     {
         MovementInputData = Vector2.zero;

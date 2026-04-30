@@ -10,10 +10,8 @@ public class FishingManager : MonoBehaviour
     {
         get
         {
-            if (instance == null)
-            {
-                instance = FindFirstObjectByType<FishingManager>();
-            }
+            if (instance != null) return instance;
+            instance = FindFirstObjectByType<FishingManager>();
             return instance;
         }
         private set => instance = value;
@@ -25,8 +23,8 @@ public class FishingManager : MonoBehaviour
     public static event Action DripTooLow; // when player doesn't have enough "drip" to catch the next fish
     public static event Action OnEscaped; // when fish escapes due to hook window timing out, player drip being too low, line breaking from high tension, or fish moving out of line range
     public static event Action OnCaught; // when player successfully catches the fish by reeling to 100% progress, the fish will be presented to camera and player can interact to confirm catch (via !OnCatchConfirmationEnd) to return to idle
-    // public static event Action OnCatchConfirmationEnd; // when player confirms catch by pressing interact or clicking, which will trigger !onReturnToIdle to reset everything for the next catch
-    public static event Action OnReturnToIdle;
+    // public static event Action OnCatchConfirmationEnd; // when player confirms catch by pressing interact or clicking, which will trigger !onReturnToGameplay to reset everything for the next catch
+    public static event Action OnReturnToGameplay;
 
     public static event Action<FishingGameState> OnFishingGameStateChanged; // for triggering state-specific animations
 
@@ -35,7 +33,7 @@ public class FishingManager : MonoBehaviour
     public float hookTimer;
     public enum FishingGameState
     {
-        Idle,
+        Gameplay, // default state when not fishing
         Casting,
         HookWindow,
         Reeling,
@@ -52,7 +50,7 @@ public class FishingManager : MonoBehaviour
     // for prototyping, we preassign all fishes in the order they will be caught. In final version, we will use CastingManager to dynamically determine fish based on player's location and other factors
     [SerializeField] private Fish[] fishSequence;
     // Starting Fishing States 
-    private FishingGameState currentFishingGameState = FishingGameState.Idle;
+    private FishingGameState currentFishingGameState = FishingGameState.Gameplay;
 
     private float timer;    // general purpose timer used for casting and hook window states
     //edited values slightly for more clear testing
@@ -84,12 +82,19 @@ public class FishingManager : MonoBehaviour
 
     public bool TryStartFishing()
     {
-        // DebugLogger.Instance.LogMethodCall("FishingManager.TryStartFishing");
-        if (!IsPlayerInFishingArea() || currentFishingGameState != FishingGameState.Idle)
+        if (!IsPlayerInFishingArea() || currentFishingGameState != FishingGameState.Gameplay)
         {
-            DebugLogger.Instance.LogMethodCall("FishingManager.TryStartFishing", "IsPlayerInFishingArea: " + IsPlayerInFishingArea() + " (should be true)" + "\nCurrentState: " + currentFishingGameState + " (should be Idle)");
+            if (!IsPlayerInFishingArea())
+            {
+                DebugLogger.Instance.Log("Player is not in a fishing area and cannot start fishing.");
+            }
+            if (currentFishingGameState != FishingGameState.Gameplay)
+            {
+                DebugLogger.Instance.Log("Cannot start fishing because current state is " + currentFishingGameState + " instead of Gameplay.");
+            }
             return false;
         }
+
         return EnterCastingState(); // returns true on success and false on failure (e.g. no fish in spot, drip too low)
     }
 
@@ -107,9 +112,9 @@ public class FishingManager : MonoBehaviour
 
     private void HandleAbortPerformed()
     {
-        if (currentFishingGameState != FishingGameState.Idle)
+        if (currentFishingGameState != FishingGameState.Gameplay)
         {
-            ReturnToIdle("Fishing aborted by player input.");
+            ReturnToGameplay("Fishing aborted by player input.");
         }
     }
 
@@ -262,7 +267,7 @@ public class FishingManager : MonoBehaviour
 
     private void SetFishingGameState(FishingGameState requestedState)
     {
-        if (currentFishingGameState == requestedState) { return; }
+        if (currentFishingGameState == requestedState) return;
 
         FishingGameState previousState = currentFishingGameState;
         currentFishingGameState = requestedState;
@@ -275,7 +280,7 @@ public class FishingManager : MonoBehaviour
     {
         DebugLogger.Instance.LogMethodCall("FishingManager.EscapeFishing", "-> !OnEscaped");
         OnEscaped?.Invoke();
-        ReturnToIdle(reason);
+        ReturnToGameplay(reason);
     }
 
     public void CaughtFish()
@@ -292,15 +297,16 @@ public class FishingManager : MonoBehaviour
         // DebugLogger.Instance.LogMethodCall("FishingManager.CompleteCatchConfirmation", "");
         // OnCatchConfirmationEnd?.Invoke();
         AdvanceFishSequenceOnCatch();
-        string fishName = activeFish != null ? activeFish.fishName : "Unknown fish";
-        ReturnToIdle(fishName + " caught.");
+        // string fishName = activeFish != null ? activeFish.fishName : "Unknown fish";
+        // ReturnToIdle(fishName + " caught.");
     }
 
-    public void ReturnToIdle(string reason)
+    // All fishing outcomes (abort, escape, successful catch) resolve here to reset states and trigger animations
+    public void ReturnToGameplay(string reason)
     {
-        DebugLogger.Instance.LogMethodCall("FishingManager.ReturnToIdle", reason);
+        DebugLogger.Instance.LogMethodCall("FishingManager.ReturnToGameplay", reason);
 
-        SetFishingGameState(FishingGameState.Idle);
+        SetFishingGameState(FishingGameState.Gameplay);
         if (activeFish != null)
         {
             activeFish.isActiveFish = false;
@@ -308,7 +314,7 @@ public class FishingManager : MonoBehaviour
         }
         else
         {
-            DebugLogger.Instance.LogWarning("FishingManager.ReturnToIdle called with no active fish.");
+            DebugLogger.Instance.LogWarning("FishingManager.ReturnToGameplay called with no active fish.");
         }
 
         timer = 0f;
@@ -318,16 +324,14 @@ public class FishingManager : MonoBehaviour
             PlayerAnimator.Instance.animator.SetTrigger("stopFishing");
         }
 
-        OnReturnToIdle?.Invoke();
-        DebugLogger.Instance.LogMethodCall("XXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
+        OnReturnToGameplay?.Invoke();
     }
 
     private void Update()
     {
         switch (currentFishingGameState)
         {
-            case FishingGameState.Idle:
+            case FishingGameState.Gameplay:
                 break;
 
             case FishingGameState.Casting:

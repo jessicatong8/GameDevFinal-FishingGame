@@ -25,7 +25,7 @@ public class TensionUI : MonoBehaviour
         FishingManager.OnHook += HandleShowUI;
         FishingManager.OnCaught += HandleHideUI;
         FishingManager.OnEscaped += HandleHideUI;
-        FishingManager.OnReturnToIdle += HandleHideUI;
+        FishingManager.OnReturnToGameplay += HandleHideUI;
     }
 
     private void OnDisable()
@@ -33,7 +33,7 @@ public class TensionUI : MonoBehaviour
         FishingManager.OnHook -= HandleShowUI;
         FishingManager.OnCaught -= HandleHideUI;
         FishingManager.OnEscaped -= HandleHideUI;
-        FishingManager.OnReturnToIdle -= HandleHideUI;
+        FishingManager.OnReturnToGameplay -= HandleHideUI;
     }
 
     private void HandleShowUI()

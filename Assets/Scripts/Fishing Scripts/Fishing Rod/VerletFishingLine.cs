@@ -113,7 +113,7 @@ public class VerletFishingLine : MonoBehaviour
         FishingManager.OnHook += HandleHooked;
         FishingManager.OnCaught += DetachFromFish;
         FishingManager.OnEscaped += DetachFromFish;
-        FishingManager.OnReturnToIdle += DetachFromFish;
+        FishingManager.OnReturnToGameplay += DetachFromFish;
         FishingManager.OnCast += DetachFromFish;
     }
 
@@ -122,7 +122,7 @@ public class VerletFishingLine : MonoBehaviour
         FishingManager.OnHook -= HandleHooked;
         FishingManager.OnCaught -= DetachFromFish;
         FishingManager.OnEscaped -= DetachFromFish;
-        FishingManager.OnReturnToIdle -= DetachFromFish;
+        FishingManager.OnReturnToGameplay -= DetachFromFish;
         FishingManager.OnCast -= DetachFromFish;
         StopCastMotion();
     }

@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 
 public class PlayerFishing : MonoBehaviour
@@ -18,10 +19,9 @@ public class PlayerFishing : MonoBehaviour
     public bool IsFishing;
     private static PlayerFishing instance;
     private Animator animator;
+    private Vector3 fishingPosition = new Vector3(-0.156808749f, 1.20062673f, -5.1311698f);
     private FishingRig fishingRig;
     private LineCastingVisuals lineCastingVisuals;
-    [SerializeField] private float castReleaseDelay = 0.25f;
-    private bool castReleased;
     private void Awake()
     {
         Instance = this;
@@ -53,7 +53,7 @@ public class PlayerFishing : MonoBehaviour
         PlayerInputState.InteractPerformed += HandleInteract;
 
         FishingManager.OnHook += BeginReeling;
-        FishingManager.OnReturnToIdle += HandleFishingEnded;
+        FishingManager.OnReturnToGameplay += HandleFishingEnded;
     }
 
     private void OnDisable()
@@ -61,58 +61,29 @@ public class PlayerFishing : MonoBehaviour
         PlayerInputState.InteractPerformed -= HandleInteract;
 
         FishingManager.OnHook -= BeginReeling;
-        FishingManager.OnReturnToIdle -= HandleFishingEnded;
+        FishingManager.OnReturnToGameplay -= HandleFishingEnded;
     }
 
     private void HandleInteract()
     {
-        if (IsFishing) { return; }
+        if (IsFishing) return;
 
         // Calls TryStartFishing which checks all conditions and returns false if fishing cannot be started (not on dock or not in idle state)
         if (FishingManager.Instance.TryStartFishing())
         {
-            // DebugLogger.Instance.Log("PlayerFishing: Fishing started successfully.");
             // TryStartFishing() -> fishingManager takes over (either failing or progressing to EnterCastingState()).
+            // DebugLogger.Instance.Log("PlayerFishing: Fishing started successfully.");
             SetFishingActive(true);
-            BeginCast();
+            BeginCast(); // only handles animation and visuals for casting, while the FishingManager handles the actual game state and logic for casting.
         }
     }
 
     private void BeginCast()
     {
-        castReleased = false;
+        Debug.Log("PlayerFishing: Beginning cast animation and visuals.");
+        transform.LookAt(Vector3.zero); // look forward towards water
+        transform.position = fishingPosition;
         animator.SetTrigger("cast");
-        StartCoroutine(ReleaseCastFallback());
-    }
-
-    // TODO: Call this from an animation event at the frame where the cast should release.
-    public void ReleaseCast()
-    {
-        if (castReleased)
-        {
-            return;
-        }
-
-        castReleased = true;
-        // DebugLogger.Instance.LogMethodCall("PlayerFishing.ReleaseCast");
-
-        if (lineCastingVisuals == null)
-        {
-            DebugLogger.Instance.LogWarning("PlayerFishing.ReleaseCast: no LineCastingVisuals found, so the cast line cannot move.");
-            return;
-        }
-
-        lineCastingVisuals.ReleaseCast();
-    }
-
-    private System.Collections.IEnumerator ReleaseCastFallback()
-    {
-        yield return new WaitForSeconds(castReleaseDelay);
-
-        if (IsFishing && !castReleased)
-        {
-            ReleaseCast();
-        }
     }
 
     // Begin Reeling/Mashing Process
@@ -125,7 +96,6 @@ public class PlayerFishing : MonoBehaviour
 
     private void HandleFishingEnded()
     {
-        castReleased = false;
         if (!IsFishing)
         {
             DebugLogger.Instance.LogWarning("HandleFishingEnded called but player is not in fishing state.");
@@ -144,12 +114,6 @@ public class PlayerFishing : MonoBehaviour
         PlayerInputState.Instance.SetState(fishingActive ? PlayerInputState.InputStates.Fishing : PlayerInputState.InputStates.Gameplay);
         // DebugLogger.Instance.Log($"PlayerFishing: Set fishing active: {fishingActive}. \nCurrent input state: {PlayerInputState.Instance.GetCurrentInputState()}");
 
-        // animator parameter for idle/fishing animation transition
-        // animator?.SetBool("startFishing", fishingActive);
-        if (fishingActive && animator != null)
-        {
-            animator.SetTrigger("startFishing");
-        }
         // enable/disable fishing visuals and player movement
         fishingRig.SetActive(fishingActive);
         PlayerMovement.Instance.enabled = !fishingActive;

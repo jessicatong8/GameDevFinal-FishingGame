@@ -6,33 +6,33 @@ public class ProgressManager : MonoBehaviour
     [SerializeField] private bool autoCatchForTesting = false; // Set to true to automatically fill progress for testing purposes.
     private const float TARGET_MASH_RATE = 3f; // expected mashes per second
     private bool mashTriggeredThisFrame;
-    private float progress = 0f; // TODO SET TO 0f after testing
+    private float progress = 70f; // TODO SET TO 0f after testing
     private bool isReeling;
 
     Fish activeFish;
 
     void Start()
     {
-        progress = 0f; // TODO SET TO 0f after testing
+        progress = 70f; // TODO SET TO 0f after testing
     }
     private void OnEnable()
     {
         FishingManager.OnHook += HandleHooked;
         PlayerInputState.MashPerformed += HandleMashPerformed;
-        FishingManager.OnCaught += HandleResetToIdle;
-        // FishingManager.OnCatchConfirmationEnd += HandleResetToIdle;
-        FishingManager.OnEscaped += HandleResetToIdle;
-        FishingManager.OnReturnToIdle += HandleResetToIdle;
+        FishingManager.OnCaught += HandleResetToGameplay;
+        // FishingManager.OnCatchConfirmationEnd += HandleResetToGameplay;
+        FishingManager.OnEscaped += HandleResetToGameplay;
+        FishingManager.OnReturnToGameplay += HandleResetToGameplay;
     }
 
     private void OnDisable()
     {
         FishingManager.OnHook -= HandleHooked;
         PlayerInputState.MashPerformed -= HandleMashPerformed;
-        FishingManager.OnCaught -= HandleResetToIdle;
-        // FishingManager.OnCatchConfirmationEnd -= HandleResetToIdle;
-        FishingManager.OnEscaped -= HandleResetToIdle;
-        FishingManager.OnReturnToIdle -= HandleResetToIdle;     // for aborts
+        FishingManager.OnCaught -= HandleResetToGameplay;
+        // FishingManager.OnCatchConfirmationEnd -= HandleResetToGameplay;
+        FishingManager.OnEscaped -= HandleResetToGameplay;
+        FishingManager.OnReturnToGameplay -= HandleResetToGameplay;     // for aborts
     }
     private void HandleHooked()
     {
@@ -48,7 +48,7 @@ public class ProgressManager : MonoBehaviour
     {
         mashTriggeredThisFrame = true;
     }
-    private void HandleResetToIdle()
+    private void HandleResetToGameplay()
     {
         mashTriggeredThisFrame = false;
         progress = 0f;     // TODO SET TO 0f after testing
@@ -60,7 +60,7 @@ public class ProgressManager : MonoBehaviour
             if (mashedThisFrame && activeFish != null)
         {
             float increment = activeFish.reelingSpeed / TARGET_MASH_RATE;
-            progress += increment;
+            progress += increment; 
             progress = Mathf.Min(progress, 100f);
         }
         if (progress >= 100f)
@@ -84,8 +84,7 @@ public class ProgressManager : MonoBehaviour
         {
             if (autoCatchForTesting)
             {
-                progress = 100f;
-                FishingManager.Instance.CaughtFish();
+                progress = 70f;
                 return;
             }
             UpdateProgress(mashTriggeredThisFrame);
