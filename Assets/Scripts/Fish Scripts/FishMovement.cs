@@ -186,7 +186,7 @@ public class FishMovement : MonoBehaviour
     }
     public void TurnLeft()
     {
-        if (GetComponent<Fish>().isActiveFish)
+        if (!GetComponent<Fish>().isActiveFish)
         {
             // Debug.Log(GetComponent<Fish>().fishName + " is not the active fish, ignoring input.");
             return;
@@ -202,7 +202,7 @@ public class FishMovement : MonoBehaviour
     }
     public void TurnRight()
     {
-        if (GetComponent<Fish>().isActiveFish)
+        if (!GetComponent<Fish>().isActiveFish)
         {
             // Debug.Log(GetComponent<Fish>().fishName + " is not the active fish, ignoring input.");
             return;
