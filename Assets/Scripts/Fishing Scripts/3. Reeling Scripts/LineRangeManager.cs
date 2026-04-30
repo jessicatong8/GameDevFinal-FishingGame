@@ -3,7 +3,6 @@ using UnityEngine;
 public class LineRangeManager : MonoBehaviour
 {
     public static LineRangeManager Instance { get; private set; }
-
     FishMovement activeFishMovement;
 
     public float xLineLeftWarningRange = -6f;
@@ -11,7 +10,6 @@ public class LineRangeManager : MonoBehaviour
 
     public float xLineLeftRange = -8f;
     public float xLineRightRange = 8f;
-
     private bool isInReelingState;
 
     private void Awake()
@@ -58,13 +56,19 @@ public class LineRangeManager : MonoBehaviour
 
     void Update()
     {
-        if (!isInReelingState || activeFishMovement == null)
+        if (!isInReelingState)
             return;
 
+        if (activeFishMovement == null)
+        {
+            DebugLogger.Instance.LogError("LineRangeManager: No active fish movement found during Update.");
+            return;
+        }
+        
         if (activeFishMovement.IsOutOfLineRange())
         {
-            DebugLogger.Instance.Log("Fish is out of line range!");
-            FishingManager.Instance.EscapeFishing("Fish escaped because if went out of the line range");
+            DebugLogger.Instance.Log("LineRangeManager: Fish is out of line range!");
+            FishingManager.Instance.EscapeFishing("Fish escaped because it went out of the line range");
         }
     }
 
