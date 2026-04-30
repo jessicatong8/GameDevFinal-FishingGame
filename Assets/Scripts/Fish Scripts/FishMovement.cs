@@ -125,12 +125,12 @@ public class FishMovement : MonoBehaviour
         if (position.x <= 0)
         {
             direction = 1; // Move right
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLineRightWarningRange - 1, xLineRightRange + 5), reelingHeight, position.z);
+            targetPosition = new Vector3(UnityEngine.Random.Range(xLineRightRange, xLineRightRange + 5), reelingHeight, position.z);
         }
         else if (position.x > 0)
         {
             direction = -1; // Move left
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLineLeftRange - 5, xLineLeftWarningRange + 1), reelingHeight, position.z);
+            targetPosition = new Vector3(UnityEngine.Random.Range(xLineLeftRange - 5, xLineLeftRange), reelingHeight, position.z);
         }
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, direction * 90f, transform.eulerAngles.z); // Flip the fish to face the right direction
 
