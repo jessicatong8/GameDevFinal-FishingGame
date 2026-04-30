@@ -9,50 +9,39 @@ using System;
 /// </summary>
 public class DebugCanvasUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI debugTextDisplay;
     private PlayerInputState inputState;
     private TensionManager tensionManager;
     private FishingManager fishingManager;
+    private GameObject debugPanel;
+    private TextMeshProUGUI debugTextDisplay;
 
-    [SerializeField] private bool showDebugUI = true;
+    [SerializeField] private bool showDebugUI = false;
     [SerializeField] private float updateRate = 0.1f; // Update every 0.1 seconds
     [Header("Section Visibility")]
     [SerializeField] private bool showPlayerStateSection = true;
-    [SerializeField] private bool showReelingSection = true;
+    [SerializeField] private bool showFishingSection = true;
     [SerializeField] private bool showActiveFishSection = true;
     [SerializeField] private bool showRecentCallsSection = true;
     [SerializeField] private int recentCallsToDisplay = 3;
-    [SerializeField] private float recentCallsWindowSeconds = 5f;
-
+    [SerializeField] private float recentCallsWindowSeconds = 3f;
     private float updateTimer;
-    private CanvasGroup canvasGroup;
-
     private void Start()
     {
         inputState = PlayerInputState.Instance;
         fishingManager = FishingManager.Instance;
         tensionManager = FindFirstObjectByType<TensionManager>();
+        debugPanel = transform.Find("Debug Panel").gameObject;
+        if (debugPanel == null)
+        {
+            DebugLogger.Instance.LogError("DebugCanvasUI: No Image component found on the GameObject!");
+        }
 
-        canvasGroup = GetComponent<CanvasGroup>();
-        if (canvasGroup == null)
-            canvasGroup = gameObject.AddComponent<CanvasGroup>();
-
+        debugTextDisplay = GetComponentInChildren<TextMeshProUGUI>(true);
         if (debugTextDisplay == null)
         {
-            DebugLogger.Instance.LogError("DebugCanvasUI: No TextMeshProUGUI assigned! Please assign the debug text display.");
-            enabled = false;
-            return;
+            DebugLogger.Instance.LogError("DebugCanvasUI: No TextMeshProUGUI assigned!");
         }
-
-        if (inputState != null)
-        {
-            PlayerInputState.DebugPerformed += ToggleDebugUI;
-        }
-        else
-        {
-            DebugLogger.Instance.LogWarning("DebugCanvasUI: PlayerInputState not found!");
-        }
-
+        PlayerInputState.DebugPerformed += ToggleDebugUI;
         UpdateDebugDisplay();
     }
 
@@ -66,16 +55,10 @@ public class DebugCanvasUI : MonoBehaviour
 
     private void ToggleDebugUI()
     {
-        if (canvasGroup == null)
-        {
-            DebugLogger.Instance.LogError("DebugCanvasUI: CanvasGroup component missing!");
-            return;
-        }
         // Debug.Log($"Toggling Debug UI {showDebugUI} -> {!showDebugUI}");
         showDebugUI = !showDebugUI;
-
         Debug.Log($"Debug UI {(showDebugUI ? "shown" : "hidden")}");
-        canvasGroup.alpha = showDebugUI ? 1f : 0f;
+        debugPanel.SetActive(showDebugUI);
     }
 
     private void Update()
@@ -91,76 +74,59 @@ public class DebugCanvasUI : MonoBehaviour
 
     private void UpdateDebugDisplay()
     {
-        if (!showDebugUI || debugTextDisplay == null)
-        {
-            return;
-        }
+        if (!showDebugUI || debugTextDisplay == null) return;
 
         string debugText = "";
-
         if (showPlayerStateSection)
         {
             // ===== PLAYER STATE =====
+            // Input State
             debugText += "<b><color=#FFFF00>PLAYER STATE</color></b>\n";
-
-            if (inputState != null)
-            {
-                debugText += $"Input State: <color=#00FFFF>{inputState.CurrentState}</color>\n";
-            }
-            else
-            {
-                debugText += "Input State: <color=#FF0000>PlayerInputState not found</color>\n";
-            }
+            debugText += $"Input State: <color=#00FFFF>{inputState.CurrentState}</color>\n";
+            // Fishing Area
             debugText += $"Current Fishing Area: {(FishingAreaTrigger.IsPlayerInFishingArea ? "<color=#00FF00>Yes</color>" : "<color=#FF0000>No</color>")}\n";
-
-            if (fishingManager != null)
-            {
-                debugText += $"Fishing State: <color=#00FFFF>{fishingManager.CurrentFishingGameState}</color>\n";
-                debugText += $"Current Drip: {fishingManager.currentDrip}\n";
-            }
-            else
-            {
-                debugText += "<color=#FF0000>FishingManager not found!</color>\n";
-            }
+            // Player's Fishing Status
+            debugText += $"Fishing State: <color=#00FFFF>{fishingManager.CurrentFishingGameState}</color>\n";
+            debugText += $"Current Drip: {fishingManager.currentDrip}\n";
 
             debugText += "\n";
         }
 
-        if (showReelingSection)
+        if (showFishingSection)
         {
-            // ===== REELING STATE =====
-            debugText += "<b><color=#FFFF00>REELING STATE</color></b>\n";
-
-            bool isReeling = fishingManager != null && fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling;
+            // ===== FISHING STATUS =====
+            debugText += "<b><color=#FFFF00>FISHING STATUS</color></b>\n";
+            bool isFishing = fishingManager.CurrentFishingGameState != FishingManager.FishingGameState.Gameplay;
+            bool isReeling = fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling;
             bool isInCatchPresentation = fishingManager != null && fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation;
-            if (!isReeling && !isInCatchPresentation)
+
+            if (!isFishing && !isInCatchPresentation)
             {
-                debugText += "<color=#808080>Not reeling</color>\n";
+                debugText += "<color=#808080>Not fishing</color>\n";
                 debugText += "\n";
             }
-            else if (tensionManager != null && fishingManager != null)
+            else if (tensionManager != null)
             {
-                if (isReeling)
+                if (isFishing)
                 {
+                    // if (isReeling)
+                    // {
+                    //     debugText += "<color=#00FF00>Currently Reeling!</color>\n";
+                    // }
+                    // TENSION
                     double currentTension = tensionManager.GetCurrentTension();
-                    // float maxTension = tensionManager.GetCurrentMaxTension();
+                    float maxTension = 100f;
                     bool isInTensionSafeZone = tensionManager.IsInSafeZone();
-                    // bool isTensionTooHigh = tensionManager.IsTensionTooHigh();
-                    // bool isTensionTooLow = tensionManager.IsTensionTooLow();
 
-                    // debugText += $"Tension: {currentTension:F2} / {maxTension:F2}\n";
+                    debugText += $"Tension: {currentTension:F2} / {maxTension:F2}\n";
                     string tensionSafeZoneIndicator = isInTensionSafeZone ? "<color=#00FF00>SAFE</color>" : "<color=#FF0000>OUT OF ZONE</color>";
                     debugText += $"Tension Zone?: {tensionSafeZoneIndicator}\n";
-                    // if (isTensionTooHigh)
-                    //     debugText += "<color=#FF0000>TENSION TOO HIGH!</color>\n";
-                    // else if (isTensionTooLow)
-                    //     debugText += "<color=#FFA500>TENSION TOO LOW!</color>\n";
-                    // else
-                    //     debugText += "<color=#00FF00>TENSION GOOD!</color>\n";
 
-                    // debugText += $"Line?: <color=#00FFFF>{fishingManager.CurrentReelLineRangeState}</color>\n";
+                    // LINE RANGE
+                    debugText += $"Line?: <color=#00FFFF>{(LineRangeManager.Instance.isInLineRange ? "IN RANGE" : "OUT OF RANGE")}</color>\n";
+
+                    // WIGGLE
                     debugText += "Wiggle?: <color=#808080>TODO</color>\n";
-
                     debugText += "\n";
                 }
                 if (isInCatchPresentation)
@@ -190,19 +156,17 @@ public class DebugCanvasUI : MonoBehaviour
             {
                 debugText += $"Fish Name: {activeFish.fishName}\n";
                 debugText += $"Object Name: {activeFish.name}\n";
-                debugText += $"Swim Speed: {activeFish.swimmingSpeed:F2}\n";
-                // debugText += $"Rarity Weight: {activeFish.rarityWeight}\n";
-                debugText += $"Level: {activeFish.level:F2}\n";
-                debugText += $"Drip Threshold: {activeFish.dripThreshold:F2}\n";
-                debugText += $"Wiggle On Timer: {activeFish.wiggleOnTimer:F2}\n";
-                debugText += $"Wiggle Off Timer: {activeFish.wiggleOffTimer:F2}\n";
-                debugText += $"Wiggle Strength: {activeFish.wiggleStrength:F2}\n";
+                debugText += $"Drip Level: {activeFish.level:F2}\n";
+
+                // debugText += $"Wiggle On Timer: {activeFish.wiggleOnTimer:F2}\n";
+                // debugText += $"Wiggle Off Timer: {activeFish.wiggleOffTimer:F2}\n";
+                // debugText += $"Wiggle Strength: {activeFish.wiggleStrength:F2}\n";
                 // debugText += $"Max Tension: {activeFish.maxTension:F2}\n";
-                debugText += $"Reeling Speed: {activeFish.reelingSpeed:F2}\n";
+
+                // debugText += $"Reeling Speed: {activeFish.reelingSpeed:F2}\n";
                 debugText += $"Tension Drop Rate: {activeFish.tensionDropRate:F2}\n";
-                debugText += $"Safe Zone Center: {activeFish.safeZoneCenter:F2}\n";
-                debugText += $"Safe Zone Width: {activeFish.safeZoneWidth:F2}\n";
-                // debugText += $"Burst Strength: {activeFish.burstStrength:F2}\n";
+                debugText += $"Safe Zone Lower: {activeFish.safeZoneCenter - activeFish.safeZoneWidth / 2:F2}\n";
+                debugText += $"Safe Zone Upper: {activeFish.safeZoneCenter + activeFish.safeZoneWidth / 2:F2}\n";
                 debugText += $"Tension Escape Time: {activeFish.tensionEscapeTime:F2}\n";
             }
 
