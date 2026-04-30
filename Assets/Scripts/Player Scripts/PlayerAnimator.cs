@@ -21,5 +21,9 @@ public class PlayerAnimator : MonoBehaviour
     {
         Instance = this;
         if (animator == null) animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            DebugLogger.Instance.LogWarning("PlayerAnimator: No Animator component found on PlayerAnimator.");
+        }
     }
 }
