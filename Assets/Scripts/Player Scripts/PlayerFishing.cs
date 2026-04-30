@@ -69,7 +69,7 @@ public class PlayerFishing : MonoBehaviour
         if (IsFishing) return;
 
         // Calls TryStartFishing which checks all conditions and returns false if fishing cannot be started (not on dock or not in idle state)
-        if (FishingManager.Instance.TryStartFishing())
+        if (CastingManager.Instance.TryStartFishing())
         {
             // TryStartFishing() -> fishingManager takes over (either failing or progressing to EnterCastingState()).
             // DebugLogger.Instance.Log("PlayerFishing: Fishing started successfully.");
@@ -118,4 +118,7 @@ public class PlayerFishing : MonoBehaviour
         fishingRig.SetActive(fishingActive);
         PlayerMovement.Instance.enabled = !fishingActive;
     }
+
+
+
 }
