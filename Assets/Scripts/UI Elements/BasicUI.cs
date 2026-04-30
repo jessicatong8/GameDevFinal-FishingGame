@@ -5,15 +5,10 @@ using Unity.VisualScripting;
 
 public class BasicUI : MonoBehaviour
 {
-    [SerializeField] private FishingManager fishingManager;
-    [SerializeField] private TensionManager tensionManager;
+    private FishingManager fishingManager;
     [SerializeField] private ProgressManager progressManager;
-
-
     private Slider progressSlider;
     private TextMeshProUGUI statusText;
-
-    private CanvasGroup overlayCanvasGroup;
 
     void OnEnable()
     {
@@ -39,21 +34,12 @@ public class BasicUI : MonoBehaviour
 
     void Start()
     {
-        overlayCanvasGroup = GetComponent<CanvasGroup>();
+        // overlayCanvasGroup = GetComponent<CanvasGroup>();
         fishingManager = FishingManager.Instance;
 
         statusText = GetComponentInChildren<TextMeshProUGUI>(true);
         progressSlider = GetComponentInChildren<Slider>(true);
-        UpdateProgressSlider(0);
-
-        if (fishingManager != null)
-        {
-            HandleFishingGameStateChanged(fishingManager.CurrentFishingGameState);
-        }
-        else
-        {
-            progressSlider.gameObject.SetActive(false);
-        }
+        HandleFishingGameStateChanged(fishingManager.CurrentFishingGameState);
     }
     void UpdateProgressSlider(float val)
     {
@@ -84,9 +70,7 @@ public class BasicUI : MonoBehaviour
     {
         // NOW HANDLED BY CATCH PRESENTATION UI
 
-        statusText.text = "";
-        // statusText.text = "FISH CAUGHT!";
-        // statusText.color = Color.green;
+        statusText.text = "";   
     }
     void HandleEscaped()
     {
@@ -103,7 +87,7 @@ public class BasicUI : MonoBehaviour
         }
         else
         {
-            // FishingGameState.Gameplay
+            // FishingGameState.Gameplay (initial state)
             statusText.gameObject.SetActive(true);
             progressSlider.gameObject.SetActive(false);
         }

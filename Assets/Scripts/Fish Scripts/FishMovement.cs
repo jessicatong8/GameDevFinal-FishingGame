@@ -184,11 +184,9 @@ public class FishMovement : MonoBehaviour
     {
         return baseSpeed * Random.Range(1f - variation, 1f + variation);
     }
-
     public void TurnLeft()
     {
-
-        if (!GetComponent<Fish>().isActiveFish)
+        if (GetComponent<Fish>().isActiveFish)
         {
             // Debug.Log(GetComponent<Fish>().fishName + " is not the active fish, ignoring input.");
             return;
@@ -202,10 +200,9 @@ public class FishMovement : MonoBehaviour
             transform.LookAt(targetPosition);
         }
     }
-
     public void TurnRight()
     {
-        if (!GetComponent<Fish>().isActiveFish)
+        if (GetComponent<Fish>().isActiveFish)
         {
             // Debug.Log(GetComponent<Fish>().fishName + " is not the active fish, ignoring input.");
             return;

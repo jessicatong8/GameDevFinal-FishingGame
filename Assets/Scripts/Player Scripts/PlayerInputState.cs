@@ -220,7 +220,6 @@ public class PlayerInputState : MonoBehaviour
                 // Debug.Log("OnReelLeft called with value: " + value);
                 ReelLeftPerformed?.Invoke();
             }
-
         }
     }
 
