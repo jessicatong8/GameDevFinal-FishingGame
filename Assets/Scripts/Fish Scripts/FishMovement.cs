@@ -42,8 +42,41 @@ public class FishMovement : MonoBehaviour
         // CatchPresentation
     }
     private FishingGameState currentFishingGameState = FishingGameState.Idle;
-    // private PlayerInputState playerInputState;
-
+    private PlayerInputState playerInputState;
+    private void OnEnable()
+    {
+        FishingManager.OnHook += HandleHooked;
+        FishingManager.OnReturnToGameplay += HandleResetToGameplay;
+        if (playerInputState == null)
+        {
+            playerInputState = PlayerInputState.Instance;
+        }
+        if (playerInputState != null)
+        {
+            playerInputState.ReelLeftPerformed += TurnLeft;
+            playerInputState.ReelRightPerformed += TurnRight;
+        }
+        else
+        {
+            Debug.LogError("FishMovement: PlayerInputState instance not found! Cannot subscribe to reel input events.");
+        }
+        playerInputState.ReelLeftPerformed += TurnLeft;
+        playerInputState.ReelRightPerformed += TurnRight;
+    }
+    private void OnDisable()
+    {
+        FishingManager.OnHook -= HandleHooked;
+        FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
+        if (playerInputState != null)
+        {
+            playerInputState.ReelLeftPerformed -= TurnLeft;
+            playerInputState.ReelRightPerformed -= TurnRight;
+        }
+        else
+        {
+            Debug.LogError("FishMovement: PlayerInputState instance not found! Cannot unsubscribe from reel input events.");
+        }
+    }
     void Start()
     {
         xLineLeftWarningRange = LineRangeManager.Instance.xLineLeftWarningRange;
@@ -59,25 +92,6 @@ public class FishMovement : MonoBehaviour
         wobbleOffset = Random.Range(0f, 100f);
         ApplySpeedVariation();
         IdleSetTargetPosition(position);
-
-    }
-
-    private void OnEnable()
-    {
-        FishingManager.OnHook += HandleHooked;
-        FishingManager.OnReturnToGameplay += HandleResetToGameplay;
-
-        PlayerInputState.Instance.ReelLeftPerformed += TurnLeft;
-        PlayerInputState.Instance.ReelRightPerformed += TurnRight;
-    }
-    private void OnDisable()
-    {
-        FishingManager.OnHook -= HandleHooked;
-        FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
-
-        PlayerInputState.Instance.ReelLeftPerformed -= TurnLeft;
-        PlayerInputState.Instance.ReelRightPerformed -= TurnRight;
-
     }
     private void Update()
     {
