@@ -163,11 +163,18 @@ public class DebugCanvasUI : MonoBehaviour
                 // debugText += $"Wiggle Strength: {activeFish.wiggleStrength:F2}\n";
                 // debugText += $"Max Tension: {activeFish.maxTension:F2}\n";
 
+                // TENSION
                 // debugText += $"Reeling Speed: {activeFish.reelingSpeed:F2}\n";
                 debugText += $"Tension Drop Rate: {activeFish.tensionDropRate:F2}\n";
                 debugText += $"Safe Zone Lower: {activeFish.safeZoneCenter - activeFish.safeZoneWidth / 2:F2}\n";
                 debugText += $"Safe Zone Upper: {activeFish.safeZoneCenter + activeFish.safeZoneWidth / 2:F2}\n";
                 debugText += $"Tension Escape Time: {activeFish.tensionEscapeTime:F2}\n";
+
+                // LINE RANGE
+                debugText += $"IsInLineRange?: {(LineRangeManager.Instance.isInLineRange ? "<color=#00FF00>Yes</color>" : "<color=#FF0000>No</color>")}\n";
+
+                // ACTIVE FISH
+                debugText += $"Is Active Fish?: {(activeFish.isActiveFish ? "<color=#00FF00>Yes</color>" : "<color=#FF0000>No</color>")}\n";
             }
 
             debugText += "\n";
