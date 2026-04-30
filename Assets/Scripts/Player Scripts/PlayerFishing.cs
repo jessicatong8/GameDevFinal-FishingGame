@@ -51,16 +51,18 @@ public class PlayerFishing : MonoBehaviour
     private void OnEnable()
     {
         PlayerInputState.InteractPerformed += HandleInteract;
-
         FishingManager.OnHook += BeginReeling;
+        FishingManager.OnCaught += HandleFishPresentation;
+        // FishingManager.OnEscaped += HandleFishingEnded;
         FishingManager.OnReturnToGameplay += HandleFishingEnded;
     }
 
     private void OnDisable()
     {
         PlayerInputState.InteractPerformed -= HandleInteract;
-
         FishingManager.OnHook -= BeginReeling;
+        FishingManager.OnCaught -= HandleFishPresentation;
+        // FishingManager.OnEscaped -= HandleFishingEnded;
         FishingManager.OnReturnToGameplay -= HandleFishingEnded;
     }
 
@@ -103,9 +105,15 @@ public class PlayerFishing : MonoBehaviour
         }
         SetFishingActive(false);
         animator.SetBool("isReeling", false);
-        animator.SetBool("isPresenting", true);
+        animator.SetTrigger("stopFishing");
+        animator.SetBool("isPresenting", false);
     }
-
+    private void HandleFishPresentation()
+    {
+        animator.SetBool("isReeling", false);
+        animator.SetBool("isPresenting", true);
+        // FishingManager.Instance.CompleteCatchConfirmation() will be called by the catch presentation UI when the player confirms the catch, which will then trigger the return to gameplay state and reset animations.
+    }
     private void SetFishingActive(bool fishingActive)
     {
         IsFishing = fishingActive;
