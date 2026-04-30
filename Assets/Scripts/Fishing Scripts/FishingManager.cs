@@ -34,14 +34,13 @@ public class FishingManager : MonoBehaviour
     public enum FishingGameState
     {
         Gameplay, // default state when not fishing
-        Casting,
-        HookWindow,
-        Reeling,
-        CatchPresentation
+        Casting, // After player initiates fishing by casting but before the fish bites
+        HookWindow, // After fish bites and is within the window where player can hook, but hasn't successfully hooked yet
+        Reeling, // After player successfully hooks and is trying to reel the fish in but hasn't caught the fish yet
+        CatchPresentation // After player successfully reels to 100% progress and the fish is caught and presented to the camera, waiting for player to confirm catch before returning to idle
     }
 
 
-    // public CastingManager castingManager;
     public FishingGameState CurrentFishingGameState => currentFishingGameState;
 
     private FishingGameState currentFishingGameState = FishingGameState.Gameplay;
@@ -162,24 +161,24 @@ public class FishingManager : MonoBehaviour
         OnReturnToGameplay?.Invoke();
     }
 
-    private void Update()
-    {
-        switch (currentFishingGameState)
-        {
-            case FishingGameState.Gameplay:
-                break;
+    // private void Update()
+    // {
+    //     switch (currentFishingGameState)
+    //     {
+    //         case FishingGameState.Gameplay:
+    //             break;
 
-            case FishingGameState.Casting:
-                // TickCastingState();
-                break;
+    //         case FishingGameState.Casting:
+    //             // TickCastingState();
+    //             break;
 
-            case FishingGameState.HookWindow:
-                // TickHookWindowState();
-                break;
+    //         case FishingGameState.HookWindow:
+    //             // TickHookWindowState();
+    //             break;
 
-            case FishingGameState.Reeling:
-                // HandleReeling(); // Now handled by ProgressManager and TensionManager
-                break;
-        }
-    }
+    //         case FishingGameState.Reeling:
+    //             // HandleReeling(); // Now handled by ProgressManager and TensionManager
+    //             break;
+    //     }
+    // }
 }
