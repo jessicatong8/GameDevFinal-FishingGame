@@ -161,7 +161,7 @@ public class FishMovement : MonoBehaviour
             }
             return;
         }
-        // transform.LookAt(targetPosition);
+        transform.LookAt(targetPosition);
         basePosition = Vector3.MoveTowards(transform.position, targetPosition, swimmingSpeed * Time.deltaTime);
 
         // Written using AI: Apply subtle vertical wobble
