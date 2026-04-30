@@ -44,8 +44,7 @@ public class PlayerFishing : MonoBehaviour
 
     private void Start()
     {
-        PlayerInputState.Instance.SetState(PlayerInputState.InputStates.Gameplay);
-        DebugLogger.Instance.Log("PlayerFishing: Starting in Gameplay state.");
+        // PlayerInputState sets Player to Gameplay state on awake
         SetFishingActive(false);
     }
 
@@ -82,7 +81,7 @@ public class PlayerFishing : MonoBehaviour
     private void BeginCast()
     {
         castReleased = false;
-        animator?.SetTrigger("cast");
+        animator.SetTrigger("cast");
         StartCoroutine(ReleaseCastFallback());
     }
 
@@ -95,7 +94,7 @@ public class PlayerFishing : MonoBehaviour
         }
 
         castReleased = true;
-        DebugLogger.Instance.LogMethodCall("PlayerFishing.ReleaseCast");
+        // DebugLogger.Instance.LogMethodCall("PlayerFishing.ReleaseCast");
 
         if (lineCastingVisuals == null)
         {
@@ -120,7 +119,7 @@ public class PlayerFishing : MonoBehaviour
     private void BeginReeling()
     {
         // animator?.SetTrigger("reel");
-        animator?.SetBool("isReeling", true);
+        animator.SetBool("isReeling", true);
         lineCastingVisuals?.TriggerReel();
     }
 
@@ -133,6 +132,8 @@ public class PlayerFishing : MonoBehaviour
             return;
         }
         SetFishingActive(false);
+        animator.SetBool("isReeling", false);
+        animator.SetBool("isPresenting", true);
     }
 
     private void SetFishingActive(bool fishingActive)
@@ -145,12 +146,12 @@ public class PlayerFishing : MonoBehaviour
 
         // animator parameter for idle/fishing animation transition
         // animator?.SetBool("startFishing", fishingActive);
-        if (fishingActive && PlayerAnimator.Instance != null && PlayerAnimator.Instance.animator != null)
+        if (fishingActive && animator != null)
         {
-            PlayerAnimator.Instance.animator?.SetTrigger("startFishing");
+            animator.SetTrigger("startFishing");
         }
         // enable/disable fishing visuals and player movement
-        fishingRig?.SetActive(fishingActive);
+        fishingRig.SetActive(fishingActive);
         PlayerMovement.Instance.enabled = !fishingActive;
     }
 }
