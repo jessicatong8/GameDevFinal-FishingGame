@@ -127,8 +127,8 @@ public class DebugCanvasUI : MonoBehaviour
                     debugText += $"Line?: <color=#00FFFF>{(LineRangeManager.Instance.isInLineRange ? "IN RANGE" : "OUT OF RANGE")}</color>\n";
 
                     // PROGRESS
-                    debugText += $"Reeling Progress: {progressManager.GetCurrentProgress():F2/100f}%\n";
-                    
+                    debugText += $"Reeling Progress: {progressManager.GetCurrentProgress():F2} / 100.00%\n";
+
                     // WIGGLE
                     debugText += "Wiggle?: <color=#808080>TODO</color>\n";
                     debugText += "\n";
