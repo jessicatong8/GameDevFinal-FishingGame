@@ -27,17 +27,6 @@ public class CastingManager : MonoBehaviour
     private float maxHookWindow = 3f;
 
 
-    public enum FishingGameState
-    {
-        Gameplay, // default state when not fishing
-        Casting,
-        HookWindow,
-        Reeling,
-    }
-    private FishingGameState currentFishingGameState = FishingGameState.Gameplay;
-
-
-
 
     private void Awake()
     {
@@ -46,13 +35,11 @@ public class CastingManager : MonoBehaviour
 
     private void OnEnable()
     {
-        FishingManager.OnHook += HandleHooked;
         FishingManager.OnCaught += HandleCaught;
     }
 
     private void OnDisable()
     {
-        FishingManager.OnHook -= HandleHooked;
         FishingManager.OnCaught -= HandleCaught;
     }
 
@@ -75,16 +62,16 @@ public class CastingManager : MonoBehaviour
 
     public bool TryStartFishing()
     {
-        if (!IsPlayerInFishingArea() || currentFishingGameState != FishingGameState.Gameplay)
+        if (!IsPlayerInFishingArea() || FishingManager.Instance.CurrentFishingGameState != FishingManager.FishingGameState.Gameplay)
         {
             if (!IsPlayerInFishingArea())
             {
                 DebugLogger.Instance.Log("Player is not in a fishing area and cannot start fishing.");
             }
-            // if (currentFishingGameState != FishingGameState.Gameplay)
-            // {
-            //     DebugLogger.Instance.Log("Cannot start fishing because current state is " + currentFishingGameState + " instead of Gameplay.");
-            // }
+            if (FishingManager.Instance.CurrentFishingGameState != FishingManager.FishingGameState.Gameplay)
+            {
+                DebugLogger.Instance.Log("Cannot start fishing because current state is " + FishingManager.Instance.CurrentFishingGameState + " instead of Gameplay.");
+            }
             return false;
         }
 
@@ -107,9 +94,7 @@ public class CastingManager : MonoBehaviour
         // DebugLogger.Instance.LogMethodCall("FishingManager.EnterCastingState", "-> !OnCast\nCasting line with fish: " + activeFish.fishName);
         FishingManager.Instance.InvokeCast();
 
-        // SetFishingGameState(FishingGameState.Casting);
         SetBiteTimer();
-        currentFishingGameState = FishingGameState.Casting;
         return true;
     }
 
@@ -143,7 +128,6 @@ public class CastingManager : MonoBehaviour
         if (biteTimer <= 0)
         {
             FishingManager.Instance.InvokeBite();
-            currentFishingGameState = FishingGameState.HookWindow;
             SetHookTimer();
         }
     }
@@ -154,38 +138,26 @@ public class CastingManager : MonoBehaviour
         if (hookTimer <= 0)
         {
             FishingManager.Instance.EscapeFishing("Fish escaped because hook window timed out.");
-            currentFishingGameState = FishingGameState.Gameplay;
         }
     }
 
-    private void HandleHooked()
-    {
-        currentFishingGameState = FishingGameState.Reeling;
-    }
 
     private void HandleCaught()
     {
         fishSequenceIndex++;
-        currentFishingGameState = FishingGameState.Gameplay;
     }
 
     private void Update()
+
     {
-        switch (currentFishingGameState)
+        if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Casting)
         {
-            case FishingGameState.Gameplay:
-                break;
-
-            case FishingGameState.Casting:
-                TickCastingState();
-                break;
-
-            case FishingGameState.HookWindow:
-                TickHookWindowState();
-                break;
-
-            case FishingGameState.Reeling:
-                break;
+            TickCastingState();
         }
+        else if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.HookWindow)
+        {
+            TickHookWindowState();
+        }
+
     }
 }
