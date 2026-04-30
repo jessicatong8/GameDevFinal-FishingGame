@@ -53,7 +53,6 @@ public class FishCaughtPresentation : MonoBehaviour
     private void HandleCatchConfirmation()
     {
         if (!isInCatchPresentation) return;
-        animator.SetBool("isPresenting", false);
         RestoreFish();
         FishingManager.Instance.CompleteCatchConfirmation();
     }
