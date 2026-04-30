@@ -6,13 +6,13 @@ public class Fish : MonoBehaviour
     public float swimmingSpeed = 4f;
     public int rarityWeight;
     public float level;
-    public float dripThreshold = 0f;
+    // public float dripThreshold = 0f;
 
     public bool isActiveFish;
 
-    public float wiggleOnTimer;
-    public float wiggleOffTimer;
-    public float wiggleStrength;
+    // public float wiggleOnTimer;
+    // public float wiggleOffTimer;
+    // public float wiggleStrength;
 
     [Header("Reeling - Tension/Progress Settings")]
     // public float maxTension = 100f;
