@@ -3,8 +3,11 @@ using UnityEngine;
 
 public class CastingManager : MonoBehaviour
 {
-    // Manages the game after the player casts to select the next fish from the FishSequenceManager and coordinate the timing for when the fish bites and window during which the player must hook the fish
+    // Manages the game after the player casts
     // This encompasses the Casting and HookWindow game states
+    // Selects the next fish from the FishSequenceManager
+    // Coordinates the timing for when the fish bites and window during which the player must hook the fish
+    // Does a drip check to determine if player succcessfully hooks the fish
 
     private static CastingManager instance;
     public static CastingManager Instance
@@ -25,13 +28,22 @@ public class CastingManager : MonoBehaviour
     public float maxBiteDelay = 2f;
 
     private float hookTimer;
-    public float minHookWindow = 1.54f;
+    public float minHookWindow = 1.5f;
     public float maxHookWindow = 3f;
 
 
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void OnEnable()
+    {
+        PlayerInputState.HookPerformed += HandleHookPerformed;
+    }
+    private void OnDisable()
+    {
+        PlayerInputState.HookPerformed -= HandleHookPerformed;
     }
 
 
@@ -87,6 +99,32 @@ public class CastingManager : MonoBehaviour
 
         SetBiteTimer();
         return true;
+    }
+
+    private void HandleHookPerformed()
+    {
+        DebugLogger.Instance.Log("HandleHookPerformed called. Current input state: " + PlayerInputState.Instance.CurrentState);
+        if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.HookWindow)
+        {
+            if (IsPlayerDrippyEnough())
+            {
+                // DebugLogger.Instance.Log("HandleHookPerformed check passed.");
+                DebugLogger.Instance.LogMethodCall("CastingManager.HandleHookPerformed", "-> !OnHook\nHook successful");
+                FishingManager.Instance.InvokeHooked();
+            }
+            else
+            {
+                DebugLogger.Instance.LogMethodCall("CastingManager.HandleHookPerformed", "-> !OnHook\nHook failed. You are not drippy enough for this fish.");
+                FishingManager.Instance.EscapeFishing("This fish ignored you because you are not drippy enough.");
+
+            }
+
+        }
+    }
+
+    private bool IsPlayerDrippyEnough()
+    {
+        return activeFish.level <= PlayerLevelManager.Instance.GetPlayerLevel();
     }
 
 

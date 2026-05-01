@@ -50,19 +50,13 @@ public class FishingManager : MonoBehaviour
     }
     private void OnEnable()
     {
-        PlayerInputState.HookPerformed += InvokeHooked;
         PlayerInputState.AbortPerformed += HandleAbortPerformed;
     }
     private void OnDisable()
     {
-        PlayerInputState.HookPerformed -= InvokeHooked;
         PlayerInputState.AbortPerformed -= HandleAbortPerformed;
     }
-    private void EnterReelingState()
-    {
-        SetFishingGameState(FishingGameState.Reeling);
 
-    }
     private void SetFishingGameState(FishingGameState requestedState)
     {
         if (currentFishingGameState == requestedState) return;
@@ -82,6 +76,13 @@ public class FishingManager : MonoBehaviour
         SetFishingGameState(FishingGameState.HookWindow);
         OnBite?.Invoke();
     }
+
+    public void InvokeHooked()
+    {
+        SetFishingGameState(FishingGameState.Reeling);
+        OnHook?.Invoke();
+    }
+
     private void HandleAbortPerformed()
     {
         if (currentFishingGameState != FishingGameState.Gameplay)
@@ -89,17 +90,7 @@ public class FishingManager : MonoBehaviour
             ReturnToGameplay("Fishing aborted by player input.");
         }
     }
-    public void InvokeHooked()
-    {
-        DebugLogger.Instance.Log("HandleHookPerformed called. Current input state: " + PlayerInputState.Instance.CurrentState);
-        // if (currentFishingGameState == FishingGameState.HookWindow)
-        {
-            // DebugLogger.Instance.Log("HandleHookPerformed check passed.");
-            DebugLogger.Instance.LogMethodCall("FishingManager.HandleHookPerformed", "-> !OnHook\nHook successful");
-            OnHook?.Invoke();
-            EnterReelingState();
-        }
-    }
+
     public void EscapeFishing(string reason)
     {
         DebugLogger.Instance.LogMethodCall("FishingManager.EscapeFishing", "-> !OnEscaped");
