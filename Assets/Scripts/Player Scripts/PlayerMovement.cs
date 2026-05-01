@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private static PlayerMovement instance;
     public static PlayerMovement Instance
     {
         get
@@ -25,7 +24,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 1.2f;
     public float gravity = -20f;
     [SerializeField] private float rotationSharpness = 12f;
-
+    private GroundChecker groundChecker;
+    private static PlayerMovement instance;
     private CharacterController characterController;
     private Animator animator;
     private Vector3 lastMoveDirection = Vector3.forward;
@@ -39,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
         Instance = this;
         characterController = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
+        groundChecker = GetComponent<GroundChecker>();
     }
 
     private void OnEnable()
@@ -94,12 +95,13 @@ public class PlayerMovement : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(lastMoveDirection, Vector3.up);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSharpness * Time.deltaTime);
 
-        if (characterController.isGrounded && verticalVelocity < 0f)
+        bool isGrounded = groundChecker.IsGrounded;
+        if (isGrounded && verticalVelocity < 0f)
         {
             verticalVelocity = -2f;
         }
 
-        if (characterController.isGrounded && jumpRequested)
+        if (isGrounded && jumpRequested)
         {
             verticalVelocity = Mathf.Sqrt(jumpForce * -2f * gravity);
             jumpRequested = false;
@@ -108,9 +110,9 @@ public class PlayerMovement : MonoBehaviour
         verticalVelocity += gravity * Time.deltaTime;
 
         finalVelocity = horizontalVelocity + Vector3.up * verticalVelocity;
-        
+
         animator?.SetFloat("moveSpeed", moveDirection.magnitude);
-        animator?.SetBool("isGrounded", characterController.isGrounded);
+        animator?.SetBool("isGrounded", isGrounded);
 
         characterController.Move(finalVelocity * Time.deltaTime);
     }
