@@ -211,7 +211,7 @@ public class VerletFishingLine : MonoBehaviour
         {
             particles[particles.Count - 1].Pos = EndPoint.position;
         }
-    
+
         for (int i = 0; i < Iterations; i++)
         {
             for (int j = 0; j < particles.Count - 1; j++)
@@ -245,7 +245,7 @@ public class VerletFishingLine : MonoBehaviour
                 EndPoint.position = particles[particles.Count - 1].Pos;
             }
         }
-    
+
         var positions = new Vector3[particles.Count];
         for (int i = 0; i < particles.Count; i++)
         {
@@ -363,11 +363,7 @@ public class VerletFishingLine : MonoBehaviour
 
     public void TriggerCast()
     {
-        if (!isRodEquipped)
-        {
-            return;
-        }
-
+        if (!isRodEquipped) return;
         StopCastMotion();
         currentTargetLength = startSegmentLength;
         SegmentLength = startSegmentLength;

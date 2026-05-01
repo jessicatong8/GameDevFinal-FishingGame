@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6561008404023863462}
   - component: {fileID: 684426778433643359}
-  - component: {fileID: 5173272281680408460}
   m_Layer: 0
   m_Name: Fishing Rod Assembly
   m_TagString: Untagged
@@ -52,23 +51,6 @@ MonoBehaviour:
   fishingLineChildPath: Fishing Line
   fishingHookChildPath: Fishing Hook
   castPointChildPath: CastPoint
---- !u!114 &5173272281680408460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3380109793904160769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd5d5cd1adbaa4fbd836dfa3fea0cd74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RodHighlighter
-  rodRenderer: {fileID: 8351783768612136871}
-  highlightMaterial: {fileID: 2100000, guid: 86b2616ed4d79734ca59b98fc78e3408, type: 2}
-  lowTensionColor: {r: 0, g: 1, b: 0, a: 1}
-  midTensionColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  highTensionColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &5487100418549315351
 GameObject:
   m_ObjectHideFlags: 0

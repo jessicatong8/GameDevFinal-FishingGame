@@ -1,53 +1,41 @@
-using UnityEngine;
+// using UnityEngine;
 
-public class LineCastingVisuals : MonoBehaviour
-{
-    private VerletFishingLine fishingLine;
+// public class LineCastingVisuals : MonoBehaviour
+// {
+//     private VerletFishingLine fishingLine;
 
-    private void Awake()
-    {
-        ResolveFishingLine();
-    }
+//     private void Awake()
+//     {
+//         ResolveFishingLine();
+//     }
+//     private void ResolveFishingLine()
+//     {
+//         if (fishingLine != null) return;
+//         fishingLine = GetComponentInChildren<VerletFishingLine>(true);
+//     }
+//     // This method is called from an animation event in the cast animation at the frame where the line should be released.
+//     public void TriggerCast()
+//     {
+//         Debug.Log("LineCastingVisuals: TriggerCast called, attempting to trigger cast visuals.");
+//         ResolveFishingLine();
+//         if (fishingLine == null)
+//         {
+//             DebugLogger.Instance.LogWarning("LineCastingVisuals.TriggerCast: No VerletFishingLine found, so the cast line cannot move.");
+//             return;
+//         }
+//         fishingLine.TriggerCast();
+//     }
 
-    // This method is called from an animation event in the cast animation at the frame where the line should be released.
-    public void ReleaseCast()
-    {
-        TriggerCast();
-    }
+//     public void TriggerReel()
+//     {
+//         ResolveFishingLine();
 
-    public void TriggerCast()
-    {
-        ResolveFishingLine();
+//         if (fishingLine == null)
+//         {
+//             DebugLogger.Instance.LogWarning("LineCastingVisuals.TriggerReel: No VerletFishingLine found, so the reel line cannot move.");
+//             return;
+//         }
 
-        if (fishingLine == null)
-        {
-            DebugLogger.Instance.LogWarning("LineCastingVisuals.TriggerCast: No VerletFishingLine found, so the cast line cannot move.");
-            return;
-        }
-
-        fishingLine.TriggerCast();
-    }
-
-    public void TriggerReel()
-    {
-        ResolveFishingLine();
-
-        if (fishingLine == null)
-        {
-            DebugLogger.Instance.LogWarning("LineCastingVisuals.TriggerReel: No VerletFishingLine found, so the reel line cannot move.");
-            return;
-        }
-
-        fishingLine.TriggerReel();
-    }
-
-    private void ResolveFishingLine()
-    {
-        if (fishingLine != null)
-        {
-            return;
-        }
-
-        fishingLine = GetComponentInChildren<VerletFishingLine>(true);
-    }
-}
+//         fishingLine.TriggerReel();
+//     }
+// }

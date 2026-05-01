@@ -124,13 +124,11 @@ public class FishingManager : MonoBehaviour
         }
         OnReturnToGameplay?.Invoke();
     }
-
     public void InvokeGameWin()
     {
         OnGameWin?.Invoke();
         // load new win and retry scene?
     }
-
     // private void Update()
     // {
     //     switch (currentFishingGameState)

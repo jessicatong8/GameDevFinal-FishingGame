@@ -1,4 +1,3 @@
-using System.IO;
 using UnityEngine;
 
 public class PlayerFishing : MonoBehaviour
@@ -21,7 +20,6 @@ public class PlayerFishing : MonoBehaviour
     private Animator animator;
     private Vector3 fishingPosition = new Vector3(-0.156808749f, 1.20062673f, -5.1311698f);
     private FishingRig fishingRig;
-    private LineCastingVisuals lineCastingVisuals;
     private void Awake()
     {
         Instance = this;
@@ -34,11 +32,6 @@ public class PlayerFishing : MonoBehaviour
         if (fishingRig == null)
         {
             DebugLogger.Instance.LogWarning("PlayerFishing: No FishingRig found in children.");
-        }
-        lineCastingVisuals = GetComponentInChildren<LineCastingVisuals>(true);
-        if (lineCastingVisuals == null)
-        {
-            DebugLogger.Instance.LogWarning("PlayerFishing: No LineCastingVisuals found in children.");
         }
     }
 
@@ -86,6 +79,8 @@ public class PlayerFishing : MonoBehaviour
         transform.LookAt(Vector3.zero); // look forward towards water
         transform.position = fishingPosition;
         animator.SetTrigger("cast");
+        // lineCastingVisuals?.TriggerCast();
+        fishingRig.TriggerCast(); 
     }
 
     // Begin Reeling/Mashing Process
@@ -93,7 +88,9 @@ public class PlayerFishing : MonoBehaviour
     {
         // animator?.SetTrigger("reel");
         animator.SetBool("isReeling", true);
-        lineCastingVisuals?.TriggerReel();
+        animator.ResetTrigger("cast");
+        fishingRig.TriggerReel(); 
+        // lineCastingVisuals?.TriggerReel();
     }
 
     private void HandleFishingEnded()
@@ -106,8 +103,10 @@ public class PlayerFishing : MonoBehaviour
         SetFishingActive(false);
         animator.SetBool("isReeling", false);
         animator.SetTrigger("stopFishing");
+        Debug.Log($"stopFishing trigger set to {animator.GetBool("stopFishing")}");
         animator.SetBool("isPresenting", false);
-        animator.ResetTrigger("stopFishing");
+        // animator.ResetTrigger("stopFishing");
+        // Debug.Log($"stopFishing trigger reset to {animator.GetBool("stopFishing")}");
     }
     private void HandleFishPresentation()
     {
@@ -127,7 +126,4 @@ public class PlayerFishing : MonoBehaviour
         fishingRig.SetActive(fishingActive);
         PlayerMovement.Instance.enabled = !fishingActive;
     }
-
-
-
 }

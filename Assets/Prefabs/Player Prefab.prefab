@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 6354055011061037513}
   - component: {fileID: 7495474366873068316}
   - component: {fileID: 4668563310377310221}
+  - component: {fileID: 2880828221451337054}
+  - component: {fileID: 3359599198103194137}
   m_Layer: 8
   m_Name: Player Prefab
   m_TagString: Player
@@ -259,9 +261,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d4a82cbfd15343af5cbb100875ea7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerFishing
-  fishingManager: {fileID: 0}
-  fishingRig: {fileID: 4253978373294293960}
-  castReleaseDelay: 0.25
   IsFishing: 0
 --- !u!114 &4668563310377310221
 MonoBehaviour:
@@ -281,6 +280,32 @@ MonoBehaviour:
   m_TrackingType: 0
   m_UpdateType: 0
   m_UseRelativeTransform: 0
+--- !u!114 &2880828221451337054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3202918795698466886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d093b9ac43e484f46beda059195ca523, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LineCastingVisuals
+--- !u!114 &3359599198103194137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3202918795698466886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1d84bbd8b969cf4f9f59bbabd10c1b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ManualHatPicker
+  hatContainer: {fileID: 1587858319816907212}
+  currentHatIndex: 0
 --- !u!1001 &7078197640663309418
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -367,22 +392,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1e7e3c9fe3257f4ea9f080e7208ec3b, type: 3}
+--- !u!4 &1587858319816907212 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8373313184310445478, guid: c1e7e3c9fe3257f4ea9f080e7208ec3b, type: 3}
+  m_PrefabInstance: {fileID: 7078197640663309418}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2092221997416066827 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9165915488117633889, guid: c1e7e3c9fe3257f4ea9f080e7208ec3b, type: 3}
   m_PrefabInstance: {fileID: 7078197640663309418}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4253978373294293960 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6427733474791661474, guid: c1e7e3c9fe3257f4ea9f080e7208ec3b, type: 3}
-  m_PrefabInstance: {fileID: 7078197640663309418}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f458d00b3c54c1f4fa29f3c6bf83b67e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FishingRig
 --- !u!4 &4800202246775129539 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2352974409916930473, guid: c1e7e3c9fe3257f4ea9f080e7208ec3b, type: 3}
