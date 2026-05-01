@@ -29,8 +29,10 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController characterController;
     private Animator animator;
     private Vector3 lastMoveDirection = Vector3.forward;
+    private Vector3 horizontalVelocity;
     private float verticalVelocity;
     private bool jumpRequested;
+    private Vector3 finalVelocity;
 
     private void Awake()
     {
@@ -39,6 +41,10 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
     }
 
+    private void OnEnable()
+    {
+        PlayerInputState.JumpPerformed += HandleJumpPerformed;
+    }
     private void Start()
     {
         if (cameraTransform == null && Camera.main != null)
@@ -46,11 +52,6 @@ public class PlayerMovement : MonoBehaviour
             cameraTransform = Camera.main.transform;
         }
         Cursor.lockState = CursorLockMode.Locked;
-    }
-
-    private void OnEnable()
-    {
-        PlayerInputState.JumpPerformed += HandleJumpPerformed;
     }
 
     private void OnDisable()
@@ -63,7 +64,6 @@ public class PlayerMovement : MonoBehaviour
         // Debug.Log("Jump input received. Current state: " + inputStateScript.CurrentState);
         jumpRequested = true;
     }
-
     private void Update()
     {
         if (characterController == null || cameraTransform == null || PlayerInputState.Instance == null)
@@ -72,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (PlayerInputState.Instance.CurrentState != PlayerInputState.InputStates.Gameplay) return; 
+        if (PlayerInputState.Instance.CurrentState != PlayerInputState.InputStates.Gameplay) return;
 
         // constantly read movement input from player input state
         Vector2 moveInput = PlayerInputState.Instance.MovementInputData;
@@ -89,13 +89,10 @@ public class PlayerMovement : MonoBehaviour
         if (moveDirection.sqrMagnitude > 0.0001f)
         {
             lastMoveDirection = moveDirection.normalized;
-            // animator parameters for movement can be set here based on moveDirection and/or its magnitude
         }
 
         Quaternion targetRotation = Quaternion.LookRotation(lastMoveDirection, Vector3.up);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSharpness * Time.deltaTime);
-
-        Vector3 horizontalVelocity = moveDirection * movementSpeed;
 
         if (characterController.isGrounded && verticalVelocity < 0f)
         {
@@ -107,12 +104,14 @@ public class PlayerMovement : MonoBehaviour
             verticalVelocity = Mathf.Sqrt(jumpForce * -2f * gravity);
             jumpRequested = false;
         }
-
+        horizontalVelocity = moveDirection * movementSpeed;
         verticalVelocity += gravity * Time.deltaTime;
 
+        finalVelocity = horizontalVelocity + Vector3.up * verticalVelocity;
         
-        Vector3 finalVelocity = horizontalVelocity + Vector3.up * verticalVelocity;
         animator?.SetFloat("moveSpeed", moveDirection.magnitude);
+        animator?.SetBool("isGrounded", characterController.isGrounded);
+
         characterController.Move(finalVelocity * Time.deltaTime);
     }
 }
