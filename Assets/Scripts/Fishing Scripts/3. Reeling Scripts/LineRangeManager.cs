@@ -2,17 +2,26 @@ using UnityEngine;
 
 public class LineRangeManager : MonoBehaviour
 {
-    public static LineRangeManager Instance { get; private set; }
-
-    FishMovement activeFishMovement;
-
+    public static LineRangeManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindFirstObjectByType<LineRangeManager>();
+            }
+            return instance;
+        }
+    }
     public float xLineLeftWarningRange = -6f;
     public float xLineRightWarningRange = 6f;
-
     public float xLineLeftRange = -8f;
     public float xLineRightRange = 8f;
-
     private bool isInReelingState;
+    public bool isInLineRange;
+
+    private static LineRangeManager instance;
+    private FishMovement activeFishMovement;
 
     private void Awake()
     {
@@ -22,26 +31,27 @@ public class LineRangeManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        Instance = this;
+        instance = this;
     }
 
     private void OnEnable()
     {
         FishingManager.OnHook += HandleHooked;
-        FishingManager.OnReturnToIdle += HandleResetToIdle;
+        FishingManager.OnCaught += HandleResetToGameplay;
+        FishingManager.OnReturnToGameplay += HandleResetToGameplay;
     }
 
     private void OnDisable()
     {
         FishingManager.OnHook -= HandleHooked;
-        FishingManager.OnReturnToIdle -= HandleResetToIdle;
-
+        FishingManager.OnCaught -= HandleResetToGameplay;
+        FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
     }
 
 
     private void HandleHooked()
     {
-        if (FishingManager.Instance == null || FishingManager.Instance.activeFish == null)
+        if (FishingManager.Instance.activeFish == null)
         {
             DebugLogger.Instance.LogError("LineRangeManager: No active fish available when hooked.");
             return;
@@ -55,20 +65,29 @@ public class LineRangeManager : MonoBehaviour
         }
         isInReelingState = true;
     }
-
     void Update()
     {
-        if (!isInReelingState || activeFishMovement == null)
+        if (!isInReelingState) return;
+
+        if (activeFishMovement == null)
+        {
+            DebugLogger.Instance.LogError("LineRangeManager: No active fish movement found during Update.");
             return;
+        }
 
         if (activeFishMovement.IsOutOfLineRange())
         {
-            DebugLogger.Instance.Log("Fish is out of line range!");
-            FishingManager.Instance.EscapeFishing("Fish escaped because if went out of the line range");
+            DebugLogger.Instance.Log("LineRangeManager: Fish is out of line range!");
+            FishingManager.Instance.EscapeFishing("Fish escaped because it went out of the line range");
+            isInLineRange = false;
+        }
+        else
+        {
+            isInLineRange = true;
         }
     }
 
-    private void HandleResetToIdle()
+    private void HandleResetToGameplay()
     {
         activeFishMovement = null;
         isInReelingState = false;

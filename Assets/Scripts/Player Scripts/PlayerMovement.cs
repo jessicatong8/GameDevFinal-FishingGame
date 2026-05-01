@@ -72,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (PlayerInputState.Instance.CurrentState != PlayerInputState.InputStates.Gameplay) { return; }
+        if (PlayerInputState.Instance.CurrentState != PlayerInputState.InputStates.Gameplay) return; 
 
         // constantly read movement input from player input state
         Vector2 moveInput = PlayerInputState.Instance.MovementInputData;

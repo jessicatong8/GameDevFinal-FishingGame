@@ -32,14 +32,14 @@ public class CatchPresentationUI : MonoBehaviour
     {
         FishingManager.OnCaught += HandleCaught;
         // FishingManager.OnCatchConfirmationEnd += HandleReturnToIdle;
-        FishingManager.OnReturnToIdle += HandleReturnToIdle; // when player confirms catch or abort/escape 
+        FishingManager.OnReturnToGameplay += HandleReturnToGameplay; // when player confirms catch or abort/escape 
     }
 
     private void OnDisable()
     {
         FishingManager.OnCaught -= HandleCaught;
         // FishingManager.OnCatchConfirmationEnd -= HandleReturnToIdle;
-        FishingManager.OnReturnToIdle -= HandleReturnToIdle;
+        FishingManager.OnReturnToGameplay -= HandleReturnToGameplay;
     }
 
     private void HandleCaught()
@@ -57,14 +57,14 @@ public class CatchPresentationUI : MonoBehaviour
         catchText.gameObject.SetActive(true);
     }
 
-    private void HandleReturnToIdle()
+    private void HandleReturnToGameplay()
     {
         HideCatchText();
     }
 
     private void HideCatchText()
     {
-        if (catchText == null) { return; }
+        if (catchText == null) return; 
         catchText.gameObject.SetActive(false);
     }
 }

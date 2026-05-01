@@ -13,7 +13,7 @@ public class FishAnimation : MonoBehaviour
         FishingManager.OnHook += HandleHooked;
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnEscaped += HandleEscaped;
-        FishingManager.OnReturnToIdle += HandleResetToIdle;
+        FishingManager.OnReturnToGameplay += HandleResetToIdle;
     }
 
     void OnDestroy()
@@ -22,7 +22,7 @@ public class FishAnimation : MonoBehaviour
         FishingManager.OnHook -= HandleHooked;
         FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnEscaped -= HandleEscaped; // can include optional escape animation instead
-        FishingManager.OnReturnToIdle -= HandleResetToIdle;
+        FishingManager.OnReturnToGameplay -= HandleResetToIdle;
     }
 
     void Update()
@@ -31,12 +31,19 @@ public class FishAnimation : MonoBehaviour
 
     void HandleBite()
     {
-        animator.SetTrigger("Bite");
+        if (GetComponent<Fish>().isActiveFish)
+        {
+            animator.SetTrigger("Bite");
+        }
     }
 
     void HandleHooked()
     {
-        animator.SetBool("IsHooked", true);    // swimming slightly faster when in reeling state
+        if (GetComponent<Fish>().isActiveFish)
+        {
+            animator.SetBool("IsHooked", true);
+        }
+
     }
 
     void HandleCaught()

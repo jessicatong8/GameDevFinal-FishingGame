@@ -33,21 +33,43 @@ public class FishMovement : MonoBehaviour
     [SerializeField] private float wobbleFrequency = 2f;
     private float wobbleOffset;
     private Vector3 basePosition;
-
     private float arrivalThreshold = 0.1f;
     private int direction = 1; // 1 for right, -1 for left
-
-
-    private enum FishingGameState
+    private PlayerInputState playerInputState;
+    private void OnEnable()
     {
-        Idle,
-        Reeling,
-        // CatchPresentation
+        FishingManager.OnHook += HandleHooked;
+        FishingManager.OnReturnToGameplay += HandleResetToGameplay;
+        if (playerInputState == null)
+        {
+            playerInputState = PlayerInputState.Instance;
+        }
+        if (playerInputState != null)
+        {
+            playerInputState.ReelLeftPerformed += TurnLeft;
+            playerInputState.ReelRightPerformed += TurnRight;
+        }
+        else
+        {
+            Debug.LogError("FishMovement: PlayerInputState instance not found! Cannot subscribe to reel input events.");
+        }
+        playerInputState.ReelLeftPerformed += TurnLeft;
+        playerInputState.ReelRightPerformed += TurnRight;
     }
-    private FishingGameState currentFishingGameState = FishingGameState.Idle;
-
-
-
+    private void OnDisable()
+    {
+        FishingManager.OnHook -= HandleHooked;
+        FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
+        if (playerInputState != null)
+        {
+            playerInputState.ReelLeftPerformed -= TurnLeft;
+            playerInputState.ReelRightPerformed -= TurnRight;
+        }
+        else
+        {
+            Debug.LogError("FishMovement: PlayerInputState instance not found! Cannot unsubscribe from reel input events.");
+        }
+    }
     void Start()
     {
         xLineLeftWarningRange = LineRangeManager.Instance.xLineLeftWarningRange;
@@ -63,63 +85,17 @@ public class FishMovement : MonoBehaviour
         wobbleOffset = Random.Range(0f, 100f);
         ApplySpeedVariation();
         IdleSetTargetPosition(position);
-        // DebugLogger.Instance.Log("Initial Position: " + position);
     }
-
-    private void OnEnable()
-    {
-        FishingManager.OnHook += HandleHooked;
-        FishingManager.OnReturnToIdle += HandleResetToIdle;
-
-        if (PlayerInputState.Instance != null)
-        {
-            PlayerInputState.Instance.ReelLeftPerformed += TurnLeft;
-            PlayerInputState.Instance.ReelRightPerformed += TurnRight;
-        }
-    }
-
-    private void OnDisable()
-    {
-        FishingManager.OnHook -= HandleHooked;
-        FishingManager.OnReturnToIdle -= HandleResetToIdle;
-
-        if (PlayerInputState.Instance != null)
-        {
-            PlayerInputState.Instance.ReelLeftPerformed -= TurnLeft;
-            PlayerInputState.Instance.ReelRightPerformed -= TurnRight;
-        }
-    }
-
-
     private void Update()
     {
         UpdateSwimmingSpeed();
-        SwimTowardTarget(currentFishingGameState);
-
-        // switch (currentFishingGameState)
-        // {
-        //     case FishingGameState.Idle:
-        //         HandleIdleMovement();
-        //         break;
-
-        //     case FishingGameState.Reeling:
-        //         HandleReelingMovment();
-        //         // HandleReeling(); // Now handled by ProgressManager and TensionManager
-        //         break;
-        // }
+        SwimTowardTarget(FishingManager.Instance.CurrentFishingGameState);
     }
-
-
 
     private void HandleHooked()
     {
-        if (!GetComponent<Fish>().isActiveFish)
-        {
-            // Debug.Log("Not the active fish, ignoring input.");
-            return;
-        }
-
-        currentFishingGameState = FishingGameState.Reeling;
+        if (!GetComponent<Fish>().isActiveFish) return;
+        // FishingManager.Instance.CurrentFishingGameState = FishingManager.FishingGameState.Reeling;
         position = new Vector3(0, reelingHeight, 5f);
         transform.position = position;
 
@@ -128,29 +104,18 @@ public class FishMovement : MonoBehaviour
         ApplySpeedVariation();
         ReelingSetTargetPosition(position);
     }
-
-    private void HandleResetToIdle()
+    private void HandleResetToGameplay()
     {
-        currentFishingGameState = FishingGameState.Idle;
-        position = new Vector3(transform.position.x, idleHeight, transform.position.z);
+        // currentFishingGameState = FishingGameState.Idle;
+        position = new Vector3(transform.position.x, idleHeight, transform.position.z); // TODO randomize where fish respawn in
+        transform.eulerAngles = new Vector3(0, direction * 90f, 0);
         transform.position = position;
 
-        baseSwimmingSpeed = GetComponent<Fish>().swimmingSpeed; // reset the base speed when fight is over
+        baseSwimmingSpeed = GetComponent<Fish>().swimmingSpeed; // reset the base speed
         speedNoiseOffset = Random.Range(0f, 100f);
         ApplySpeedVariation();
         IdleSetTargetPosition(position);
     }
-
-    // private void HandleIdleMovement()
-    // {
-    //     SwimTowardTarget(currentFishingGameState);
-    // }
-
-    // private void HandleReelingMovment()
-    // {
-    //     SwimTowardTarget(currentFishingGameState);
-    // }
-
     public Vector3 IdleSetTargetPosition(Vector3 position)
     {
         if (position.x <= 0)
@@ -174,12 +139,12 @@ public class FishMovement : MonoBehaviour
         if (position.x <= 0)
         {
             direction = 1; // Move right
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLineRightWarningRange - 1, xLineRightRange + 5), reelingHeight, position.z);
+            targetPosition = new Vector3(UnityEngine.Random.Range(xLineRightRange, xLineRightRange + 5), reelingHeight, position.z);
         }
         else if (position.x > 0)
         {
             direction = -1; // Move left
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLineLeftRange - 5, xLineLeftWarningRange + 1), reelingHeight, position.z);
+            targetPosition = new Vector3(UnityEngine.Random.Range(xLineLeftRange - 5, xLineLeftRange), reelingHeight, position.z);
         }
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, direction * 90f, transform.eulerAngles.z); // Flip the fish to face the right direction
 
@@ -187,28 +152,29 @@ public class FishMovement : MonoBehaviour
         return targetPosition;
     }
 
-    private void SwimTowardTarget(FishingGameState state)
+    private void SwimTowardTarget(FishingManager.FishingGameState state)
     {
         float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
 
         if (distanceToTarget <= arrivalThreshold)
         {
             transform.position = targetPosition;
-            if (state == FishingGameState.Idle)
-            {
-                IdleSetTargetPosition(transform.position);
-            }
-            else if (state == FishingGameState.Reeling)
+            if (state == FishingManager.FishingGameState.Reeling)
             {
                 ReelingSetTargetPosition(transform.position);
             }
+            else
+            {
+                IdleSetTargetPosition(transform.position);
+            }
+
             return;
         }
-        // transform.LookAt(targetPosition);
+        transform.LookAt(targetPosition);
         basePosition = Vector3.MoveTowards(transform.position, targetPosition, swimmingSpeed * Time.deltaTime);
 
         // Written using AI: Apply subtle vertical wobble
-        float wobbleAmplitude = state == FishingGameState.Idle ? idleWobbleAmplitude : reelingWobbleAmplitude;
+        float wobbleAmplitude = state == FishingManager.FishingGameState.Gameplay ? idleWobbleAmplitude : reelingWobbleAmplitude;
         float wobble = Mathf.Sin(Time.time * wobbleFrequency + wobbleOffset) * wobbleAmplitude;
         transform.position = basePosition + Vector3.forward * wobble;
     }
@@ -216,7 +182,7 @@ public class FishMovement : MonoBehaviour
     // Written using AI: Adding noise to the swimming speed
     private void UpdateSwimmingSpeed()
     {
-        float variation = currentFishingGameState == FishingGameState.Reeling ? reelingSpeedVariation : idleSpeedVariation;
+        float variation = FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Reeling ? reelingSpeedVariation : idleSpeedVariation;
         float noise = Mathf.PerlinNoise(Time.time * speedNoiseFrequency + speedNoiseOffset, 0f);
         float speedMultiplier = Mathf.Lerp(1f - variation, 1f + variation, noise);
         swimmingSpeed = baseSwimmingSpeed * speedMultiplier;
@@ -224,7 +190,7 @@ public class FishMovement : MonoBehaviour
     // Written using AI: Adding noise to the swimming speed
     private void ApplySpeedVariation()
     {
-        float variation = currentFishingGameState == FishingGameState.Reeling ? reelingSpeedVariation : idleSpeedVariation;
+        float variation = FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Reeling ? reelingSpeedVariation : idleSpeedVariation;
         swimmingSpeed = GetRandomSpeed(baseSwimmingSpeed, variation);
     }
 
@@ -233,33 +199,27 @@ public class FishMovement : MonoBehaviour
     {
         return baseSpeed * Random.Range(1f - variation, 1f + variation);
     }
-
-
     public void TurnLeft()
     {
-        // Debug.Log("Reel Left Input Received");
         if (!GetComponent<Fish>().isActiveFish)
         {
-            // Debug.Log("No active fish, ignoring input.");
+            // Debug.Log(GetComponent<Fish>().fishName + " is not the active fish, ignoring input.");
             return;
         }
 
-
         if (direction != -1)
         {
+            // Debug.Log("Turning Left");
             direction = -1;
             ReelingSetTargetPosition(transform.position);
-            // transform.LookAt(targetPosition);
+            transform.LookAt(targetPosition);
         }
     }
-
     public void TurnRight()
     {
-        // Debug.Log("Reel Right Input Received");
-
         if (!GetComponent<Fish>().isActiveFish)
         {
-            // Debug.Log("No active fish, ignoring input.");
+            // Debug.Log(GetComponent<Fish>().fishName + " is not the active fish, ignoring input.");
             return;
         }
 
@@ -267,14 +227,13 @@ public class FishMovement : MonoBehaviour
         {
             direction = 1;
             ReelingSetTargetPosition(transform.position);
-            // transform.LookAt(targetPosition);
+            transform.LookAt(targetPosition);
         }
     }
     public bool IsInInnerLineRange()
     {
         return transform.position.x > xLineLeftWarningRange && transform.position.x < xLineRightWarningRange;
     }
-
     public bool IsInLeftWarningRange()
     {
 
@@ -284,7 +243,6 @@ public class FishMovement : MonoBehaviour
     {
         return transform.position.x >= xLineRightWarningRange && transform.position.x <= xLineRightRange;
     }
-
     public bool IsOutOfLineRange()
     {
         return transform.position.x < xLineLeftRange || transform.position.x > xLineRightRange;
