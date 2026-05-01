@@ -115,6 +115,7 @@ public class CastingManager : MonoBehaviour
             else
             {
                 DebugLogger.Instance.LogMethodCall("CastingManager.HandleHookPerformed", "-> !OnHook\nHook failed. You are not drippy enough for this fish.");
+                FishSequenceManager.Instance.IncrementFishSequenceIndex();
                 FishingManager.Instance.EscapeFishing("This fish ignored you because you are not drippy enough.");
 
             }
@@ -124,7 +125,7 @@ public class CastingManager : MonoBehaviour
 
     private bool IsPlayerDrippyEnough()
     {
-        return activeFish.level <= PlayerLevelManager.Instance.GetPlayerLevel();
+        return activeFish.level <= LevelManager.Instance.GetPlayerLevel();
     }
 
 

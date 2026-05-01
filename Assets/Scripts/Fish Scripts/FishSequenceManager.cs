@@ -30,11 +30,13 @@ public class FishSequenceManager : MonoBehaviour
     private void OnEnable()
     {
         FishingManager.OnCaught += HandleCaught;
+        // FishingManager.OnGameWin += ResetFishData;
     }
 
     private void OnDisable()
     {
         FishingManager.OnCaught -= HandleCaught;
+        // FishingManager.OnGameWin -= ResetFishData;
     }
 
 
@@ -68,10 +70,14 @@ public class FishSequenceManager : MonoBehaviour
     private void HandleCaught()
     {
 
-        if (!CheckGameWin())
+        if (CheckGameWin())
         {
-            IncrementFishSequenceIndex();
+            return;
+
         }
+        // IncrementFishCaught();
+        IncrementFishSequenceIndex();
+        // Debug.Log("FishSequenceManager: You've caught " + GetNumFishCaught() + " fish");
 
     }
 
@@ -101,7 +107,7 @@ public class FishSequenceManager : MonoBehaviour
         FishData.fishSequenceIndex++;
     }
 
-    public void AddFishCaught()
+    public void IncrementFishCaught()
     {
         FishData.numFishCaught += 1;
     }

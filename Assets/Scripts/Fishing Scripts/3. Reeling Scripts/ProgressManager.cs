@@ -11,7 +11,7 @@ public class ProgressManager : MonoBehaviour
 
     void Start()
     {
-        // progress = 0f; 
+        HandleResetToGameplay();
     }
     private void OnEnable()
     {

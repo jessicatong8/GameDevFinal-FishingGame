@@ -46,7 +46,7 @@ public class Fish : MonoBehaviour
 
                 reelingProgressRate = 8;
                 tensionIncreaseRate = 20f;
-                tensionDropRate = 40f;
+                tensionDropRate = 30f;
                 safeZoneCenter = 50f;
                 safeZoneWidth = 30f;
                 burstStrength = 2f;
