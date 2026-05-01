@@ -3,56 +3,46 @@ using System.Collections.Generic;
 
 public class ManualHatPicker : MonoBehaviour
 {
-    [Header("Settings")]
-    [Tooltip("The parent object containing all hat models.")]
-    public Transform hatContainer; 
-    
+    [SerializeField] private List<GameObject> hats = new List<GameObject>(); // will have 3 hats
     [SerializeField] private int currentHatIndex = 0;
-    private List<GameObject> hats = new List<GameObject>();
-
-    // This allows you to right-click the component in the Inspector to trigger it
-    [ContextMenu("Cycle Hat")]
+    public void Start()
+    {
+        ShowOnlyThisHat(0);
+    }
+    public void OnEnable()
+    {
+        PlayerInputState.CycleHatPerformed += CycleHat;
+    }
+    public void OnDisable()
+    {
+        PlayerInputState.CycleHatPerformed -= CycleHat;
+    }
     public void CycleHat()
     {
-        if (hats.Count == 0) RefreshHatList();
-        
-        currentHatIndex = (currentHatIndex + 1) % hats.Count;
-        UpdateHatVisibility();
+        currentHatIndex = (currentHatIndex + 1) % (hats.Count+1); // allows for values: 0, 1, 2, 3, then back to 0
+        ShowOnlyThisHat(currentHatIndex);
     }
-
     private void OnValidate()
+    // runs whenever you change inspector values 
     {
-        // Runs whenever you change values in the Inspector
-        if (hatContainer != null)
-        {
-            RefreshHatList();
-            UpdateHatVisibility();
-        }
+        ShowOnlyThisHat(currentHatIndex);
     }
-
-    private void RefreshHatList()
+    private void ShowOnlyThisHat(int hatIndex)
     {
-        hats.Clear();
-        // Mimicking the source code's way of finding children under customize_objects
-        foreach (Transform child in hatContainer)
+        if (currentHatIndex == 0)    // hatless
         {
-            hats.Add(child.gameObject);
-        }
-    }
-
-    private void UpdateHatVisibility()
-    {
-        if (hats.Count == 0) return;
-
-        // Ensure index stays within bounds
-        currentHatIndex = Mathf.Clamp(currentHatIndex, 0, hats.Count - 1);
-
-        // Toggle logic based on the ApplySelections method
-        for (int i = 0; i < hats.Count; i++)
-        {
-            if (hats[i] != null)
+            for (int i = 0; i < hats.Count; i++)
             {
-                hats[i].SetActive(i == currentHatIndex);
+                hats[i].SetActive(false);
+            }
+        }
+        else                    // hats 1,2,3
+        {
+            for (int i = 1; i <= hats.Count; i++) // 
+            {
+                // Debug.Log($"ManualHatPicker.ShowOnlyThisHat: Setting hat {i} active: {i == hatIndex + 1}");
+                // hats[] has 0,1,2 but maps to hatIndex 1,2,3. both i and hatIndex are 1-based to skip the hatless option at index 0.
+                hats[i-1].SetActive(i == hatIndex);
             }
         }
     }

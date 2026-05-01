@@ -9,17 +9,17 @@ public class PlayerAnimationBridge : MonoBehaviour
     {
         // Find the FishingRig script in children
         fishingRig = GetComponentInChildren<FishingRig>(true);
-        DebugLogger.Instance.LogMethodCall("PlayerAnimationBridge.Awake", fishingRig != null ? "FishingRig found and cached." : "No FishingRig found in children.");
+        // DebugLogger.Instance.LogMethodCall("PlayerAnimationBridge.Awake", fishingRig != null ? "FishingRig found and cached." : "No FishingRig found in children.");
     }
     public void TriggerCast()
     {
-        DebugLogger.Instance.LogMethodCall("PlayerAnimationBridge.TriggerCast", "Called from animation event.");
+        // DebugLogger.Instance.LogMethodCall("PlayerAnimationBridge.TriggerCast", "Called from animation event.");
         fishingRig?.TriggerCast();
     }
     // Not currently being triggered by animation events, but could be in the future if we want to sync the reel animation more closely with the physics.
     public void TriggerReel()   
     {
-        DebugLogger.Instance.LogMethodCall("PlayerAnimationBridge.TriggerReel", "Called from animation event.");
+        // DebugLogger.Instance.LogMethodCall("PlayerAnimationBridge.TriggerReel", "Called from animation event.");
         fishingRig?.TriggerReel();
     }
 }
