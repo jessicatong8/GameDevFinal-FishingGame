@@ -5,14 +5,11 @@ public class ProgressManager : MonoBehaviour
 {
     private const float TARGET_MASH_RATE = 3f; // expected mashes per second
     private bool mashTriggeredThisFrame;
-    [SerializeField] private float progress = 0f;   // Starting progress, can be set to a different value for testing
+    [SerializeField] private float startingProgress = 0f; // Can be set in inspector for testing different starting points.
+    private float progress;   // 0-100 representing reeling progress towards catching the fish.
     private bool isReeling;
     Fish activeFish;
 
-    void Start()
-    {
-        HandleResetToGameplay();
-    }
     private void OnEnable()
     {
         FishingManager.OnHook += HandleHooked;
@@ -21,6 +18,10 @@ public class ProgressManager : MonoBehaviour
         // FishingManager.OnCatchConfirmationEnd += HandleResetToGameplay;
         FishingManager.OnEscaped += HandleResetToGameplay;
         FishingManager.OnReturnToGameplay += HandleResetToGameplay;
+    }
+    void Start()
+    {
+        HandleResetToGameplay();
     }
 
     private void OnDisable()
@@ -48,7 +49,7 @@ public class ProgressManager : MonoBehaviour
     private void HandleResetToGameplay()
     {
         mashTriggeredThisFrame = false;
-        progress = 0f;
+        progress = startingProgress;
         isReeling = false;
         activeFish = null;
     }

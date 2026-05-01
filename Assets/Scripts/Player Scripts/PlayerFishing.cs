@@ -79,7 +79,7 @@ public class PlayerFishing : MonoBehaviour
         transform.LookAt(Vector3.zero); // look forward towards water
         transform.position = fishingPosition;
         animator.SetTrigger("cast");
-        // lineCastingVisuals?.TriggerCast();
+        animator.SetBool("isFishing", true);
         fishingRig.TriggerCast(); 
     }
 
@@ -90,7 +90,6 @@ public class PlayerFishing : MonoBehaviour
         animator.SetBool("isReeling", true);
         animator.ResetTrigger("cast");
         fishingRig.TriggerReel(); 
-        // lineCastingVisuals?.TriggerReel();
     }
 
     private void HandleFishingEnded()
@@ -102,11 +101,8 @@ public class PlayerFishing : MonoBehaviour
         }
         SetFishingActive(false);
         animator.SetBool("isReeling", false);
-        animator.SetTrigger("stopFishing");
-        Debug.Log($"stopFishing trigger set to {animator.GetBool("stopFishing")}");
+        animator.SetBool("isFishing", false);
         animator.SetBool("isPresenting", false);
-        // animator.ResetTrigger("stopFishing");
-        // Debug.Log($"stopFishing trigger reset to {animator.GetBool("stopFishing")}");
     }
     private void HandleFishPresentation()
     {

@@ -520,10 +520,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6058885c6a0e54e3e961320c9907674e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LineRangeUI
-  LeftArrow: {fileID: 853119038}
-  RightArrow: {fileID: 1936593894}
-  WarningUI: {fileID: 1888466648}
-  SafeZone: {fileID: 1001065075}
+  LineRangeIndicators: {fileID: 1251630156}
+  LineRangeWaterOverlay: {fileID: 1612408215}
 --- !u!4 &127835403
 Transform:
   m_ObjectHideFlags: 0
@@ -4920,7 +4918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d63a22c1fdf8d4d599d58557de606008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressManager
-  progress: 70
+  startingProgress: 70
 --- !u!4 &1152363079
 Transform:
   m_ObjectHideFlags: 0
