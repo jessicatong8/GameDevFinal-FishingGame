@@ -4169,6 +4169,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3359599198103194137, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
+      propertyPath: currentHatIndex
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3380447512777688485, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -4188,6 +4192,10 @@ PrefabInstance:
     - target: {fileID: 4253978373294293960, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: castPointChildPath
       value: End of fishing rod
+      objectReference: {fileID: 0}
+    - target: {fileID: 4294066791754466961, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4668563310377310221, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: m_Enabled
@@ -4215,7 +4223,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5679271941359360942, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: useSimpleLine
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5679271941359360942, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: fishingManager
@@ -4256,6 +4264,10 @@ PrefabInstance:
     - target: {fileID: 5831369245553026531, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328579374356497685, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6354055011061037513, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: m_Enabled
@@ -4320,6 +4332,10 @@ PrefabInstance:
     - target: {fileID: 8262606240771337477, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8500810363381688563, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8683006611712420482, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: m_IsActive
@@ -5154,7 +5170,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1251630157
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6374,7 +6390,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1612408216
 MonoBehaviour:
   m_ObjectHideFlags: 0
