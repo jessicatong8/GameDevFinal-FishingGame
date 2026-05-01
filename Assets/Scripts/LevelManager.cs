@@ -37,6 +37,7 @@ public class LevelManager : MonoBehaviour
     public void IncrementPlayerLevel()
     {
         PlayerData.playerLevel++;
+        FishingManager.Instance.InvokeLevelUp(PlayerData.playerLevel);
     }
 
     public void ResetPlayerLevel()
@@ -49,13 +50,13 @@ public class LevelManager : MonoBehaviour
         FishSequenceManager.Instance.IncrementFishCaught();
         int numFishCaught = FishSequenceManager.Instance.GetNumFishCaught();
 
-        Debug.Log("Fish was caught, checking if you can level up. Current level: " + GetPlayerLevel());
+        // Debug.Log("Fish was caught, checking if you can level up. Current level: " + GetPlayerLevel());
 
         Debug.Log("You've caught " + numFishCaught + " fish!");
         if (numFishCaught == 2 || numFishCaught == 5 || numFishCaught == 9 || numFishCaught == 10) // according to our preset fish sequence
         {
             IncrementPlayerLevel();
-            Debug.Log("Enough fish were caught, you have leveled up. Current level: " + GetPlayerLevel());
+            // Debug.Log("Enough fish were caught, you have leveled up. Current level: " + GetPlayerLevel());
 
         }
         // CheckGameWin();

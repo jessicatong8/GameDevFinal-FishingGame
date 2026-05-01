@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class ManualHatPicker : MonoBehaviour
+public class Hats : MonoBehaviour
 {
     [SerializeField] private List<GameObject> hats = new List<GameObject>(); // will have 3 hats
     [SerializeField] private int numHats = 0;
@@ -11,10 +11,12 @@ public class ManualHatPicker : MonoBehaviour
     }
     public void OnEnable()
     {
+        FishingManager.OnLevelUp += HandleLevelUp;
         PlayerInputState.CycleHatPerformed += CycleHat;
     }
     public void OnDisable()
     {
+        FishingManager.OnLevelUp -= HandleLevelUp;
         PlayerInputState.CycleHatPerformed -= CycleHat;
     }
     public void CycleHat()
@@ -27,7 +29,7 @@ public class ManualHatPicker : MonoBehaviour
     {
         ShowHats(numHats);
     }
-    public void ShowHats(int numHats)
+    private void ShowHats(int numHats)
     // Shows hats stacked on top of each other given how many hats should be displayed
     {
         if (numHats == 0)    // hatless
@@ -46,6 +48,11 @@ public class ManualHatPicker : MonoBehaviour
                 hats[i].SetActive(true);
             }
         }
+    }
+
+    private void HandleLevelUp(int playerLevel)
+    {
+        ShowHats(playerLevel - 1);
     }
 
 }

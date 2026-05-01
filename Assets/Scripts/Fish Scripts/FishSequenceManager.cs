@@ -83,7 +83,7 @@ public class FishSequenceManager : MonoBehaviour
 
     public bool CheckGameWin()
     {
-        Debug.Log("A fish was caught, checking for game win.");
+        // Debug.Log("A fish was caught, checking for game win.");
         Fish[] sequence = usePrototypeFishSequence ? prototypeFishSequence : fishSequence;
 
         if (FishData.fishSequenceIndex == sequence.Length - 1)
