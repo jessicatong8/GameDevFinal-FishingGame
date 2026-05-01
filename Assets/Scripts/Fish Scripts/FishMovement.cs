@@ -20,8 +20,8 @@ public class FishMovement : MonoBehaviour
 
     private float baseSwimmingSpeed;
 
-    [SerializeField] private float idleHeight = 0f;
-    [SerializeField] private float reelingHeight = 1f;
+    [SerializeField] private float idleHeight = -1f;
+    [SerializeField] private float reelingHeight = 0f;
 
 
     [SerializeField] private float idleSpeedVariation = 0.2f;
@@ -29,7 +29,7 @@ public class FishMovement : MonoBehaviour
     [SerializeField] private float speedNoiseFrequency = 0.8f;
     private float speedNoiseOffset;
 
-    [SerializeField] private float idleWobbleAmplitude = 0.02f;
+    [SerializeField] private float idleWobbleAmplitude = 0.01f;
     [SerializeField] private float reelingWobbleAmplitude = 0.008f;
 
     [SerializeField] private float wobbleFrequency = 2f;
