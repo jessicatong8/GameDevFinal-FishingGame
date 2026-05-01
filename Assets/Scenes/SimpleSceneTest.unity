@@ -3435,7 +3435,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &942407486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4344,8 +4344,8 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 0}
     - {fileID: 0}
+    - {fileID: 0}
     - {fileID: 2880828221451337054, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
-    - {fileID: 5527816746292536304, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
     m_RemovedGameObjects:
     - {fileID: 2384808230855692666, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
     - {fileID: 7535372399304021179, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
@@ -4765,7 +4765,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fish
   fishName: Yellow tang
-  level: 1
+  level: 0
   isActiveFish: 0
   swimmingSpeed: 4
   reelingSpeed: 5
@@ -5288,7 +5288,7 @@ RectTransform:
   m_Father: {fileID: 1809830872}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
