@@ -16,6 +16,9 @@ public class FishSequenceManager : MonoBehaviour
     }
 
     [SerializeField] private Fish[] fishSequence;
+    [SerializeField] private Fish[] prototypeFishSequence;
+
+    public bool usePrototypeFishSequence;
     // [SerializeField] private int fishSequenceIndex;
 
     private void Awake()
@@ -38,7 +41,10 @@ public class FishSequenceManager : MonoBehaviour
 
     public Fish GetNextFishFromSequence()
     {
-        if (fishSequence == null || fishSequence.Length == 0)
+        Fish[] sequence = usePrototypeFishSequence ? prototypeFishSequence : fishSequence;
+
+
+        if (sequence == null || sequence.Length == 0)
         {
             DebugLogger.Instance.LogWarning("FishingManager: Fish sequence is null or empty, but usePrototypeFishSequence is true. Please assign fish to the sequence in the inspector.");
             return null;
@@ -46,9 +52,9 @@ public class FishSequenceManager : MonoBehaviour
 
         Debug.Log("fish sequence index: " + FishData.fishSequenceIndex);
 
-        if (FishData.fishSequenceIndex < fishSequence.Length)
+        if (FishData.fishSequenceIndex < sequence.Length)
         {
-            Fish nextFish = fishSequence[FishData.fishSequenceIndex];
+            Fish nextFish = sequence[FishData.fishSequenceIndex];
             if (nextFish != null)
             {
                 return nextFish;
@@ -61,21 +67,38 @@ public class FishSequenceManager : MonoBehaviour
 
     private void HandleCaught()
     {
+
+        if (!CheckGameWin())
+        {
+            IncrementFishSequenceIndex();
+        }
+
+    }
+
+    public bool CheckGameWin()
+    {
         Debug.Log("A fish was caught, checking for game win.");
-        if (FishData.fishSequenceIndex == fishSequence.Length - 1)
+        Fish[] sequence = usePrototypeFishSequence ? prototypeFishSequence : fishSequence;
+
+        if (FishData.fishSequenceIndex == sequence.Length - 1)
         {
             Debug.Log("All fish in sequence have been caught, invoking game win and resetting fish data.");
             FishingManager.Instance.InvokeGameWin();
             ResetFishData();
-            return;
+            return true;
         }
-        FishData.fishSequenceIndex++;
+        return false;
     }
 
     public void ResetFishData()
     {
         FishData.numFishCaught = 0;
         FishData.fishSequenceIndex = 0;
+    }
+
+    public void IncrementFishSequenceIndex()
+    {
+        FishData.fishSequenceIndex++;
     }
 
     public void AddFishCaught()
