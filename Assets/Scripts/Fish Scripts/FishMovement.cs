@@ -53,8 +53,6 @@ public class FishMovement : MonoBehaviour
         {
             Debug.LogError("FishMovement: PlayerInputState instance not found! Cannot subscribe to reel input events.");
         }
-        playerInputState.ReelLeftPerformed += TurnLeft;
-        playerInputState.ReelRightPerformed += TurnRight;
     }
     private void OnDisable()
     {
@@ -64,10 +62,6 @@ public class FishMovement : MonoBehaviour
         {
             playerInputState.ReelLeftPerformed -= TurnLeft;
             playerInputState.ReelRightPerformed -= TurnRight;
-        }
-        else
-        {
-            Debug.LogError("FishMovement: PlayerInputState instance not found! Cannot unsubscribe from reel input events.");
         }
     }
     void Start()
