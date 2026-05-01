@@ -43,6 +43,7 @@ public class PlayerInputState : MonoBehaviour
     public event Action ReelRightPerformed;
     public static event Action AbortPerformed;
     public static event Action DebugPerformed;
+    public static event Action CycleHatPerformed;
     // Menu?
     public InputStates CurrentState => currentState;
     [SerializeField] private InputStates currentState = InputStates.Gameplay;
@@ -149,6 +150,16 @@ public class PlayerInputState : MonoBehaviour
         }
     }
 
+    public void OnCycleHat(InputValue value)
+    {
+        if (!value.isPressed) return;
+
+        if (currentState == InputStates.Gameplay)
+        {
+            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnCycleHat", "-> !CycleHatPerformed");
+            CycleHatPerformed?.Invoke();
+        }
+    }
     public void OnInteract(InputValue value)
     {
         if (!value.isPressed) return;
