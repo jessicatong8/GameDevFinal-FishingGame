@@ -7,7 +7,7 @@ public class FishAnimation : MonoBehaviour
 
     void Start()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponentInParent<Animator>();
 
         FishingManager.OnBite += HandleBite;
         FishingManager.OnHook += HandleHooked;
@@ -31,7 +31,7 @@ public class FishAnimation : MonoBehaviour
 
     void HandleBite()
     {
-        if (GetComponent<Fish>().isActiveFish)
+        if (GetComponentInParent<Fish>().isActiveFish)
         {
             animator.SetTrigger("Bite");
         }
@@ -39,7 +39,7 @@ public class FishAnimation : MonoBehaviour
 
     void HandleHooked()
     {
-        if (GetComponent<Fish>().isActiveFish)
+        if (GetComponentInParent<Fish>().isActiveFish)
         {
             animator.SetBool("IsHooked", true);
         }

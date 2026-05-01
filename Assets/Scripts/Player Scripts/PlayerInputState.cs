@@ -145,7 +145,7 @@ public class PlayerInputState : MonoBehaviour
         if (currentState == InputStates.Gameplay)
         {
             // Toggle zoom between 1st person and 3rd person
-            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnZoomToggle", $"-> Current zoom input: {(ZoomInputData == 0f ? "1 (3rd P)" : "0 (1st P)")}.");
+            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnZoomToggle", $"-> Current zoom input: {(ZoomInputData == 0f ? "1 (3rd P)" : "0 (1st P)")}.");
             ZoomInputData = ZoomInputData == 0f ? 1f : 0f;
         }
     }
@@ -183,7 +183,7 @@ public class PlayerInputState : MonoBehaviour
 
         if (currentState == InputStates.Fishing || fishingManagerInstance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
         {
-            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnConfirmCatch", "-> !ConfirmCatchPerformed");
+            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnConfirmCatch", "-> !ConfirmCatchPerformed");
             ConfirmCatchPerformed?.Invoke();
         }
     }
@@ -253,14 +253,14 @@ public class PlayerInputState : MonoBehaviour
         if (currentState == InputStates.Fishing &&
         fishingManagerInstance.CurrentFishingGameState != FishingManager.FishingGameState.CatchPresentation)
         {
-            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !AbortPerformed");
+            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !AbortPerformed");
             AbortPerformed?.Invoke();
         }
         // acts as confirm catch during catch presentation
         else if (currentState == InputStates.Fishing &&
         fishingManagerInstance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
         {
-            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !ConfirmCatchPerformed");
+            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !ConfirmCatchPerformed");
             ConfirmCatchPerformed?.Invoke();
         }
     }
