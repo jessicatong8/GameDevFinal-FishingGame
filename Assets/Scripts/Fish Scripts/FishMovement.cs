@@ -5,6 +5,7 @@ public class FishMovement : MonoBehaviour
 {
 
     private Vector3 position;
+    private Vector3 originalPosition;
     private Vector3 targetPosition;
 
     private float swimmingSpeed;
@@ -74,6 +75,7 @@ public class FishMovement : MonoBehaviour
 
         position = new Vector3(transform.position.x, idleHeight, transform.position.z);
         transform.position = position;
+        originalPosition = position;
 
         baseSwimmingSpeed = GetComponent<Fish>().swimmingSpeed;
         speedNoiseOffset = Random.Range(0f, 100f);
@@ -229,7 +231,7 @@ public class FishMovement : MonoBehaviour
     private void HandleResetToGameplay()
     {
         // currentFishingGameState = FishingGameState.Idle;
-        position = new Vector3(transform.position.x, idleHeight, transform.position.z); // TODO randomize where fish respawn in
+        position = originalPosition;
         transform.eulerAngles = new Vector3(0, direction * 90f, 0);
         transform.position = position;
 
