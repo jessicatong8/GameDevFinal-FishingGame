@@ -39,8 +39,8 @@ public class PlayerInputState : MonoBehaviour
     public static event Action HookPerformed;
     public static event Action MashPerformed;
     public static event Action ConfirmCatchPerformed;
-    public event Action ReelLeftPerformed;
-    public event Action ReelRightPerformed;
+    public static event Action ReelLeftPerformed;
+    public static event Action ReelRightPerformed;
     public static event Action AbortPerformed;
     public static event Action DebugPerformed;
     // Menu?
@@ -239,14 +239,14 @@ public class PlayerInputState : MonoBehaviour
     {
         if (!value.isPressed) return;
 
-        if (currentState == InputStates.Fishing && 
+        if (currentState == InputStates.Fishing &&
         fishingManagerInstance.CurrentFishingGameState != FishingManager.FishingGameState.CatchPresentation)
         {
             DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !AbortPerformed");
             AbortPerformed?.Invoke();
         }
         // acts as confirm catch during catch presentation
-        else if (currentState == InputStates.Fishing && 
+        else if (currentState == InputStates.Fishing &&
         fishingManagerInstance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
         {
             DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !ConfirmCatchPerformed");
