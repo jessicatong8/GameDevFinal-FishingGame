@@ -110,6 +110,7 @@ public class PlayerMovement : MonoBehaviour
 
         verticalVelocity += gravity * Time.deltaTime;
 
+        
         Vector3 finalVelocity = horizontalVelocity + Vector3.up * verticalVelocity;
         animator?.SetFloat("moveSpeed", moveDirection.magnitude);
         characterController.Move(finalVelocity * Time.deltaTime);

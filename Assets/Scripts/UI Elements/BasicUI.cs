@@ -69,7 +69,6 @@ public class BasicUI : MonoBehaviour
     void HandleCaught()
     {
         // NOW HANDLED BY CATCH PRESENTATION UI
-
         statusText.text = "";   
     }
     void HandleEscaped()
