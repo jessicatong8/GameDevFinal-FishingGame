@@ -4765,7 +4765,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fish
   fishName: Yellow tang
-  level: 0
+  level: 1
   isActiveFish: 0
   swimmingSpeed: 4
   reelingSpeed: 5
