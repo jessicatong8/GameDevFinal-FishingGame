@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FishMovement : MonoBehaviour
 {
@@ -35,34 +36,34 @@ public class FishMovement : MonoBehaviour
     private Vector3 basePosition;
     private float arrivalThreshold = 0.1f;
     private int direction = 1; // 1 for right, -1 for left
-    private PlayerInputState playerInputState;
+
+
+    [Header("Fish Placement")]
+    [SerializeField] private Vector3 localOffset = new Vector3(0f, 0f, 2f);
+    [SerializeField] private float rotationSpeed = 40f;
+
     private void OnEnable()
     {
         FishingManager.OnHook += HandleHooked;
+        FishingManager.OnCaught += HandleCaught;
         FishingManager.OnReturnToGameplay += HandleResetToGameplay;
-        if (playerInputState == null)
-        {
-            playerInputState = PlayerInputState.Instance;
-        }
-        if (playerInputState != null)
-        {
-            playerInputState.ReelLeftPerformed += TurnLeft;
-            playerInputState.ReelRightPerformed += TurnRight;
-        }
-        else
-        {
-            Debug.LogError("FishMovement: PlayerInputState instance not found! Cannot subscribe to reel input events.");
-        }
+
+        PlayerInputState.ReelLeftPerformed += TurnLeft;
+        PlayerInputState.ReelRightPerformed += TurnRight;
+        PlayerInputState.ConfirmCatchPerformed += HandleCatchConfirmation;
     }
+
+
+
     private void OnDisable()
     {
         FishingManager.OnHook -= HandleHooked;
+        FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
-        if (playerInputState != null)
-        {
-            playerInputState.ReelLeftPerformed -= TurnLeft;
-            playerInputState.ReelRightPerformed -= TurnRight;
-        }
+        PlayerInputState.ReelLeftPerformed -= TurnLeft;
+        PlayerInputState.ReelRightPerformed -= TurnRight;
+        PlayerInputState.ConfirmCatchPerformed -= HandleCatchConfirmation;
+
     }
     void Start()
     {
@@ -82,34 +83,15 @@ public class FishMovement : MonoBehaviour
     }
     private void Update()
     {
+        if (GetComponent<Fish>().isActiveFish && FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
+        {
+            RotateFish();
+            return;
+        }
         UpdateSwimmingSpeed();
         SwimTowardTarget(FishingManager.Instance.CurrentFishingGameState);
     }
 
-    private void HandleHooked()
-    {
-        if (!GetComponent<Fish>().isActiveFish) return;
-        // FishingManager.Instance.CurrentFishingGameState = FishingManager.FishingGameState.Reeling;
-        position = new Vector3(0, reelingHeight, 5f);
-        transform.position = position;
-
-        baseSwimmingSpeed = GetComponent<Fish>().reelingSpeed;
-        speedNoiseOffset = Random.Range(0f, 100f);
-        ApplySpeedVariation();
-        ReelingSetTargetPosition(position);
-    }
-    private void HandleResetToGameplay()
-    {
-        // currentFishingGameState = FishingGameState.Idle;
-        position = new Vector3(transform.position.x, idleHeight, transform.position.z); // TODO randomize where fish respawn in
-        transform.eulerAngles = new Vector3(0, direction * 90f, 0);
-        transform.position = position;
-
-        baseSwimmingSpeed = GetComponent<Fish>().swimmingSpeed; // reset the base speed
-        speedNoiseOffset = Random.Range(0f, 100f);
-        ApplySpeedVariation();
-        IdleSetTargetPosition(position);
-    }
     public Vector3 IdleSetTargetPosition(Vector3 position)
     {
         if (position.x <= 0)
@@ -224,6 +206,62 @@ public class FishMovement : MonoBehaviour
             transform.LookAt(targetPosition);
         }
     }
+
+
+    private void HandleHooked()
+    {
+        if (!GetComponent<Fish>().isActiveFish) return;
+        // FishingManager.Instance.CurrentFishingGameState = FishingManager.FishingGameState.Reeling;
+        position = new Vector3(0, reelingHeight, 5f);
+        transform.position = position;
+
+        baseSwimmingSpeed = GetComponent<Fish>().reelingSpeed;
+        speedNoiseOffset = Random.Range(0f, 100f);
+        ApplySpeedVariation();
+        ReelingSetTargetPosition(position);
+    }
+    private void HandleCaught()
+    {
+        if (!GetComponent<Fish>().isActiveFish) return;
+        PlaceFishInFrontOfCamera();
+    }
+
+    private void HandleResetToGameplay()
+    {
+        // currentFishingGameState = FishingGameState.Idle;
+        position = new Vector3(transform.position.x, idleHeight, transform.position.z); // TODO randomize where fish respawn in
+        transform.eulerAngles = new Vector3(0, direction * 90f, 0);
+        transform.position = position;
+
+        baseSwimmingSpeed = GetComponent<Fish>().swimmingSpeed; // reset the base speed
+        speedNoiseOffset = Random.Range(0f, 100f);
+        ApplySpeedVariation();
+        IdleSetTargetPosition(position);
+    }
+
+    private void HandleCatchConfirmation()
+    {
+        if (!GetComponent<Fish>().isActiveFish) return;
+
+        // HandleResetToGameplay();
+        FishingManager.Instance.ReturnToGameplay("Fish caught was confirmed.");
+
+    }
+
+    private void PlaceFishInFrontOfCamera()
+    {
+        Transform targetAnchor = PlayerCamera.Instance.transform;
+        Vector3 targetPosition = targetAnchor.position + targetAnchor.forward;
+        transform.position = targetPosition + targetAnchor.TransformVector(localOffset);
+        transform.LookAt(PlayerCamera.Instance.transform.position);
+
+    }
+
+    private void RotateFish()
+    {
+        transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime, Space.World);
+    }
+
     public bool IsInInnerLineRange()
     {
         return transform.position.x > xLineLeftWarningRange && transform.position.x < xLineRightWarningRange;
