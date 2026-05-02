@@ -137,7 +137,7 @@ public class FishMovement : MonoBehaviour
         if (distanceToTarget <= arrivalThreshold)
         {
             transform.position = targetPosition;
-            if (state == FishingManager.FishingGameState.Reeling)
+            if (GetComponent<Fish>().isActiveFish && state == FishingManager.FishingGameState.Reeling)
             {
                 ReelingSetTargetPosition(transform.position);
             }
