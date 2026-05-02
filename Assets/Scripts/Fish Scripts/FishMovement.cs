@@ -208,8 +208,6 @@ public class FishMovement : MonoBehaviour
             transform.LookAt(targetPosition);
         }
     }
-
-
     private void HandleHooked()
     {
         if (!GetComponent<Fish>().isActiveFish) return;
@@ -227,7 +225,6 @@ public class FishMovement : MonoBehaviour
         if (!GetComponent<Fish>().isActiveFish) return;
         PlaceFishInFrontOfCamera();
     }
-
     private void HandleResetToGameplay()
     {
         // currentFishingGameState = FishingGameState.Idle;
@@ -240,7 +237,6 @@ public class FishMovement : MonoBehaviour
         ApplySpeedVariation();
         IdleSetTargetPosition(position);
     }
-
     private void HandleCatchConfirmation()
     {
         if (!GetComponent<Fish>().isActiveFish) return;
@@ -249,7 +245,6 @@ public class FishMovement : MonoBehaviour
         FishingManager.Instance.ReturnToGameplay("Fish caught was confirmed.");
 
     }
-
     private void PlaceFishInFrontOfCamera()
     {
         Transform targetAnchor = PlayerCamera.Instance.transform;
@@ -258,7 +253,6 @@ public class FishMovement : MonoBehaviour
         transform.LookAt(PlayerCamera.Instance.transform.position);
 
     }
-
     private void RotateFish()
     {
         transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime, Space.World);
