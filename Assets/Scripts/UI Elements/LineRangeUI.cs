@@ -81,11 +81,11 @@ public class LineRangeUI : MonoBehaviour
         // Only update UI if something actually changed
         if (WarningZone.activeSelf == true && isInner == true)
         {
-            WarningZone.SetActive(false);
+            WarningZone.SetActive(false); //call the fade out
         }
         else if (WarningZone.activeSelf == false && isOuter == true)
         {
-            WarningZone.SetActive(true);
+            WarningZone.SetActive(true); //fade warning zone in 
         }
         // Toggle arrows based on side
         if (LeftArrow.activeSelf != isRight) LeftArrow.SetActive(isRight);
