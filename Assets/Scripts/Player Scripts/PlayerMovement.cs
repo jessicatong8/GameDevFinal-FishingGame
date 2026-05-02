@@ -52,7 +52,6 @@ public class PlayerMovement : MonoBehaviour
         {
             cameraTransform = Camera.main.transform;
         }
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void OnDisable()
