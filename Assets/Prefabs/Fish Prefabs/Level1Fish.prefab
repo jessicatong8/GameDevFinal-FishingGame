@@ -46,14 +46,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ef91e4b9978f4180b5ab9fa6b2bd52e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fish
-  fishName: Level1Fish
+  fishName: yellow tang
   level: 1
   isActiveFish: 0
   swimmingSpeed: 4
   reelingSpeed: 5
   reelingProgressRate: 15
   tensionIncreaseRate: 20
-  tensionDropRate: 20
+  tensionDropRate: 30
   safeZoneCenter: 50
   safeZoneWidth: 40
   tensionEscapeTime: 3

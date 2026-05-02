@@ -31,7 +31,7 @@ Transform:
   m_LocalScale: {x: 0.58, y: 0.58, z: 0.58}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 1016248787181885520}
+  - {fileID: 2833590143687723513}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &8633716806847750974
@@ -46,12 +46,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ef91e4b9978f4180b5ab9fa6b2bd52e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fish
-  fishName: Level3Fish
+  fishName: puffer fish
   level: 3
   isActiveFish: 0
   swimmingSpeed: 6
   reelingSpeed: 8
-  reelingProgressRate: 5
+  reelingProgressRate: 8
   tensionIncreaseRate: 30
   tensionDropRate: 40
   safeZoneCenter: 50
@@ -79,7 +79,7 @@ MonoBehaviour:
   wobbleFrequency: 2
   localOffset: {x: 0, y: 0, z: 4}
   rotationSpeed: 40
---- !u!1001 &689272424601534395
+--- !u!1001 &2366736456375037458
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -87,74 +87,79 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2329344339266163818}
     m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
+    - target: {fileID: -8679921383154817045, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
+    - target: {fileID: 919132149155446097, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
       propertyPath: m_Name
-      value: ParrotFish
+      value: Puffer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8506126679483648347}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
+      addedObject: {fileID: 315369767201658358}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6838550445240570181}
-  m_SourcePrefab: {fileID: 100100000, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
---- !u!1 &383263707181187818 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
-  m_PrefabInstance: {fileID: 689272424601534395}
+      addedObject: {fileID: 572309917312877198}
+  m_SourcePrefab: {fileID: 100100000, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
+--- !u!4 &2833590143687723513 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
+  m_PrefabInstance: {fileID: 2366736456375037458}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &8506126679483648347
+--- !u!1 &3177640923873825603 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 7bfebf3c764864d3ca90f5ee285d9f84, type: 3}
+  m_PrefabInstance: {fileID: 2366736456375037458}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &315369767201658358
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 383263707181187818}
+  m_GameObject: {fileID: 3177640923873825603}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 45534c02e54d5423bbc8cda8247821e7, type: 2}
@@ -169,20 +174,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6838550445240570181
+--- !u!114 &572309917312877198
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 383263707181187818}
+  m_GameObject: {fileID: 3177640923873825603}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 189e1e8fe4ab5472b90696e958954aec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishAnimation
---- !u!4 &1016248787181885520 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 32becea2c4f9e4b97aa6150376e9df9b, type: 3}
-  m_PrefabInstance: {fileID: 689272424601534395}
-  m_PrefabAsset: {fileID: 0}
