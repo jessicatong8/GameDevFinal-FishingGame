@@ -79,15 +79,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "ZoomToggle",
-                    "type": "Button",
-                    "id": "1ecbbde0-bdf9-458a-b29e-713f720e447f",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Cycle Hat",
                     "type": "Button",
                     "id": "438c9acc-1a22-4c8b-b939-fd31f4452caa",
@@ -288,7 +279,7 @@
                 {
                     "name": "",
                     "id": "1c04ea5f-b012-41d1-a6f7-02e963b52893",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -304,28 +295,6 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "ZoomScroll",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "19fc55a6-693c-4819-976e-2905e1c44c91",
-                    "path": "<Gamepad>/rightStickPress",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad;Joystick;XR",
-                    "action": "ZoomToggle",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "eeda6e80-06a5-4bbe-9811-32e1d9ad240e",
-                    "path": "<Keyboard>/backquote",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "ZoomToggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
