@@ -94,7 +94,4 @@ public class StatusUI : MonoBehaviour
         // ClearText();
         SetGamePlayText();
     }
-
-
-
 }
