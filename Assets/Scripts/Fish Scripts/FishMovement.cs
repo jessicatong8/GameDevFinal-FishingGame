@@ -281,4 +281,8 @@ public class FishMovement : MonoBehaviour
     {
         return transform.position.x < xLineLeftRange || transform.position.x > xLineRightRange;
     }
+    public Vector3 GetFishPosition()
+    {
+        return transform.position;
+    }
 }

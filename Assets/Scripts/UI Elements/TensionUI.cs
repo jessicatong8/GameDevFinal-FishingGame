@@ -52,8 +52,10 @@ public class TensionUI : MonoBehaviour
         Fish fish = fishingManager.activeFish;
 
         float safeZoneWidth = fish.safeZoneWidth;
+        float offsetFromCenter = fish.safeZoneCenter - 50f;
 
         safeZone.transform.localScale = new Vector3(safeZoneWidth/100, 1f, 1f);
+        safeZone.localPosition = new Vector3(safeZone.localPosition.x + offsetFromCenter, safeZone.localPosition.y, safeZone.localPosition.z);
     }
 
     private void Update()
