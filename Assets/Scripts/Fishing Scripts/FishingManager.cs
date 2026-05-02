@@ -1,7 +1,8 @@
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 // using Unity.XR.CoreUtils;
-
+    
 public class FishingManager : MonoBehaviour
 {
     // Manage fishing gamestates and event broadcasting for the fishing.
@@ -134,6 +135,6 @@ public class FishingManager : MonoBehaviour
     public void InvokeGameWin()
     {
         OnGameWin?.Invoke();
-        // load new win and retry scene?
+        SceneManager.LoadScene("WinScene");
     }
 }
