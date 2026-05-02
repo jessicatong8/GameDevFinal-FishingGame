@@ -8,6 +8,11 @@ public class LineRangeUI : MonoBehaviour
     private GameObject RightArrow;
     [SerializeField] private GameObject LineRangeWaterOverlay;
     private GameObject WarningZone;
+
+    [Header("Fade Settings")]
+    [SerializeField] private float fadeSpeed = 10f; 
+    [SerializeField] private CanvasGroup warningCanvasGroup;
+
     private LineRangeManager lineRangeManager;
     private Fish activeFish;
     private bool isInReelingState;
@@ -39,6 +44,10 @@ public class LineRangeUI : MonoBehaviour
         {
             DebugLogger.Instance.LogError("LineRangeUI: RightArrow child not found under LineRangeIndicators.");
         }
+        
+        warningCanvasGroup.alpha = 0;
+        WarningZone.SetActive(true);
+
         HandleDisableUI();
     }
     private void OnDisable()
@@ -79,14 +88,9 @@ public class LineRangeUI : MonoBehaviour
         bool isOuter = !isInner; 
 
         // Only update UI if something actually changed
-        if (WarningZone.activeSelf == true && isInner == true)
-        {
-            WarningZone.SetActive(false); //call the fade out
-        }
-        else if (WarningZone.activeSelf == false && isOuter == true)
-        {
-            WarningZone.SetActive(true); //fade warning zone in 
-        }
+        float targetAlpha = isInner ? 0f : 1f;
+        warningCanvasGroup.alpha = Mathf.MoveTowards(warningCanvasGroup.alpha, targetAlpha, fadeSpeed * Time.deltaTime);
+        
         // Toggle arrows based on side
         if (LeftArrow.activeSelf != isRight) LeftArrow.SetActive(isRight);
         if (RightArrow.activeSelf != isLeft) RightArrow.SetActive(isLeft);
