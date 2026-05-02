@@ -7,13 +7,16 @@ public class FishingTutorialManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private TextMeshProUGUI tutorialText;
-    [SerializeField] private float fadeSpeed = 1f;
+    [SerializeField] private float fadeInSpeed = 3f;
+    [SerializeField] private float fadeOutSpeed = 5f;
+
     
     [Header("Tutorial Texts")]
-    [SerializeField] private string introTxt = "Let's start fishing! Press [E] to cast your line!";
+    [SerializeField] private string promptTxt = "Walk to the dock to start fishing!"; 
+    [SerializeField] private string castTxt = "Let's start fishing! Press [E] to cast your line!";
     [SerializeField] private string waitTxt = "Now we wait for a fish to come along...";
     [SerializeField] private string biteTxt = "You've got a fish on the line! Press [SPACE] to hook it!";
-    [SerializeField] private string reelTxt = "Keep the fish in the green! Press [SPACE] to reel.";
+    [SerializeField] private string reelTxt = "Keep the fish icon in the green bar! Press [SPACE] to reel.\nUse [LEFT/RIGHT] arrows to keep the fish in the circle!";
 
     private bool tutorialCompleted = false; //prevents race conditions
     private Coroutine tutorialRoutine; //prevents multiple conflicting coroutines from firing at the same time 
@@ -21,6 +24,7 @@ public class FishingTutorialManager : MonoBehaviour
     private void Start()
     {
         canvasGroup.alpha = 0;
+        UpdateTutorialStep(promptTxt);
     }
 
     private void OnEnable()
@@ -29,6 +33,7 @@ public class FishingTutorialManager : MonoBehaviour
         FishingManager.OnBite += OnFishBite;
         FishingManager.OnHook += OnHookSuccess;
         FishingManager.OnCaught += EndTutorialPermanently;
+        FishingManager.OnEscaped += OnFishEscaped;
         FishingAreaTrigger.OnPlayerEnterFishingArea += HandleAreaEntrance;
         FishingAreaTrigger.OnPlayerExitFishingArea += HandleAreaExit;
     }
@@ -39,19 +44,20 @@ public class FishingTutorialManager : MonoBehaviour
         FishingManager.OnBite -= OnFishBite;
         FishingManager.OnHook -= OnHookSuccess;
         FishingManager.OnCaught -= EndTutorialPermanently;
+        FishingManager.OnEscaped -= OnFishEscaped;
         FishingAreaTrigger.OnPlayerEnterFishingArea -= HandleAreaEntrance;
         FishingAreaTrigger.OnPlayerExitFishingArea -= HandleAreaExit;
     }
 
     private void HandleAreaEntrance(bool isInArea)
     {
-        if (!tutorialCompleted) UpdateTutorialStep(introTxt);
+        if (!tutorialCompleted) UpdateTutorialStep(castTxt);
     }
 
     //for if player doesnt start fishing but walks in and out of exit area
     private void HandleAreaExit(bool isInArea)
     {
-        if (!tutorialCompleted) HideTutorial();
+        if (!tutorialCompleted) UpdateTutorialStep(promptTxt);
     }
 
     private void OnCastPerformed() => UpdateTutorialStep(waitTxt);
@@ -64,6 +70,11 @@ public class FishingTutorialManager : MonoBehaviour
         HideTutorial();
         //allows us to fade out the sign before killing the script
         Invoke(nameof(DisableScript), 2f); 
+    }
+
+    private void OnFishEscaped()
+    {
+        if (!tutorialCompleted) UpdateTutorialStep(castTxt);
     }
 
     private void DisableScript() => this.enabled = false;
@@ -80,25 +91,25 @@ public class FishingTutorialManager : MonoBehaviour
     {
         if (tutorialRoutine != null) StopCoroutine(tutorialRoutine);
 
-        tutorialRoutine = StartCoroutine(FadeUI(0f));
+        tutorialRoutine = StartCoroutine(FadeUI(0f, fadeOutSpeed));
     }
 
     private IEnumerator TransitionRoutine(string newMessage)
     {
         if (canvasGroup.alpha > 0)
         {
-            yield return StartCoroutine(FadeUI(0f));
+            yield return StartCoroutine(FadeUI(0f, fadeOutSpeed));
         }
         tutorialText.text = newMessage;
 
-        yield return StartCoroutine(FadeUI(1f));
+        yield return StartCoroutine(FadeUI(1f, fadeInSpeed));
     }
 
-    private IEnumerator FadeUI(float targetAlpha)
+    private IEnumerator FadeUI(float targetAlpha, float speed)
     {
         while (!Mathf.Approximately(canvasGroup.alpha, targetAlpha))
         {
-            canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, targetAlpha, fadeSpeed * Time.deltaTime);
+            canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, targetAlpha, speed * Time.deltaTime);
             yield return null;
         }
     }
