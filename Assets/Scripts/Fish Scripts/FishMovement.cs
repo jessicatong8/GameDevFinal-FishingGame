@@ -242,7 +242,7 @@ public class FishMovement : MonoBehaviour
         if (!GetComponent<Fish>().isActiveFish) return;
 
         // HandleResetToGameplay();
-        FishingManager.Instance.ReturnToGameplay("Fish caught was confirmed.");
+        FishingManager.Instance.ReturnToGameplay("FishCaughtConfirmed");
 
     }
     private void PlaceFishInFrontOfCamera()

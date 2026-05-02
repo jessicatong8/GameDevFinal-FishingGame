@@ -30,7 +30,9 @@ public class FishingManager : MonoBehaviour
     public static event Action<FishingGameState> OnFishingGameStateChanged; // for triggering state-specific animations TODO: get rid of this, referenced in BasicUI
 
     public Fish activeFish;
-    public int currentDrip; // will get from player or overarching score
+    public int currentDrip; // will get from player or overarching score'
+    public string escapeReason;
+
 
     public enum FishingGameState
     {
@@ -86,13 +88,14 @@ public class FishingManager : MonoBehaviour
     {
         if (currentFishingGameState != FishingGameState.Gameplay)
         {
-            ReturnToGameplay("Fishing aborted by player input.");
+            ReturnToGameplay("PlayerAborted");
         }
     }
 
     // Used in TensionManager, LineRangeManager, and CastingManager
     public void EscapeFishing(string reason)
     {
+        // Debug.Log("Fish Escaped: " + escapeReason);
         DebugLogger.Instance.LogMethodCall("FishingManager.EscapeFishing", "-> !OnEscaped");
         OnEscaped?.Invoke();
         ReturnToGameplay(reason);
@@ -110,6 +113,7 @@ public class FishingManager : MonoBehaviour
     // All fishing outcomes (abort, escape, successful catch) resolve here to reset states and trigger animations
     public void ReturnToGameplay(string reason)
     {
+        escapeReason = reason;
         if (currentFishingGameState == FishingGameState.Gameplay) return;
         DebugLogger.Instance.LogMethodCall("FishingManager.ReturnToGameplay", reason);
 
