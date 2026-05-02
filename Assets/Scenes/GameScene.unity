@@ -4303,6 +4303,37 @@ MonoBehaviour:
   xLineLeftRange: -8
   xLineRightRange: 8
   isInLineRange: 0
+--- !u!1 &380576126
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 380576127}
+  m_Layer: 0
+  m_Name: MashPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &380576127
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380576126}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 330.78564, y: 230.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 838503646}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &384996550
 GameObject:
   m_ObjectHideFlags: 0
@@ -8131,7 +8162,7 @@ MonoBehaviour:
   mashSplash1: {fileID: 6042243990886550057, guid: af44cbf49172b8d42b452221c9638892, type: 3}
   mashSplash2: {fileID: 8866987181904549775, guid: 8c8d8385f96bd054a88a3df780d77bcc, type: 3}
   bobPoint: {fileID: 1426164025}
-  mashPoint: {fileID: 83180359}
+  mashPoint: {fileID: 380576127}
 --- !u!4 &838503646
 Transform:
   m_ObjectHideFlags: 0
@@ -8146,7 +8177,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1426164025}
-  - {fileID: 83180359}
+  - {fileID: 380576127}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &841225664
@@ -10112,6 +10143,7 @@ Transform:
   - {fileID: 2031387305}
   - {fileID: 1658998921}
   - {fileID: 8619124962086250685}
+  - {fileID: 2130294455}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &966608309
@@ -18313,7 +18345,7 @@ GameObject:
   - component: {fileID: 1782347215}
   - component: {fileID: 1782347214}
   m_Layer: 0
-  m_Name: Panel
+  m_Name: Menu Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20490,19 +20522,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ce724615a4ffd4d5791d0f0a392180d0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1652712460}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ce724615a4ffd4d5791d0f0a392180d0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1652712461}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ce724615a4ffd4d5791d0f0a392180d0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1652712459}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ce724615a4ffd4d5791d0f0a392180d0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1652712463}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce724615a4ffd4d5791d0f0a392180d0, type: 3}
 --- !u!1 &2064459322
 GameObject:
@@ -21088,6 +21108,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2100941961}
   m_Mesh: {fileID: -7819724793042292410, guid: cfe9405cef691a84bb649ca2d5fbaed2, type: 3}
+--- !u!4 &2130294455 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce724615a4ffd4d5791d0f0a392180d0, type: 3}
+  m_PrefabInstance: {fileID: 2064374369}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2437871869430173347
 PrefabInstance:
   m_ObjectHideFlags: 0
