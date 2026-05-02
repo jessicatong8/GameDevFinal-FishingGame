@@ -54,5 +54,4 @@ public class Hats : MonoBehaviour
     {
         ShowHats(playerLevel - 1);
     }
-
 }
