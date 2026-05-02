@@ -869,7 +869,7 @@ PrefabInstance:
     - target: {fileID: 7495474366873068316, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: inputState
       value: 
-      objectReference: {fileID: 796612805}
+      objectReference: {fileID: 0}
     - target: {fileID: 7495474366873068316, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: fishingLine
       value: 
@@ -881,7 +881,7 @@ PrefabInstance:
     - target: {fileID: 7495474366873068316, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: playerMovement
       value: 
-      objectReference: {fileID: 796612804}
+      objectReference: {fileID: 0}
     - target: {fileID: 7495474366873068316, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       propertyPath: fishingHookObject
       value: 
@@ -923,6 +923,13 @@ PrefabInstance:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 2880828221451337054, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
+    - {fileID: 5749844108527728980, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
+    - {fileID: 6354055011061037513, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
+    - {fileID: 1209043419273133153, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
+    - {fileID: 3202918795698466905, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
+    - {fileID: 7495474366873068316, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
+    - {fileID: 4668563310377310221, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
+    - {fileID: 3359599198103194137, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
     m_RemovedGameObjects:
     - {fileID: 2384808230855692666, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
     - {fileID: 7535372399304021179, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
@@ -933,106 +940,13 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2092221997416066827, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
       insertIndex: -1
       addedObject: {fileID: 160666739}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3202918795698466886, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
-      insertIndex: 2
-      addedObject: {fileID: 796612808}
-    - targetCorrespondingSourceObject: {fileID: 3202918795698466886, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
-      insertIndex: 6
-      addedObject: {fileID: 796612807}
-    - targetCorrespondingSourceObject: {fileID: 3202918795698466886, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 796612806}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
---- !u!1 &796612799 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3202918795698466886, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
-  m_PrefabInstance: {fileID: 796612798}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &796612800 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2092221997416066827, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
   m_PrefabInstance: {fileID: 796612798}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &796612804 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6354055011061037513, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
-  m_PrefabInstance: {fileID: 796612798}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 796612799}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efdb5d66ec2d02841b5bb32aa6d3afc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ThirdPersonCharacter
---- !u!114 &796612805 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1209043419273133153, guid: 8345927da4cb2eb4a9761f91a8897865, type: 3}
-  m_PrefabInstance: {fileID: 796612798}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 796612799}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d097cc9b8b75a244fbffdd1ea8d5cfaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputState
---- !u!114 &796612806
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 796612799}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8a665d986075b045ae8af4cdccbc6fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationBridge
---- !u!114 &796612807
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 796612799}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b627d9be00d235940ab21d71776d0e2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GroundChecker
-  offset: 0.4
-  radius: 1
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 8
-  isGrounded: 1
---- !u!95 &796612808
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 796612799}
-  m_Enabled: 0
-  m_Avatar: {fileID: 9000000, guid: f9f65d468731bcf4fba794d064637f84, type: 3}
-  m_Controller: {fileID: 9100000, guid: 3964edee805e94c2ca573fec3b058bbf, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'Hips'\n\tTransform 'Spine1'\n\tTransform 'RightForeArm'\n\tTransform
-    'LeftLeg'\n\tTransform 'LeftArm'\n\tTransform 'RightShoulder'\n\tTransform 'LeftShoulder'\n\tTransform
-    'RightArm'\n\tTransform 'Spine'\n\tTransform 'LeftForeArm'\n\tand more ...\n\tFrom
-    animation clip 'fall'"
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &954301472
 GameObject:
   m_ObjectHideFlags: 0
