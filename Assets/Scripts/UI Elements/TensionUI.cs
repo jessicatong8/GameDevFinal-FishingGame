@@ -47,14 +47,16 @@ public class TensionUI : MonoBehaviour
         uiPanel.SetActive(false);
     }
 
-    //change to get from tension manager 
     private void SetupSafeZone()
     {
         Fish fish = fishingManager.activeFish;
 
         float safeZoneWidth = fish.safeZoneWidth;
+        float offsetFromCenter = fish.safeZoneCenter - 50f;
+        float parentWidth = tensionSlider.GetComponent<RectTransform>().rect.width;
 
         safeZone.transform.localScale = new Vector3(safeZoneWidth/100, 1f, 1f);
+        safeZone.localPosition = new Vector3(safeZone.localPosition.x + ((offsetFromCenter/100) * parentWidth), safeZone.localPosition.y, safeZone.localPosition.z);
     }
 
     private void Update()

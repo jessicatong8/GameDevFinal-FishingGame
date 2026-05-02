@@ -137,7 +137,7 @@ public class FishMovement : MonoBehaviour
         if (distanceToTarget <= arrivalThreshold)
         {
             transform.position = targetPosition;
-            if (state == FishingManager.FishingGameState.Reeling)
+            if (GetComponent<Fish>().isActiveFish && state == FishingManager.FishingGameState.Reeling)
             {
                 ReelingSetTargetPosition(transform.position);
             }
@@ -274,5 +274,9 @@ public class FishMovement : MonoBehaviour
     public bool IsOutOfLineRange()
     {
         return transform.position.x < xLineLeftRange || transform.position.x > xLineRightRange;
+    }
+    public Vector3 GetFishPosition()
+    {
+        return transform.position;
     }
 }

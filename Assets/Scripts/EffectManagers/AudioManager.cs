@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class FishingAudioManager : MonoBehaviour
 {     
+    [Header("Audio")]
     [SerializeField] private AudioSource backgroundMusic;
     [SerializeField] private AudioSource castWhooshSound;  
     [SerializeField] private AudioSource waterPlopSound;
@@ -10,6 +11,9 @@ public class FishingAudioManager : MonoBehaviour
     [SerializeField] private AudioSource reelingSound;
     [SerializeField] private AudioSource caughtFishSound;
     [SerializeField] private AudioSource escapedFishSound;
+
+    [Header("Timing Specification")]
+    [SerializeField] private float plopDelay = 0.8f;
 
     private void Start()
     {
@@ -39,7 +43,7 @@ public class FishingAudioManager : MonoBehaviour
     private void PlayCastSequence()
     {
         castWhooshSound.Play();
-        Invoke(nameof(PlayPlopSound), 0.4f); 
+        Invoke(nameof(PlayPlopSound), plopDelay); 
     }
 
     private void PlayPlopSound()
