@@ -27,7 +27,6 @@ public class FishingManager : MonoBehaviour
     public static event Action OnReturnToGameplay;
     public static event Action<int> OnLevelUp; // when player levels up by catching a certain number of fish
     public static event Action OnGameWin; // when player catches all fish and wins the game
-
     public static event Action<FishingGameState> OnFishingGameStateChanged; // for triggering state-specific animations TODO: get rid of this, referenced in BasicUI
 
     public Fish activeFish;
@@ -83,7 +82,6 @@ public class FishingManager : MonoBehaviour
         SetFishingGameState(FishingGameState.Reeling);
         OnHook?.Invoke();
     }
-
     private void HandleAbortPerformed()
     {
         if (currentFishingGameState != FishingGameState.Gameplay)
@@ -92,12 +90,14 @@ public class FishingManager : MonoBehaviour
         }
     }
 
+    // Used in TensionManager, LineRangeManager, and CastingManager
     public void EscapeFishing(string reason)
     {
         DebugLogger.Instance.LogMethodCall("FishingManager.EscapeFishing", "-> !OnEscaped");
         OnEscaped?.Invoke();
         ReturnToGameplay(reason);
     }
+    // Used in ProgressManager when player successfully reels in the fish
     public void CaughtFish()
     {
         string fishName = activeFish != null ? activeFish.fishName : "Unknown fish";
@@ -136,25 +136,4 @@ public class FishingManager : MonoBehaviour
         OnGameWin?.Invoke();
         // load new win and retry scene?
     }
-
-    // private void Update()
-    // {
-    //     switch (currentFishingGameState)
-    //     {
-    //         case FishingGameState.Gameplay:
-    //             break;
-
-    //         case FishingGameState.Casting:
-    //             // TickCastingState();
-    //             break;
-
-    //         case FishingGameState.HookWindow:
-    //             // TickHookWindowState();
-    //             break;
-
-    //         case FishingGameState.Reeling:
-    //             // HandleReeling(); // Now handled by ProgressManager and TensionManager
-    //             break;
-    //     }
-    // }
 }
