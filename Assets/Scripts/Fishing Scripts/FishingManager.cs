@@ -16,18 +16,19 @@ public class FishingManager : MonoBehaviour
         }
         private set => instance = value;
     } // Singleton instance for easy access from other scripts, such as TensionManager and ProgressManager during the reeling phase.
+
+
     public static event Action OnCast; // when player initiates fishing by casting the line
     public static event Action OnBite; // after timer when a fish bites line and player can try to hook
     public static event Action OnHook; // when player successfully hooks the fish within the hook window
-
     public static event Action OnEscaped; // when fish escapes due to hook window timing out, player drip being too low, line breaking from high tension, or fish moving out of line range
     public static event Action OnCaught; // when player successfully catches the fish by reeling to 100% progress, the fish will be presented to camera and player can interact to confirm catch (via !OnCatchConfirmationEnd) to return to idle
     // public static event Action OnCatchConfirmationEnd; // when player confirms catch by pressing interact or clicking, which will trigger !onReturnToGameplay to reset everything for the next catch
     public static event Action OnReturnToGameplay;
-
+    public static event Action<int> OnLevelUp; // when player levels up by catching a certain number of fish
     public static event Action OnGameWin; // when player catches all fish and wins the game
 
-    public static event Action<FishingGameState> OnFishingGameStateChanged; // for triggering state-specific animations
+    public static event Action<FishingGameState> OnFishingGameStateChanged; // for triggering state-specific animations TODO: get rid of this, referenced in BasicUI
 
     public Fish activeFish;
     public int currentDrip; // will get from player or overarching score
@@ -113,6 +114,7 @@ public class FishingManager : MonoBehaviour
         DebugLogger.Instance.LogMethodCall("FishingManager.ReturnToGameplay", reason);
 
         SetFishingGameState(FishingGameState.Gameplay);
+
         if (activeFish != null)
         {
             activeFish.isActiveFish = false;
@@ -120,15 +122,21 @@ public class FishingManager : MonoBehaviour
         }
         else
         {
-            DebugLogger.Instance.LogWarning("FishingManager.ReturnToGameplay called with no active fish.");
+            // DebugLogger.Instance.LogWarning("FishingManager.ReturnToGameplay called with no active fish.");
         }
         OnReturnToGameplay?.Invoke();
+    }
+    public void InvokeLevelUp(int currentLevel)
+    {
+        DebugLogger.Instance.LogMethodCall($"Player leveled up to {currentLevel}!");
+        OnLevelUp?.Invoke(currentLevel);
     }
     public void InvokeGameWin()
     {
         OnGameWin?.Invoke();
         // load new win and retry scene?
     }
+
     // private void Update()
     // {
     //     switch (currentFishingGameState)

@@ -31,6 +31,8 @@ public class CastingManager : MonoBehaviour
     public float minHookWindow = 1.5f;
     public float maxHookWindow = 3f;
 
+    [SerializeField] private bool disableDripCheck;
+
 
     private void Awake()
     {
@@ -125,6 +127,10 @@ public class CastingManager : MonoBehaviour
 
     private bool IsPlayerDrippyEnough()
     {
+        if (disableDripCheck)
+        {
+            return true;
+        }
         return activeFish.level <= LevelManager.Instance.GetPlayerLevel();
     }
 

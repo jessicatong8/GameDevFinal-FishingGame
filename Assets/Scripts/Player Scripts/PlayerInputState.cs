@@ -39,10 +39,11 @@ public class PlayerInputState : MonoBehaviour
     public static event Action HookPerformed;
     public static event Action MashPerformed;
     public static event Action ConfirmCatchPerformed;
-    public event Action ReelLeftPerformed;
-    public event Action ReelRightPerformed;
+    public static event Action ReelLeftPerformed;
+    public static event Action ReelRightPerformed;
     public static event Action AbortPerformed;
     public static event Action DebugPerformed;
+    public static event Action CycleHatPerformed;
     // Menu?
     public InputStates CurrentState => currentState;
     [SerializeField] private InputStates currentState = InputStates.Gameplay;
@@ -144,11 +145,21 @@ public class PlayerInputState : MonoBehaviour
         if (currentState == InputStates.Gameplay)
         {
             // Toggle zoom between 1st person and 3rd person
-            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnZoomToggle", $"-> Current zoom input: {(ZoomInputData == 0f ? "1 (3rd P)" : "0 (1st P)")}.");
+            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnZoomToggle", $"-> Current zoom input: {(ZoomInputData == 0f ? "1 (3rd P)" : "0 (1st P)")}.");
             ZoomInputData = ZoomInputData == 0f ? 1f : 0f;
         }
     }
 
+    public void OnCycleHat(InputValue value)
+    {
+        if (!value.isPressed) return;
+
+        if (currentState == InputStates.Gameplay)
+        {
+            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnCycleHat", "-> !CycleHatPerformed");
+            CycleHatPerformed?.Invoke();
+        }
+    }
     public void OnInteract(InputValue value)
     {
         if (!value.isPressed) return;
@@ -172,7 +183,7 @@ public class PlayerInputState : MonoBehaviour
 
         if (currentState == InputStates.Fishing || fishingManagerInstance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
         {
-            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnConfirmCatch", "-> !ConfirmCatchPerformed");
+            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnConfirmCatch", "-> !ConfirmCatchPerformed");
             ConfirmCatchPerformed?.Invoke();
         }
     }
@@ -239,17 +250,17 @@ public class PlayerInputState : MonoBehaviour
     {
         if (!value.isPressed) return;
 
-        if (currentState == InputStates.Fishing && 
+        if (currentState == InputStates.Fishing &&
         fishingManagerInstance.CurrentFishingGameState != FishingManager.FishingGameState.CatchPresentation)
         {
-            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !AbortPerformed");
+            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !AbortPerformed");
             AbortPerformed?.Invoke();
         }
         // acts as confirm catch during catch presentation
-        else if (currentState == InputStates.Fishing && 
+        else if (currentState == InputStates.Fishing &&
         fishingManagerInstance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
         {
-            DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !ConfirmCatchPerformed");
+            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !ConfirmCatchPerformed");
             ConfirmCatchPerformed?.Invoke();
         }
     }
