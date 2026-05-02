@@ -129,8 +129,6 @@ public class DebugCanvasUI : MonoBehaviour
                     // PROGRESS
                     debugText += $"Reeling Progress: {progressManager.GetCurrentProgress():F2} / 100.00%\n";
 
-                    // WIGGLE
-                    debugText += "Wiggle?: <color=#808080>TODO</color>\n";
                     debugText += "\n";
                 }
                 if (isInCatchPresentation)
@@ -162,9 +160,6 @@ public class DebugCanvasUI : MonoBehaviour
                 debugText += $"Object Name: {activeFish.name}\n";
                 debugText += $"Drip Level: {activeFish.level:F2}\n";
 
-                // debugText += $"Wiggle On Timer: {activeFish.wiggleOnTimer:F2}\n";
-                // debugText += $"Wiggle Off Timer: {activeFish.wiggleOffTimer:F2}\n";
-                // debugText += $"Wiggle Strength: {activeFish.wiggleStrength:F2}\n";
                 // debugText += $"Max Tension: {activeFish.maxTension:F2}\n";
 
                 // TENSION
