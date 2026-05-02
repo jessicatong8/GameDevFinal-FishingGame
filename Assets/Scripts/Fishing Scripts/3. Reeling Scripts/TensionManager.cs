@@ -90,7 +90,7 @@ public class TensionManager : MonoBehaviour
         if (outOfZoneTimer >= escapeTime)
         {
             outOfZoneTimer = 0f;
-            FishingManager.Instance.EscapeFishing("Tension too high, line snapped");
+            FishingManager.Instance.EscapeFishing("TensionOutOfRange");
         }
     }
 

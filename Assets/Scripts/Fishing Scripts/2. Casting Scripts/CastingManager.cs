@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 
 public class CastingManager : MonoBehaviour
@@ -118,7 +117,7 @@ public class CastingManager : MonoBehaviour
             {
                 DebugLogger.Instance.LogMethodCall("CastingManager.HandleHookPerformed", "-> !OnHook\nHook failed. You are not drippy enough for this fish.");
                 FishSequenceManager.Instance.IncrementFishSequenceIndex();
-                FishingManager.Instance.EscapeFishing("This fish ignored you because you are not drippy enough.");
+                FishingManager.Instance.EscapeFishing("DripLevelTooLow");
 
             }
 
@@ -150,7 +149,7 @@ public class CastingManager : MonoBehaviour
         hookTimer -= Time.deltaTime;
         if (hookTimer <= 0)
         {
-            FishingManager.Instance.EscapeFishing("Fish escaped because hook window timed out.");
+            FishingManager.Instance.EscapeFishing("HookWindowTimedOut");
         }
     }
 
