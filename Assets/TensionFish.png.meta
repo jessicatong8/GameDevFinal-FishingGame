@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b8e6beb9ac3aa47dd9ec311adecb3860
+guid: 54eab1b0893d24fb487dbcbf250db894
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TensionOutside_0
+      name: TensionFish_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 802
-        height: 310
+        width: 599
+        height: 417
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -125,8 +125,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c5c4b2ab016a341e0864c5611ccc3002
-      internalID: 1721809757
+      spriteID: dbd63f617db564864878e9f319d56873
+      internalID: 1541382107
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 21ebe864a259b48eea5a215f442fc51d
+    spriteID: 3aab8b60d04f84ff4b5b18f77675a1dd
     internalID: 0
     vertices: []
     indices: 
@@ -145,7 +145,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      TensionOutside_0: 1721809757
+      TensionFish_0: 1541382107
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
