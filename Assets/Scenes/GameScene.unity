@@ -7087,12 +7087,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2001369991}
+  m_Father: {fileID: 1030449159}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: -40, y: -30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &802838066
 MonoBehaviour:
@@ -7141,12 +7141,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45.35
+  m_fontSize: 40
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 10
-  m_fontSizeMax: 55
+  m_fontSizeMin: 5
+  m_fontSizeMax: 40
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -8428,7 +8428,8 @@ MonoBehaviour:
   castTxt: Let's start fishing! Press [E] to cast your line!
   waitTxt: Now we wait for a fish to come along...
   biteTxt: You've got a fish on the line! Press [SPACE] to hook it!
-  reelTxt: Keep the fish in the green! Press [SPACE] to reel.
+  reelTxt: "Keep the fish icon in the green! Press [SPACE] to reel. \n\nUse [LEFT/RIGHT]
+    arrows to keep the fish in the circle!"
 --- !u!114 &926891666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10283,7 +10284,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 802838065}
   m_Father: {fileID: 2001369991}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -11811,7 +11813,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 14b21a45d420e453f9b84619defa6a64, type: 3}
+  m_Resource: {fileID: 8300000, guid: 1b9a489ecaa5040a4854f0e07f9fa0fa, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.4
   m_Pitch: 1
@@ -17935,7 +17937,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1030449159}
-  - {fileID: 802838065}
   m_Father: {fileID: 926891664}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
