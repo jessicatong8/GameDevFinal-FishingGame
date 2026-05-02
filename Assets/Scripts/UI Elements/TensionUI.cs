@@ -61,11 +61,7 @@ public class TensionUI : MonoBehaviour
 
     private void Update()
     {
-        if (uiPanel.activeSelf == false)
-        {
-            return;
-        }
-
+        if (uiPanel.activeSelf == false) return;
         float currentTension = tensionManager.GetCurrentTension();
         tensionSlider.value = currentTension;
     }
