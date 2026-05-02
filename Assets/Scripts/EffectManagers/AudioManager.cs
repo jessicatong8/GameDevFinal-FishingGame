@@ -39,8 +39,7 @@ public class FishingAudioManager : MonoBehaviour
     private void PlayCastSequence()
     {
         castWhooshSound.Play();
-        Invoke(nameof(PlayPlopSound), 0.5f); 
-        //calls method in specified amount of time
+        Invoke(nameof(PlayPlopSound), 0.4f); 
     }
 
     private void PlayPlopSound()
