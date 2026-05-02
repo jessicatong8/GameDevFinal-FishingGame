@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
 
 public class BasicUI : MonoBehaviour
 {
@@ -30,6 +29,7 @@ public class BasicUI : MonoBehaviour
         FishingManager.OnEscaped -= HandleEscaped;
         FishingManager.OnFishingGameStateChanged -= HandleFishingGameStateChanged;
         FishingManager.OnReturnToGameplay -= HandleReturnToGameplay;
+        PlayerInputState.MenuTogglePerformed -= HandleReturnToGameplay;
     }
 
     void Start()
@@ -68,8 +68,10 @@ public class BasicUI : MonoBehaviour
     }
     void HandleCaught()
     {
-        // NOW HANDLED BY CATCH PRESENTATION UI
-        statusText.text = "";   
+        // Color txtcColor= new Color(0.447f, 0.851f, 0.447f, 1.000f);
+        Color txtColor = new Color(1.000f, 1.000f, 1.000f, 1.000f);
+        string txtColorHEX = ColorUtility.ToHtmlStringRGBA(txtColor);
+        statusText.text = $"FISH CAUGHT: <color=#{txtColorHEX}>{fishingManager.activeFish.fishName}</color>";
     }
     void HandleEscaped()
     {
@@ -78,6 +80,7 @@ public class BasicUI : MonoBehaviour
     }
     void HandleFishingGameStateChanged(FishingManager.FishingGameState state)
     {
+        bool isInMenu = PlayerInputState.Instance.CurrentState == PlayerInputState.InputStates.Menu;
         bool isFishing = state != FishingManager.FishingGameState.Gameplay;
         if (isFishing)
         {
@@ -92,6 +95,12 @@ public class BasicUI : MonoBehaviour
         }
     }
     void HandleReturnToGameplay()
+    {
+        HandleFishingGameStateChanged(FishingManager.FishingGameState.Gameplay);
+        UpdateProgressSlider(0);
+        statusText.text = "Press F to Fish";
+    }
+    void HandleMenu()
     {
         HandleFishingGameStateChanged(FishingManager.FishingGameState.Gameplay);
         UpdateProgressSlider(0);
