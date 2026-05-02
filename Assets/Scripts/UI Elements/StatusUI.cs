@@ -81,6 +81,9 @@ public class StatusUI : MonoBehaviour
             case "PlayerAborted":
                 SetGamePlayText();
                 break;
+            case "FishCaughtConfirmed":
+                SetGamePlayText();
+                break;
         }
         ;
     }
