@@ -47,10 +47,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f458d00b3c54c1f4fa29f3c6bf83b67e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishingRig
-  fishingRodAssembly: {fileID: 3380109793904160769}
-  fishingLineChildPath: Fishing Line
-  fishingHookChildPath: Fishing Hook
-  castPointChildPath: CastPoint
+  fishingLine: {fileID: 8981985187298196281}
+  lineStartPoint: {fileID: 4120425288822468931}
+  fishingHook: {fileID: 5487100418549315351}
+  bobVFX: {fileID: 0}
+  landingTarget: {fileID: 0}
 --- !u!1 &5487100418549315351
 GameObject:
   m_ObjectHideFlags: 0
