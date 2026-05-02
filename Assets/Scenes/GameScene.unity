@@ -10317,10 +10317,7 @@ MonoBehaviour:
   - {fileID: 8619124962086250684}
   prototypeFishSequence:
   - {fileID: 2074694865}
-  - {fileID: 1196392398}
-  - {fileID: 262265230}
-  - {fileID: 8619124962086250684}
-  usePrototypeFishSequence: 0
+  usePrototypeFishSequence: 1
 --- !u!1 &989545184
 GameObject:
   m_ObjectHideFlags: 0
@@ -12851,7 +12848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d63a22c1fdf8d4d599d58557de606008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressManager
-  startingProgress: 0
+  startingProgress: 70
 --- !u!4 &1152363079
 Transform:
   m_ObjectHideFlags: 0
