@@ -13,7 +13,7 @@ public class FishingTutorialManager : MonoBehaviour
     
     [Header("Tutorial Texts")]
     [SerializeField] private string promptTxt = "Walk to the dock to start fishing!"; 
-    [SerializeField] private string castTxt = "Let's start fishing! Press [E] to cast your line!";
+    [SerializeField] private string castTxt = "Let's start fishing! Press [F] to cast your line!";
     [SerializeField] private string waitTxt = "Now we wait for a fish to come along...";
     [SerializeField] private string biteTxt = "You've got a fish on the line! Press [SPACE] to hook it!";
     [SerializeField] private string reelTxt = "Keep the fish icon in the green! Press [SPACE] to reel. \n\nUse [LEFT/RIGHT] arrows to keep the fish in the circle!";
