@@ -14,6 +14,7 @@ public class StatusUI : MonoBehaviour
         FishingManager.OnBite += HandleBite;
         FishingManager.OnHook += HandleHook;
         FishingManager.OnReturnToGameplay += HandleReturnToGameplay;
+        FishingManager.OnLevelUp += HandleLevelUp;
     }
 
     void OnDisable()
@@ -22,6 +23,7 @@ public class StatusUI : MonoBehaviour
         FishingManager.OnBite -= HandleBite;
         FishingManager.OnHook -= HandleHook;
         FishingManager.OnReturnToGameplay -= HandleReturnToGameplay;
+        FishingManager.OnLevelUp -= HandleLevelUp;
     }
 
     void Start()
@@ -64,7 +66,7 @@ public class StatusUI : MonoBehaviour
                 // SetGamePlayText();
                 break;
             case "DripLevelTooLow":
-                statusText.text = "The fish ignored you because you aren’t drippy enough yet";
+                statusText.text = "You were mogged, your face card declined and the fish swam away.";
                 StartCoroutine(EscapedMessageDelay(2.5f));
                 // SetGamePlayText();
                 break;
@@ -86,6 +88,17 @@ public class StatusUI : MonoBehaviour
                 break;
         }
         ;
+    }
+
+    private void HandleLevelUp(int playerLevel)
+    {
+        // Debug.Log(playerLevel);
+        statusText.text = "Congrats, you just got DRIPPED OUT! Maybe you're finally cool enough for drippier fish...";
+    }
+
+    private void HandleCaught()
+    {
+        //TODO change text depending on level of fish caught
     }
 
     private System.Collections.IEnumerator EscapedMessageDelay(float delay)
