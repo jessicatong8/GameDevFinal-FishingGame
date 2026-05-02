@@ -16,7 +16,7 @@ public class FishingTutorialManager : MonoBehaviour
     [SerializeField] private string castTxt = "Let's start fishing! Press [E] to cast your line!";
     [SerializeField] private string waitTxt = "Now we wait for a fish to come along...";
     [SerializeField] private string biteTxt = "You've got a fish on the line! Press [SPACE] to hook it!";
-    [SerializeField] private string reelTxt = "Keep the fish icon in the green bar! Press [SPACE] to reel.\nUse [LEFT/RIGHT] arrows to keep the fish in the circle!";
+    [SerializeField] private string reelTxt = "Keep the fish icon in the green bar! Press [SPACE] to reel. Use [LEFT/RIGHT] arrows to keep the fish in the circle!";
 
     private bool tutorialCompleted = false; //prevents race conditions
     private Coroutine tutorialRoutine; //prevents multiple conflicting coroutines from firing at the same time 

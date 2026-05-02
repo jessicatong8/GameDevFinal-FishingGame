@@ -50,7 +50,6 @@ public class FishingAudioManager : MonoBehaviour
     private void PlayBiteSound()
     {
         fishBiteSound.Play();
-        //maybe play tense music??
     }
 
     private void PlayHookSound()
