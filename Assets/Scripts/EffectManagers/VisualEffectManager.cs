@@ -124,7 +124,7 @@ public class VisualEffectManager : MonoBehaviour
         int newLevel = LevelManager.Instance.GetPlayerLevel();
         Vector3 targetPosition = targetAnchor.position + targetAnchor.forward;
         Vector3 localOffset = new Vector3(0f, -0.5f, 2.5f);
-        currentHat = levelUpHats[newLevel - 1];
+        currentHat = levelUpHats[newLevel - 2];
         currentHat = Instantiate(currentHat, targetPosition + targetAnchor.TransformVector(localOffset), Quaternion.identity);
         currentHat.SetActive(true);
     }
