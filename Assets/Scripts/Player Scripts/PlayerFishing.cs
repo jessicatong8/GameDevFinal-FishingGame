@@ -72,7 +72,7 @@ public class PlayerFishing : MonoBehaviour
     }
     private void BeginCast()
     {
-        Debug.Log("PlayerFishing: Beginning cast animation and visuals.");
+        // Debug.Log("PlayerFishing: Beginning cast animation and visuals.");
         transform.LookAt(Vector3.zero); // look forward towards water
         transform.position = fishingPosition;
         animator.SetTrigger("cast");
@@ -94,7 +94,7 @@ public class PlayerFishing : MonoBehaviour
             DebugLogger.Instance.LogWarning("HandleFishingEnded called but player is not in fishing state.");
             return;
         }
-        
+
         // Keep player in fishing mode while presentations (catch and level up) are being shown
         FishingManager.FishingGameState currentState = FishingManager.Instance.CurrentFishingGameState;
         

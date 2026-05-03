@@ -724,6 +724,14 @@ PrefabInstance:
       value: -5.4
       objectReference: {fileID: 0}
     - target: {fileID: 8765664314995135046, guid: 7361a0a4066014b73aec58c26427b5a9, type: 3}
+      propertyPath: localOffset.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8765664314995135046, guid: 7361a0a4066014b73aec58c26427b5a9, type: 3}
+      propertyPath: localOffset.z
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8765664314995135046, guid: 7361a0a4066014b73aec58c26427b5a9, type: 3}
       propertyPath: reelingHeight
       value: 1
       objectReference: {fileID: 0}
@@ -4690,6 +4698,14 @@ PrefabInstance:
       value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: localOffset.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: localOffset.z
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: reelingHeight
       value: 0.9
       objectReference: {fileID: 0}
@@ -4825,6 +4841,14 @@ PrefabInstance:
     - target: {fileID: 2804580490823429068, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: m_Name
       value: 6_Level2Fish_Mandarin
+      objectReference: {fileID: 0}
+    - target: {fileID: 8174870239663022773, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
+      propertyPath: localOffset.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8174870239663022773, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
+      propertyPath: localOffset.z
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 8174870239663022773, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: reelingSpeedVariation
@@ -7638,6 +7662,14 @@ PrefabInstance:
     - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: reelingProgressRate
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: localOffset.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: localOffset.z
+      value: 2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10591,6 +10623,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: 5_Level1Fish_YellowTang
       objectReference: {fileID: 0}
+    - target: {fileID: 2608195185711172662, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
+      propertyPath: localOffset.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608195185711172662, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
+      propertyPath: localOffset.z
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6934182710573912601, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.24
@@ -12934,7 +12974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d63a22c1fdf8d4d599d58557de606008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressManager
-  startingProgress: 0
+  startingProgress: 70
 --- !u!4 &1152363079
 Transform:
   m_ObjectHideFlags: 0
@@ -13542,6 +13582,14 @@ PrefabInstance:
     - target: {fileID: 1430605049871976209, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: m_Name
       value: 2_Level1Fish_Tuna
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608195185711172662, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
+      propertyPath: localOffset.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608195185711172662, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
+      propertyPath: localOffset.z
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 6934182710573912601, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: m_LocalScale.x
@@ -15080,6 +15128,14 @@ PrefabInstance:
     - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: idleHeight
       value: -2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: localOffset.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: localOffset.z
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: reelingHeight
@@ -21943,6 +21999,14 @@ PrefabInstance:
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 8174870239663022773, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
+      propertyPath: localOffset.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8174870239663022773, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
+      propertyPath: localOffset.z
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8174870239663022773, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: reelingHeight
       value: 0.35
       objectReference: {fileID: 0}
@@ -22143,6 +22207,14 @@ PrefabInstance:
       value: -3.5
       objectReference: {fileID: 0}
     - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: localOffset.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: localOffset.z
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: reelingHeight
       value: 0.65
       objectReference: {fileID: 0}
@@ -22328,6 +22400,14 @@ PrefabInstance:
       value: 3_Level2Fish_RoyalGramma
       objectReference: {fileID: 0}
     - target: {fileID: 8174870239663022773, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
+      propertyPath: localOffset.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8174870239663022773, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
+      propertyPath: localOffset.z
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8174870239663022773, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: wobbleFrequency
       value: 3
       objectReference: {fileID: 0}
@@ -22425,6 +22505,14 @@ PrefabInstance:
     - target: {fileID: 6197005950305113567, guid: 7361a0a4066014b73aec58c26427b5a9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8765664314995135046, guid: 7361a0a4066014b73aec58c26427b5a9, type: 3}
+      propertyPath: localOffset.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8765664314995135046, guid: 7361a0a4066014b73aec58c26427b5a9, type: 3}
+      propertyPath: localOffset.z
+      value: 2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
