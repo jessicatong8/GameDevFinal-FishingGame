@@ -78,7 +78,7 @@ public class LineRangeManager : MonoBehaviour
         if (activeFishMovement.IsOutOfLineRange())
         {
             DebugLogger.Instance.Log("LineRangeManager: Fish is out of line range!");
-            FishingManager.Instance.EscapeFishing("Fish escaped because it went out of the line range");
+            FishingManager.Instance.EscapeFishing("OutOfLineRange");
             isInLineRange = false;
         }
         else

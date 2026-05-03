@@ -16,7 +16,7 @@ public class Fish : MonoBehaviour
     public float tensionDropRate = 20f; // how fast the tension drops when mashing
     public float safeZoneCenter = 50f;
     public float safeZoneWidth = 50f;
-    // public float burstStrength = 0.3f;
+    public float startingTension = 50f;
     public float tensionEscapeTime = 3f; // how long the player can stay out of the safe tension zone before the fish escapes
 
 

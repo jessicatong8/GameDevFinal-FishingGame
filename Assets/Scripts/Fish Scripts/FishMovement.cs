@@ -240,10 +240,7 @@ public class FishMovement : MonoBehaviour
     private void HandleCatchConfirmation()
     {
         if (!GetComponent<Fish>().isActiveFish) return;
-
-        // HandleResetToGameplay();
-        FishingManager.Instance.ReturnToGameplay("Fish caught was confirmed.");
-
+        FishingManager.Instance.ReturnToGameplay("FishCaughtConfirmed");
     }
     private void PlaceFishInFrontOfCamera()
     {
@@ -251,13 +248,11 @@ public class FishMovement : MonoBehaviour
         Vector3 targetPosition = targetAnchor.position + targetAnchor.forward;
         transform.position = targetPosition + targetAnchor.TransformVector(localOffset);
         transform.LookAt(PlayerCamera.Instance.transform.position);
-
     }
     private void RotateFish()
     {
         transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime, Space.World);
     }
-
     public bool IsInInnerLineRange()
     {
         return transform.position.x > xLineLeftWarningRange && transform.position.x < xLineRightWarningRange;

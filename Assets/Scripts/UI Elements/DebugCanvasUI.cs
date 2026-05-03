@@ -93,7 +93,7 @@ public class DebugCanvasUI : MonoBehaviour
             debugText += $"Current Fishing Area: {(FishingAreaTrigger.IsPlayerInFishingArea ? "<color=#00FF00>Yes</color>" : "<color=#FF0000>No</color>")}\n";
             // Player's Fishing Status
             debugText += $"Fishing State: <color=#00FFFF>{fishingManager.CurrentFishingGameState}</color>\n";
-            debugText += $"Current Drip: {fishingManager.currentDrip}\n";
+            debugText += $"Current Drip: {LevelManager.Instance.GetPlayerLevel()}\n";
 
             debugText += "\n";
         }

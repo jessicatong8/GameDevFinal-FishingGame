@@ -88,9 +88,6 @@ public class FishSequenceManager : MonoBehaviour
 
         if (FishData.fishSequenceIndex == sequence.Length - 1)
         {
-            Debug.Log("All fish in sequence have been caught, invoking game win and resetting fish data.");
-            FishingManager.Instance.InvokeGameWin();
-            ResetFishData();
             return true;
         }
         return false;

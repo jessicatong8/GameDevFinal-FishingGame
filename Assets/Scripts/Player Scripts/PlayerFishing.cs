@@ -46,7 +46,6 @@ public class PlayerFishing : MonoBehaviour
         PlayerInputState.InteractPerformed += HandleInteract;
         FishingManager.OnHook += BeginReeling;
         FishingManager.OnCaught += HandleFishPresentation;
-        // FishingManager.OnEscaped += HandleFishingEnded;
         FishingManager.OnReturnToGameplay += HandleFishingEnded;
     }
 
@@ -55,7 +54,6 @@ public class PlayerFishing : MonoBehaviour
         PlayerInputState.InteractPerformed -= HandleInteract;
         FishingManager.OnHook -= BeginReeling;
         FishingManager.OnCaught -= HandleFishPresentation;
-        // FishingManager.OnEscaped -= HandleFishingEnded;
         FishingManager.OnReturnToGameplay -= HandleFishingEnded;
     }
 
@@ -63,16 +61,15 @@ public class PlayerFishing : MonoBehaviour
     {
         if (IsFishing) return;
 
-        // Calls TryStartFishing which checks all conditions and returns false if fishing cannot be started (not on dock or not in idle state)
-        if (CastingManager.Instance.TryStartFishing())
+        // Calls AttemptCast which checks all conditions and returns false if fishing cannot be started (not on dock or not in idle state)
+        if (CastingManager.Instance.AttemptCast())
         {
-            // TryStartFishing() -> fishingManager takes over (either failing or progressing to EnterCastingState()).
+            // AttemptCast() -> fishingManager takes over (either failing or progressing to EnterCastingState()).
             // DebugLogger.Instance.Log("PlayerFishing: Fishing started successfully.");
             SetFishingActive(true);
             BeginCast(); // only handles animation and visuals for casting, while the FishingManager handles the actual game state and logic for casting.
         }
     }
-
     private void BeginCast()
     {
         Debug.Log("PlayerFishing: Beginning cast animation and visuals.");
@@ -82,7 +79,6 @@ public class PlayerFishing : MonoBehaviour
         animator.SetBool("isFishing", true);
         fishingRig.TriggerCast(); 
     }
-
     // Begin Reeling/Mashing Process
     private void BeginReeling()
     {
@@ -91,7 +87,6 @@ public class PlayerFishing : MonoBehaviour
         animator.ResetTrigger("cast");
         fishingRig.TriggerReel(); 
     }
-
     private void HandleFishingEnded()
     {
         if (!IsFishing)
@@ -108,7 +103,6 @@ public class PlayerFishing : MonoBehaviour
     {
         animator.SetBool("isReeling", false);
         animator.SetBool("isPresenting", true);
-        // FishingManager.Instance.CompleteCatchConfirmation() will be called by the catch presentation UI when the player confirms the catch, which will then trigger the return to gameplay state and reset animations.
     }
     private void SetFishingActive(bool fishingActive)
     {

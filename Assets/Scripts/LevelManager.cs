@@ -1,4 +1,7 @@
 using UnityEngine;
+using System;
+
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -13,68 +16,62 @@ public class LevelManager : MonoBehaviour
         }
         private set => instance = value;
     }
+
+    public static event Action<int> OnLevelUp; // after a catch is confirmed, when player levels up by catching a certain number of fish
+    public static event Action OnGameWin; // after a catch is confirmed, when player catches all fish and wins the game
+
     void Awake()
     {
         ResetPlayerLevel();
     }
-
     private void OnEnable()
     {
         FishingManager.OnCaught += HandleCaught;
-        FishingManager.OnGameWin += ResetPlayerLevel;
+        PlayerInputState.ConfirmCatchPerformed += HandleCatchConfirmed;
     }
-
     private void OnDisable()
     {
         FishingManager.OnCaught -= HandleCaught;
-        FishingManager.OnGameWin -= ResetPlayerLevel;
     }
     public int GetPlayerLevel()
     {
         return PlayerData.playerLevel;
     }
-
-    public void IncrementPlayerLevel()
+    private void IncrementPlayerLevel()
     {
         PlayerData.playerLevel++;
-        FishingManager.Instance.InvokeLevelUp(PlayerData.playerLevel);
+        DebugLogger.Instance.LogMethodCall($"Player leveled up to {PlayerData.playerLevel}!");
+        OnLevelUp?.Invoke(PlayerData.playerLevel);
     }
-
-    public void ResetPlayerLevel()
+    private void ResetPlayerLevel()
     {
         PlayerData.playerLevel = 1;
     }
-
     private void HandleCaught()
     {
         FishSequenceManager.Instance.IncrementFishCaught();
+    }
+
+    private void HandleCatchConfirmed()
+    {
+        // Invoke events for leveling player up and winning the game
+
         int numFishCaught = FishSequenceManager.Instance.GetNumFishCaught();
-
-        // Debug.Log("Fish was caught, checking if you can level up. Current level: " + GetPlayerLevel());
-
         Debug.Log("You've caught " + numFishCaught + " fish!");
         if (numFishCaught == 2 || numFishCaught == 5 || numFishCaught == 9 || numFishCaught == 10) // according to our preset fish sequence
         {
             IncrementPlayerLevel();
-            // Debug.Log("Enough fish were caught, you have leveled up. Current level: " + GetPlayerLevel());
-
         }
-        // CheckGameWin();
+        if (FishSequenceManager.Instance.CheckGameWin()) //TODO move checkGameWin here
+        {
+            HandleGameWin();
+        }
     }
 
-    // public void CheckGameWin()
-    // {
-    //     Debug.Log("A fish was caught, checking for game win.");
-
-
-    //     if (GetPlayerLevel() == 5)
-    //     {
-    //         Debug.Log("All fish in have been caught, invoking game win!");
-    //         FishingManager.Instance.InvokeGameWin();
-    //         ResetPlayerLevel();
-
-    //     }
-
-    // }
-
+    private void HandleGameWin()
+    {
+        Debug.Log("All fish in sequence have been caught, invoking game win.");
+        OnGameWin?.Invoke();
+        SceneManager.LoadScene("WinScene");
+    }
 }

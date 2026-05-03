@@ -151,7 +151,6 @@ public class PlayerInputState : MonoBehaviour
 
         if (currentState == InputStates.Gameplay)
         {
-            // In gameplay: starts fishing if possible. In fishing: allows catch confirmation listeners to respond.
             // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnInteract", "-> !InteractPerformed");
             InteractPerformed?.Invoke();
         }
@@ -159,9 +158,9 @@ public class PlayerInputState : MonoBehaviour
     public void OnConfirmCatch(InputValue value)
     {
         if (!value.isPressed) return;
-        if (fishingManager == null) return;
+        if (currentState != InputStates.Fishing) return;
 
-        if (currentState == InputStates.Fishing || fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
+        if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
         {
             // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnConfirmCatch", "-> !ConfirmCatchPerformed");
             ConfirmCatchPerformed?.Invoke();
@@ -172,7 +171,7 @@ public class PlayerInputState : MonoBehaviour
         if (!value.isPressed) return;
         if (currentState != InputStates.Fishing) return;
 
-        if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.HookWindow)
+        if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.HookWindow)
         {
             // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnHook", "-> !HookPerformed\nHookWindow success");
             HookPerformed?.Invoke();
@@ -183,7 +182,7 @@ public class PlayerInputState : MonoBehaviour
         if (!value.isPressed) return;
         if (currentState != InputStates.Fishing) return;
 
-        if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
+        if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
         {
             // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnMash","-> !MashPerformed");
             MashPerformed?.Invoke();
@@ -194,7 +193,7 @@ public class PlayerInputState : MonoBehaviour
         if (!value.isPressed) return;
         if (currentState != InputStates.Fishing) return;
 
-        if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
+        if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
         {
             // Debug.Log("OnReelLeft called with value: " + value);
             ReelLeftPerformed?.Invoke();
@@ -205,7 +204,7 @@ public class PlayerInputState : MonoBehaviour
         if (!value.isPressed) return;
         if (currentState != InputStates.Fishing) return;
 
-        if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
+        if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
         {
             // Debug.Log("OnReelRight called with value: " + value);
             ReelRightPerformed?.Invoke();
@@ -226,13 +225,15 @@ public class PlayerInputState : MonoBehaviour
         {
             // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !AbortPerformed");
             AbortPerformed?.Invoke();
+            FishingManager.Instance.ReturnToGameplay("PlayerAborted");
         }
     }
     public void OnMenuToggle(InputValue value)
     {
         if (!value.isPressed) return;
+        if (currentState != InputStates.Gameplay) return;
 
-        if (currentState == InputStates.Gameplay || currentState == InputStates.Menu)
+        if (currentState == InputStates.Menu)
         {
             // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnMenu", "-> !MenuTogglePerformed");
             MenuTogglePerformed?.Invoke();

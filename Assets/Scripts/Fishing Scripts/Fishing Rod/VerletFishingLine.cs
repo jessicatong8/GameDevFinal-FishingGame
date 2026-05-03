@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 // Based from this repo: https://github.com/Kevin-Kwan/Unity3D-FishingRodMotion?tab=readme-ov-file
@@ -360,38 +359,42 @@ public class VerletFishingLine : MonoBehaviour
         p1.Pos += delta * diff * 0.5f;
         p2.Pos -= delta * diff * 0.5f;
     }
-
-    public void TriggerCast()
+    private Vector3? forcedLandingPoint = null;
+    public void TriggerCast(Vector3? targetPoint = null)
     {
         if (!isRodEquipped) return;
         StopCastMotion();
+
+        // Set initial lengths
         currentTargetLength = startSegmentLength;
         SegmentLength = startSegmentLength;
         isChangingLength = false;
 
-        if (StartPoint == null || EndPoint == null)
-        {
-            return;
-        }
+        if (StartPoint == null || EndPoint == null) return;
 
         lockEndBeforeAttach = lockEndToTransform;
         lockEndToTransform = true;
         EndPoint.position = StartPoint.position;
 
-        Vector3 castOrigin = StartPoint.position;
-        Vector3 castDirection = GetCastDirection();
-        float castDistance = Random.Range(castDistanceMin, castDistanceMax);
-        Vector3 fallbackTarget = castOrigin + castDirection * castDistance;
-
-        if (TryGetWaterLandingPoint(castOrigin, castDirection, castDistance, out Vector3 waterLandingPoint))
+        Vector3 landingPoint;
+        
+        if (targetPoint.HasValue)
         {
-            castTargetPosition = waterLandingPoint;
-            isCastingToWater = true;
-            StartCoroutine(MoveHookToWater(castTargetPosition));
-            return;
+            landingPoint = targetPoint.Value;
         }
+        else
+        {
+            Vector3 castOrigin = StartPoint.position;
+            Vector3 castDirection = GetCastDirection();
+            float castDistance = Random.Range(castDistanceMin, castDistanceMax);
 
-        castTargetPosition = fallbackTarget;
+            // Raycast to find water, fallback to math if no water hit[cite: 26]
+            if (!TryGetWaterLandingPoint(castOrigin, castDirection, castDistance, out landingPoint))
+            {
+                landingPoint = castOrigin + castDirection * castDistance;
+            }
+        }
+        castTargetPosition = landingPoint;
         isCastingToWater = true;
         StartCoroutine(MoveHookToTarget(castTargetPosition));
     }
