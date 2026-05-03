@@ -13,7 +13,6 @@ public class TensionManager : MonoBehaviour
     // TENSION VARIABLES
     private float tension;
     private float maxTension = 100;
-    private float startingTension;
     private float tensionDropRate;
     // TENSION ZONES
     private float safeZoneLower;
@@ -21,26 +20,34 @@ public class TensionManager : MonoBehaviour
     // ESCAPE VARIABLES
     private float outOfZoneTimer; // counts how long tension has been out of the safe zone
     private float escapeTime; // if outOfZoneTimer exceeds escapeTime, fish escapes
-    void Start()
-    {
 
-    }
     private void OnEnable()
     {
         FishingManager.OnHook += HandleHooked;
         PlayerInputState.MashPerformed += HandleMashPerformed;
-        FishingManager.OnCaught += HandleResetToGameplay;
-        FishingManager.OnEscaped += HandleResetToGameplay;
         FishingManager.OnReturnToGameplay += HandleResetToGameplay;
     }
     private void OnDisable()
     {
         FishingManager.OnHook -= HandleHooked;
         PlayerInputState.MashPerformed -= HandleMashPerformed;
-        FishingManager.OnCaught -= HandleResetToGameplay;
-        FishingManager.OnEscaped -= HandleResetToGameplay;
         FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
     }
+
+    void Update()
+    {
+        if (!isReeling)
+        {
+            return;
+        }
+
+        UpdateTension(mashTriggeredThisFrame);
+        UpdateEscapeTimer();
+        mashTriggeredThisFrame = false;
+        // DebugLogger.Instance.Log("Current Tension: " + tension);
+
+    }
+
     private void HandleMashPerformed()
     {
         // DebugLogger.Instance.LogMethodCall("TensionManager: HandleMashPerformed");
@@ -58,7 +65,6 @@ public class TensionManager : MonoBehaviour
         isReeling = true;
         tensionDropRate = activeFish.tensionDropRate;
         tension = activeFish.startingTension;
-        // start in the middle of the safe zone
 
         safeZoneLower = activeFish.safeZoneCenter - activeFish.safeZoneWidth / 2f;
         safeZoneUpper = activeFish.safeZoneCenter + activeFish.safeZoneWidth / 2f;
@@ -99,25 +105,16 @@ public class TensionManager : MonoBehaviour
 
     private void HandleResetToGameplay()
     {
-        // DebugLogger.Instance.LogMethodCall("TensionManager: HandleResetToGameplay");
         mashTriggeredThisFrame = false;
         tension = 0f;
         outOfZoneTimer = 0f;
         isReeling = false;
         activeFish = null;
     }
+
     public float GetCurrentTension()
     {
         return tension;
     }
-    void Update()
-    {
-        if (isReeling)
-        {
-            UpdateTension(mashTriggeredThisFrame);
-            UpdateEscapeTimer();
-            mashTriggeredThisFrame = false;
-            // DebugLogger.Instance.Log("Current Tension: " + tension);
-        }
-    }
+
 }
