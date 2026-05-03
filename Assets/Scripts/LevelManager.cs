@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 
 using UnityEngine.SceneManagement;
 
@@ -16,10 +15,12 @@ public class LevelManager : MonoBehaviour
         }
         private set => instance = value;
     }
-    // private bool playerLeveledUpThisCatch = false; // tracks if player leveled up on this catch before confirming level up presentation
+    private FishSequenceManager fishSequenceManager;
+
     void Awake()
     {
         ResetPlayerLevel();
+        fishSequenceManager = FindFirstObjectByType<FishSequenceManager>();
     }
     private void OnEnable()
     {
@@ -41,7 +42,6 @@ public class LevelManager : MonoBehaviour
     private void IncrementPlayerLevel()
     {
         PlayerData.playerLevel++;
-        // playerLeveledUpThisCatch = true;
         DebugLogger.Instance.LogMethodCall($"Player leveled up to {PlayerData.playerLevel}!");
     }
     private void ResetPlayerLevel()
@@ -50,15 +50,14 @@ public class LevelManager : MonoBehaviour
     }
     private void HandleCaught()
     {
-        // playerLeveledUpThisCatch = false; // reset flag at start of catch
-        FishSequenceManager.Instance.IncrementFishCaught();
+        fishSequenceManager.IncrementFishCaught();
     }
 
     private void HandleCatchConfirmed()
     {
         // Invoke events for leveling player up and winning the game
 
-        int numFishCaught = FishSequenceManager.Instance.GetNumFishCaught();
+        int numFishCaught = fishSequenceManager.GetNumFishCaught();
         Debug.Log("You've caught " + numFishCaught + " fish!");
         if (numFishCaught == 2 || numFishCaught == 5 || numFishCaught == 9 || numFishCaught == 10) // according to our preset fish sequence
         {
@@ -66,7 +65,7 @@ public class LevelManager : MonoBehaviour
             FishingManager.Instance.TransitionToLevelUpPresentation();
         }
 
-        else if (FishSequenceManager.Instance.CheckGameWin()) //TODO move checkGameWin here
+        else if (fishSequenceManager.CheckGameWin()) //TODO move checkGameWin here
         {
             HandleGameWin();
         }

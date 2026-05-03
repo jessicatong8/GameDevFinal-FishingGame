@@ -4,16 +4,6 @@ public class FishSequenceManager : MonoBehaviour
 {
 
     private static FishSequenceManager instance;
-    public static FishSequenceManager Instance
-    {
-        get
-        {
-            if (instance != null) return instance;
-            instance = FindFirstObjectByType<FishSequenceManager>();
-            return instance;
-        }
-        private set => instance = value;
-    }
 
     [SerializeField] private Fish[] fishSequence;
     [SerializeField] private Fish[] prototypeFishSequence;
@@ -70,23 +60,13 @@ public class FishSequenceManager : MonoBehaviour
     private void HandleCaught()
     {
 
-        // if (CheckGameWin())
-        // {
-        //     return;
-
-        // }
-        // IncrementFishCaught();
         IncrementFishSequenceIndex();
-        // Debug.Log("FishSequenceManager: You've caught " + GetNumFishCaught() + " fish");
 
     }
 
     public bool CheckGameWin()
     {
-        // Debug.Log("A fish was caught, checking for game win.");
         Fish[] sequence = usePrototypeFishSequence ? prototypeFishSequence : fishSequence;
-        // Debug.Log("You've caught " + GetNumFishCaught() + " fish");
-        // Debug.Log("Fish Sequence Index: " + FishData.fishSequenceIndex);
 
         if (FishData.fishSequenceIndex == sequence.Length)
         {
