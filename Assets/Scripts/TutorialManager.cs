@@ -9,10 +9,10 @@ public class FishingTutorialManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI tutorialText;
     [SerializeField] private float fadeInSpeed = 3f;
     [SerializeField] private float fadeOutSpeed = 5f;
+    [SerializeField] private float currentAlpha;
 
-    
     [Header("Tutorial Texts")]
-    [SerializeField] private string promptTxt = "Walk to the dock to start fishing!"; 
+    [SerializeField] private string promptTxt = "Walk to the dock to start fishing!";
     [SerializeField] private string castTxt = "Let's start fishing! Press [F] to cast your line!";
     [SerializeField] private string waitTxt = "Now we wait for a fish to come along...";
     [SerializeField] private string biteTxt = "You've got a fish on the line! Press [SPACE] to hook it!";
@@ -69,7 +69,7 @@ public class FishingTutorialManager : MonoBehaviour
         tutorialCompleted = true;
         HideTutorial();
         //allows us to fade out the sign before killing the script
-        Invoke(nameof(DisableScript), 2f); 
+        Invoke(nameof(DisableScript), 2f);
     }
 
     private void OnFishEscaped()
@@ -104,13 +104,22 @@ public class FishingTutorialManager : MonoBehaviour
 
         yield return StartCoroutine(FadeUI(1f, fadeInSpeed));
     }
-
     private IEnumerator FadeUI(float targetAlpha, float speed)
     {
-        while (!Mathf.Approximately(canvasGroup.alpha, targetAlpha))
+        // Use a while loop that checks the distance to the target
+        while (Mathf.Abs(canvasGroup.alpha - targetAlpha) > 0.001f)
         {
             canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, targetAlpha, speed * Time.deltaTime);
             yield return null;
         }
+
+        // Explicitly set the final value to ensure it's perfect
+        canvasGroup.alpha = targetAlpha;
+        canvasGroup.interactable = targetAlpha > 0;
+        canvasGroup.blocksRaycasts = targetAlpha > 0;
+    }
+    void Update()
+    {
+        currentAlpha = canvasGroup.alpha; // For debugging purposes
     }
 }
