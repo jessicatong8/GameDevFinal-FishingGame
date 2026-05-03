@@ -44,7 +44,6 @@ public class FishMovement : MonoBehaviour
     [SerializeField] private float rotationSpeed = 40f;
     private void OnEnable()
     {
-        playerCamera = FindFirstObjectByType<PlayerCamera>();
         FishingManager.OnBite += HandleBite;
         FishingManager.OnHook += HandleHooked;
         FishingManager.OnCaught += HandleCaught;
@@ -55,6 +54,7 @@ public class FishMovement : MonoBehaviour
     }
     void Start()
     {
+        playerCamera = FindFirstObjectByType<PlayerCamera>();
         lineRangeManager = FindFirstObjectByType<LineRangeManager>();
         if (lineRangeManager != null)
         {

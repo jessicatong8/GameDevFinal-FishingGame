@@ -22,15 +22,14 @@ public class PlayerFishing : MonoBehaviour
         {
             DebugLogger.Instance.LogWarning("PlayerFishing: No FishingRig found in children.");
         }
-        playerMovement = GetComponent<PlayerMovement>();
-        groundChecker = GetComponent<GroundChecker>();
-        castingManager = FindFirstObjectByType<CastingManager>();
     }
-
     private void Start()
     {
         // PlayerInputState sets Player to Gameplay state on awake
         SetFishingActive(false);
+        playerMovement = GetComponent<PlayerMovement>();
+        groundChecker = GetComponent<GroundChecker>();
+        castingManager = FindFirstObjectByType<CastingManager>();
     }
 
     private void OnEnable()
@@ -69,7 +68,7 @@ public class PlayerFishing : MonoBehaviour
         transform.position = fishingPosition;
         animator.SetTrigger("cast");
         animator.SetBool("isFishing", true);
-        fishingRig.TriggerCast(); 
+        fishingRig.TriggerCast();
     }
     // Begin Reeling/Mashing Process
     private void BeginReeling()
@@ -77,7 +76,7 @@ public class PlayerFishing : MonoBehaviour
         // animator?.SetTrigger("reel");
         animator.SetBool("isReeling", true);
         animator.ResetTrigger("cast");
-        fishingRig.TriggerReel(); 
+        fishingRig.TriggerReel();
     }
     private void HandleFishingEnded()
     {
@@ -89,7 +88,7 @@ public class PlayerFishing : MonoBehaviour
 
         // Keep player in fishing mode while presentations (catch and level up) are being shown
         FishingManager.FishingGameState currentState = FishingManager.Instance.CurrentFishingGameState;
-        
+
         if (currentState == FishingManager.FishingGameState.CatchPresentation || currentState == FishingManager.FishingGameState.LevelUpPresentation)
         {
             DebugLogger.Instance.Log($"HandleFishingEnded called during {currentState}, ignoring to keep player in fishing mode for presentation.");

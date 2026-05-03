@@ -14,6 +14,7 @@ public class DebugCanvasUI : MonoBehaviour
     private ProgressManager progressManager;
     private LineRangeManager lineRangeManager;
     private FishingManager fishingManager;
+    private LevelManager levelManager;
     private GameObject debugPanel;
     private TextMeshProUGUI debugTextDisplay;
 
@@ -34,12 +35,12 @@ public class DebugCanvasUI : MonoBehaviour
         lineRangeManager = FindFirstObjectByType<LineRangeManager>();
         tensionManager = FindFirstObjectByType<TensionManager>();
         progressManager = FindFirstObjectByType<ProgressManager>();
+        levelManager = FindFirstObjectByType<LevelManager>();
         debugPanel = transform.Find("Debug Panel").gameObject;
         if (debugPanel == null)
         {
             DebugLogger.Instance.LogError("DebugCanvasUI: No Image component found on the GameObject!");
         }
-
         debugTextDisplay = GetComponentInChildren<TextMeshProUGUI>(true);
         if (debugTextDisplay == null)
         {
@@ -48,7 +49,6 @@ public class DebugCanvasUI : MonoBehaviour
         PlayerInputState.DebugPerformed += ToggleDebugUI;
         UpdateDebugDisplay();
     }
-
     private void OnDestroy()
     {
         if (inputState != null)
@@ -56,7 +56,6 @@ public class DebugCanvasUI : MonoBehaviour
             PlayerInputState.DebugPerformed -= ToggleDebugUI;
         }
     }
-
     private void ToggleDebugUI()
     {
         showDebugUI = !showDebugUI;
@@ -95,7 +94,7 @@ public class DebugCanvasUI : MonoBehaviour
             debugText += $"Current Fishing Area: {(FishingAreaTrigger.IsPlayerInFishingArea ? "<color=#00FF00>Yes</color>" : "<color=#FF0000>No</color>")}\n";
             // Player's Fishing Status
             debugText += $"Fishing State: <color=#00FFFF>{fishingManager.CurrentFishingGameState}</color>\n";
-            debugText += $"Current Drip: {LevelManager.Instance.GetPlayerLevel()}\n";
+            debugText += $"Current Drip: {levelManager.GetPlayerLevel()}\n";
 
             debugText += "\n";
         }

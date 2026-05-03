@@ -4,22 +4,14 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    private static LevelManager instance;
-    public static LevelManager Instance
-    {
-        get
-        {
-            if (instance != null) return instance;
-            instance = FindFirstObjectByType<LevelManager>();
-            return instance;
-        }
-        private set => instance = value;
-    }
     private FishSequenceManager fishSequenceManager;
 
     void Awake()
     {
         ResetPlayerLevel();
+    }
+    void Start()
+    {
         fishSequenceManager = FindFirstObjectByType<FishSequenceManager>();
     }
     private void OnEnable()

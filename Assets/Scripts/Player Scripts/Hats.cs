@@ -5,8 +5,10 @@ public class Hats : MonoBehaviour
 {
     [SerializeField] private List<GameObject> hats = new List<GameObject>(); // will have 3 hats
     [SerializeField] private int numHats = 0;
+    private LevelManager levelManager;
     public void Start()
     {
+        levelManager = FindFirstObjectByType<LevelManager>();
         ShowHats(0);
     }
     public void OnEnable()
@@ -52,6 +54,6 @@ public class Hats : MonoBehaviour
 
     private void HandleLevelUp()
     {
-        ShowHats(LevelManager.Instance.GetPlayerLevel() - 1); // playerLevel is 1-based and numHats is 0-based, so subtract 1 to get correct index
+        ShowHats(levelManager.GetPlayerLevel() - 1); // playerLevel is 1-based and numHats is 0-based, so subtract 1 to get correct index
     }
 }

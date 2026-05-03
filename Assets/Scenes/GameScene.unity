@@ -12980,7 +12980,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d63a22c1fdf8d4d599d58557de606008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressManager
-  startingProgress: 70
+  startingProgress: 0
 --- !u!4 &1152363079
 Transform:
   m_ObjectHideFlags: 0

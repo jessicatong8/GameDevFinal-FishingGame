@@ -19,11 +19,13 @@ public class CastingManager : MonoBehaviour
     private FishingManager fishingManager;
     private FishSequenceManager fishSequenceManager;
     private GroundChecker groundChecker;
-    private void Awake()
+    private LevelManager levelManager;
+    private void Start()
     {
         fishingManager = FindFirstObjectByType<FishingManager>();
         fishSequenceManager = FindFirstObjectByType<FishSequenceManager>();
         groundChecker = FindFirstObjectByType<GroundChecker>();
+        levelManager = FindFirstObjectByType<LevelManager>();
     }
     private void OnEnable()
     {
@@ -100,7 +102,7 @@ public class CastingManager : MonoBehaviour
         {
             return true;
         }
-        return activeFish.level <= LevelManager.Instance.GetPlayerLevel();
+        return activeFish.level <= levelManager.GetPlayerLevel();
     }
     private void UpdateCastingTimer()
     {
