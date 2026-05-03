@@ -237,13 +237,6 @@ public class FishMovement : MonoBehaviour
     private void HandleResetToGameplay()
     {
         if (!GetComponent<Fish>().isActiveFish) return;
-        if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation || FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.LevelUpPresentation)
-        {
-            // DebugLogger.Instance.Log("HandleResetToGameplay called during presentation state, ignoring to keep player in fishing mode for presentation.");
-            return;
-        }
-
-        // currentFishingGameState = FishingGameState.Idle;
         position = originalPosition;
         transform.eulerAngles = new Vector3(0, direction * 90f, 0);
         transform.position = position;

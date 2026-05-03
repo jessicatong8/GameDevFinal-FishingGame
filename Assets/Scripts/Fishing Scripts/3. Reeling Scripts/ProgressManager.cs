@@ -13,14 +13,14 @@ public class ProgressManager : MonoBehaviour
     private void OnEnable()
     {
         FishingManager.OnHook += HandleHooked;
-        // FishingManager.OnCaught += HandleReset;
+        FishingManager.OnCaught += HandleReset;
         PlayerInputState.MashPerformed += HandleMashPerformed;
     }
 
     private void OnDisable()
     {
         FishingManager.OnHook -= HandleHooked;
-        // FishingManager.OnCaught -= HandleReset;
+        FishingManager.OnCaught -= HandleReset;
         PlayerInputState.MashPerformed -= HandleMashPerformed;
     }
     void Update()
@@ -50,7 +50,7 @@ public class ProgressManager : MonoBehaviour
     private void HandleReset()
     {
         mashTriggeredThisFrame = false;
-        progress = 0f;
+        progress = startingProgress;
         isReeling = false;
         activeFish = null;
     }
