@@ -81,6 +81,7 @@ public class VisualEffectManager : MonoBehaviour
     {
         GameObject instance = Instantiate(prefab, position, Quaternion.identity);
         instance.transform.localScale = Vector3.one * scale;
+        Destroy(instance, 3f);
     }
     void SpawnCatchPresentationVFX()
     {
