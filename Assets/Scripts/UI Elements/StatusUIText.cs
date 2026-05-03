@@ -11,9 +11,7 @@ public class StatusUIText : MonoBehaviour
         FishingManager.OnCast += HandleCast;
         FishingManager.OnBite += HandleBite;
         FishingManager.OnHook += HandleHook;
-        // FishingManager.OnCaught += HandleCaught;
         FishingManager.OnReturnToGameplay += HandleReturnToGameplay;
-        LevelManager.OnLevelUp += HandleLevelUp;
     }
 
     void OnDisable()
@@ -21,9 +19,7 @@ public class StatusUIText : MonoBehaviour
         FishingManager.OnCast -= HandleCast;
         FishingManager.OnBite -= HandleBite;
         FishingManager.OnHook -= HandleHook;
-        // FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnReturnToGameplay -= HandleReturnToGameplay;
-        LevelManager.OnLevelUp -= HandleLevelUp;
     }
     void Start()
     {
@@ -56,7 +52,7 @@ public class StatusUIText : MonoBehaviour
     // Mainly for a cleaner catch panel and repositioned text to be above the fish presentation
     void HandleReturnToGameplay()
     {
-        string reason = fishingManager.escapeReason;
+        string reason = fishingManager.ReturnToGameplayReason;
         switch (reason)
         {
             case "HookWindowTimedOut":
@@ -85,11 +81,6 @@ public class StatusUIText : MonoBehaviour
                 SetGamePlayText();
                 break;
         }
-    }
-    private void HandleLevelUp(int playerLevel)
-    {
-        // Debug.Log(playerLevel);
-        statusText.text = "Congrats, you just got DRIPPED OUT! Maybe you're finally cool enough for drippier fish...";
     }
     private System.Collections.IEnumerator EscapedMessageDelay(float delay)
     {

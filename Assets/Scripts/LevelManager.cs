@@ -20,6 +20,8 @@ public class LevelManager : MonoBehaviour
     public static event Action<int> OnLevelUp; // after a catch is confirmed, when player levels up by catching a certain number of fish
     public static event Action OnGameWin; // after a catch is confirmed, when player catches all fish and wins the game
 
+    private bool playerLeveledUpThisCatch = false; // tracks if player leveled up on this catch before confirming level up presentation
+
     void Awake()
     {
         ResetPlayerLevel();
@@ -27,7 +29,7 @@ public class LevelManager : MonoBehaviour
     private void OnEnable()
     {
         FishingManager.OnCaught += HandleCaught;
-        PlayerInputState.ConfirmCatchPerformed += HandleCatchConfirmed;
+        PlayerInputState.ConfirmPerformed += HandleCatchConfirmed;
     }
     private void OnDisable()
     {
@@ -40,6 +42,7 @@ public class LevelManager : MonoBehaviour
     private void IncrementPlayerLevel()
     {
         PlayerData.playerLevel++;
+        playerLeveledUpThisCatch = true;
         DebugLogger.Instance.LogMethodCall($"Player leveled up to {PlayerData.playerLevel}!");
         OnLevelUp?.Invoke(PlayerData.playerLevel);
     }
@@ -49,6 +52,7 @@ public class LevelManager : MonoBehaviour
     }
     private void HandleCaught()
     {
+        playerLeveledUpThisCatch = false; // reset flag at start of catch
         FishSequenceManager.Instance.IncrementFishCaught();
     }
 
@@ -66,6 +70,19 @@ public class LevelManager : MonoBehaviour
         {
             HandleGameWin();
         }
+    }
+
+    // Returns true if player leveled up from the most recent catch
+    public bool DidPlayerLevelUp()
+    {
+        return playerLeveledUpThisCatch;
+    }
+
+    // Checks if player SHOULD level up based on current fish count (deterministic, not event-dependent)
+    public bool ShouldPlayerLevelUp()
+    {
+        int numFishCaught = FishSequenceManager.Instance.GetNumFishCaught();
+        return numFishCaught == 2 || numFishCaught == 5 || numFishCaught == 9 || numFishCaught == 10;
     }
 
     private void HandleGameWin()

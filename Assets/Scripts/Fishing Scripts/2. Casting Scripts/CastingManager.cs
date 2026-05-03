@@ -83,7 +83,6 @@ public class CastingManager : MonoBehaviour
         SetBiteTimer();
         return true;
     }
-
     private void HandleHookPerformed()
     {
         // DebugLogger.Instance.Log("HandleHookPerformed called. Current input state: " + PlayerInputState.Instance.CurrentState);
@@ -92,7 +91,7 @@ public class CastingManager : MonoBehaviour
             if (IsPlayerDrippyEnough())
             {
                 // DebugLogger.Instance.Log("HandleHookPerformed check passed.");
-                DebugLogger.Instance.LogMethodCall("CastingManager.HandleHookPerformed", "-> !OnHook\nHook successful");
+                // DebugLogger.Instance.LogMethodCall("CastingManager.HandleHookPerformed", "-> !OnHook\nHook successful");
                 fishingManager.InvokeHooked();
             }
             else
@@ -102,8 +101,7 @@ public class CastingManager : MonoBehaviour
                 fishingManager.EscapeFishing("DripLevelTooLow");
             }
         }
-    }
-
+    } 
     private bool IsPlayerDrippyEnough()
     {
         if (disableDripCheck)
@@ -112,8 +110,6 @@ public class CastingManager : MonoBehaviour
         }
         return activeFish.level <= LevelManager.Instance.GetPlayerLevel();
     }
-
-
     private void UpdateCastingTimer()
     {
         biteTimer -= Time.deltaTime;
@@ -123,7 +119,6 @@ public class CastingManager : MonoBehaviour
             SetHookTimer();
         }
     }
-
     private void UpdateHookWindowTimer()
     {
         hookTimer -= Time.deltaTime;
@@ -132,8 +127,6 @@ public class CastingManager : MonoBehaviour
             FishingManager.Instance.EscapeFishing("HookWindowTimedOut");
         }
     }
-
-
     private void Update()
 
     {
