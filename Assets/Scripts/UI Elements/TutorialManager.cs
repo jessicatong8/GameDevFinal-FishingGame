@@ -9,7 +9,6 @@ public class FishingTutorialManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI tutorialText;
     [SerializeField] private float fadeInSpeed = 3f;
     [SerializeField] private float fadeOutSpeed = 5f;
-    [SerializeField] private float currentAlpha;
 
     [Header("Tutorial Texts")]
     [SerializeField] private string promptTxt = "Walk to the dock to start fishing!";
@@ -19,7 +18,7 @@ public class FishingTutorialManager : MonoBehaviour
     [SerializeField] private string reelTxt = "Keep the fish in the green! [SPACE] to reel. Use [LEFT/RIGHT] arrows to keep the fish in the circle!";
 
     private bool tutorialCompleted = false; //prevents race conditions
-    private Coroutine tutorialRoutine; //prevents multiple conflicting coroutines from firing at the same time 
+    private Coroutine currentRoutine; //prevents multiple conflicting coroutines from firing at the same time 
 
     private void Start()
     {
@@ -47,6 +46,10 @@ public class FishingTutorialManager : MonoBehaviour
         FishingManager.OnEscaped -= OnFishEscaped;
         FishingAreaTrigger.OnPlayerEnterFishingArea -= HandleAreaEntrance;
         FishingAreaTrigger.OnPlayerExitFishingArea -= HandleAreaExit;
+        
+        //ensures tutorial is hidden when completed
+        StopAllCoroutines();
+        canvasGroup.alpha = 0;
     }
 
     private void HandleAreaEntrance(bool isInArea)
@@ -64,62 +67,51 @@ public class FishingTutorialManager : MonoBehaviour
     private void OnFishBite() => UpdateTutorialStep(biteTxt);
     private void OnHookSuccess() => UpdateTutorialStep(reelTxt);
 
-    private void EndTutorialPermanently()
-    {
-        tutorialCompleted = true;
-        HideTutorial();
-        //allows us to fade out the sign before killing the script
-        Invoke(nameof(DisableScript), 2f);
-    }
-
     private void OnFishEscaped()
     {
         if (!tutorialCompleted) UpdateTutorialStep(castTxt);
     }
 
-    private void DisableScript() => this.enabled = false;
-
     private void UpdateTutorialStep(string newMessage)
     {
         if (tutorialCompleted) return;
-        if (tutorialRoutine != null) StopCoroutine(tutorialRoutine);
+        if (currentRoutine != null) StopCoroutine(currentRoutine);
 
-        tutorialRoutine = StartCoroutine(TransitionRoutine(newMessage));
+        currentRoutine = StartCoroutine(TransitionRoutine(newMessage));
     }
 
-    private void HideTutorial()
+    private void EndTutorialPermanently()
     {
-        if (tutorialRoutine != null) StopCoroutine(tutorialRoutine);
+        tutorialCompleted = true;
+        if (currentRoutine != null) StopCoroutine(currentRoutine);
+        currentRoutine = StartCoroutine(FinalFadeOut());
+    }
 
-        tutorialRoutine = StartCoroutine(FadeUI(0f, fadeOutSpeed));
+    private IEnumerator FinalFadeOut()
+    {
+        yield return FadeUI(0f, fadeOutSpeed);
+        //ensures the script is killed after the fade out 
+        this.enabled = false; 
     }
 
     private IEnumerator TransitionRoutine(string newMessage)
     {
         if (canvasGroup.alpha > 0)
         {
-            yield return StartCoroutine(FadeUI(0f, fadeOutSpeed));
+            yield return FadeUI(0f, fadeOutSpeed);
         }
         tutorialText.text = newMessage;
 
-        yield return StartCoroutine(FadeUI(1f, fadeInSpeed));
+        yield return FadeUI(1f, fadeInSpeed);
     }
     private IEnumerator FadeUI(float targetAlpha, float speed)
     {
-        // Use a while loop that checks the distance to the target
-        while (Mathf.Abs(canvasGroup.alpha - targetAlpha) > 0.001f)
+        while (!Mathf.Approximately(canvasGroup.alpha, targetAlpha))
         {
             canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, targetAlpha, speed * Time.deltaTime);
             yield return null;
         }
 
-        // Explicitly set the final value to ensure it's perfect
         canvasGroup.alpha = targetAlpha;
-        canvasGroup.interactable = targetAlpha > 0;
-        canvasGroup.blocksRaycasts = targetAlpha > 0;
-    }
-    void Update()
-    {
-        currentAlpha = canvasGroup.alpha; // For debugging purposes
     }
 }
