@@ -40,11 +40,6 @@ public class MenuUI : MonoBehaviour
     }
     public void HandleQuit()
     {
-        ReloadCurrentScene();
-    }
-    private void ReloadCurrentScene()
-    {
-        Scene current = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(current.name);
+        SceneManager.LoadScene("TitleScene");
     }
 }

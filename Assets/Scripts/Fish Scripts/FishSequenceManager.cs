@@ -59,9 +59,7 @@ public class FishSequenceManager : MonoBehaviour
 
     private void HandleCaught()
     {
-
         IncrementFishSequenceIndex();
-
     }
 
     public bool CheckGameWin()

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class FishMovement : MonoBehaviour
 {
@@ -99,12 +98,12 @@ public class FishMovement : MonoBehaviour
         if (position.x <= 0)
         {
             direction = 1; // Move right
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLineRightRange, xRightBoundary), idleHeight, position.z);
+            targetPosition = new Vector3(Random.Range(xLineRightRange, xRightBoundary), idleHeight, position.z);
         }
         else if (position.x > 0)
         {
             direction = -1; // Move left
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLeftBoundary, xLineLeftRange), idleHeight, position.z);
+            targetPosition = new Vector3(Random.Range(xLeftBoundary, xLineLeftRange), idleHeight, position.z);
         }
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, direction * 90f, transform.eulerAngles.z); // Flip the fish to face the right direction
 
@@ -116,16 +115,15 @@ public class FishMovement : MonoBehaviour
         if (position.x <= 0)
         {
             direction = 1; // Move right
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLineRightRange, xLineRightRange + 5), reelingHeight, position.z);
+            targetPosition = new Vector3(Random.Range(xLineRightRange, xLineRightRange + 5), reelingHeight, position.z);
         }
         else if (position.x > 0)
         {
             direction = -1; // Move left
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLineLeftRange - 5, xLineLeftRange), reelingHeight, position.z);
+            targetPosition = new Vector3(Random.Range(xLineLeftRange - 5, xLineLeftRange), reelingHeight, position.z);
         }
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, direction * 90f, transform.eulerAngles.z); // Flip the fish to face the right direction
 
-        // Debug.Log("Target Position: " + targetPosition);
         return targetPosition;
     }
     private void SwimTowardTarget(FishingManager.FishingGameState state)
@@ -178,7 +176,6 @@ public class FishMovement : MonoBehaviour
     {
         if (!GetComponent<Fish>().isActiveFish)
         {
-            // Debug.Log(GetComponent<Fish>().fishName + " is not the active fish, ignoring input.");
             return;
         }
 
@@ -194,7 +191,6 @@ public class FishMovement : MonoBehaviour
     {
         if (!GetComponent<Fish>().isActiveFish)
         {
-            // Debug.Log(GetComponent<Fish>().fishName + " is not the active fish, ignoring input.");
             return;
         }
 
@@ -208,7 +204,6 @@ public class FishMovement : MonoBehaviour
     private void HandleBite()
     {
         if (!GetComponent<Fish>().isActiveFish) return;
-        // FishingManager.Instance.CurrentFishingGameState = FishingManager.FishingGameState.Reeling;
         position = new Vector3(0, reelingHeight, 5f);
         transform.position = position;
         transform.eulerAngles = new Vector3(-10, transform.eulerAngles.y, transform.eulerAngles.z); //tilt fish up
@@ -219,10 +214,6 @@ public class FishMovement : MonoBehaviour
     {
         if (!GetComponent<Fish>().isActiveFish) return;
         transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z);
-
-        // FishingManager.Instance.CurrentFishingGameState = FishingManager.FishingGameState.Reeling;
-        // position = new Vector3(0, reelingHeight, 5f);
-        // transform.position = position;
 
         baseSwimmingSpeed = GetComponent<Fish>().reelingSpeed;
         speedNoiseOffset = Random.Range(0f, 100f);
@@ -237,13 +228,6 @@ public class FishMovement : MonoBehaviour
     private void HandleResetToGameplay()
     {
         if (!GetComponent<Fish>().isActiveFish) return;
-        if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation || FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.LevelUpPresentation)
-        {
-            // DebugLogger.Instance.Log("HandleResetToGameplay called during presentation state, ignoring to keep player in fishing mode for presentation.");
-            return;
-        }
-
-        // currentFishingGameState = FishingGameState.Idle;
         position = originalPosition;
         transform.eulerAngles = new Vector3(0, direction * 90f, 0);
         transform.position = position;
@@ -257,7 +241,6 @@ public class FishMovement : MonoBehaviour
     private void HandleCatchConfirmation()
     {
         if (!GetComponent<Fish>().isActiveFish) return;
-        // currentFishingGameState = FishingGameState.Idle;
         position = originalPosition;
         transform.eulerAngles = new Vector3(0, direction * 90f, 0);
         transform.position = position;
