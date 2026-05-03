@@ -1,18 +1,25 @@
 using TMPro;
 using UnityEngine;
-[RequireComponent(typeof(TextMeshProUGUI))]
 public class CatchPresentationUI : MonoBehaviour
 {
+    [SerializeField] private GameObject catchPanel;
     private TextMeshProUGUI catchText;
     private void Awake()
     {
-        catchText = GetComponent<TextMeshProUGUI>();
-        gameObject.SetActive(false);
+        if (catchPanel == null)
+        {
+            DebugLogger.Instance.LogError("CatchPresentationUI: CatchPanel reference is not set in the inspector.");
+        }
+        catchText = GetComponentInChildren<TextMeshProUGUI>();
     }
     private void OnEnable()
     {
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnReturnToGameplay += HandleReturnToGameplay; // when player confirms catch or abort/escape 
+    }
+    private void Start()
+    {
+        catchPanel.SetActive(false);
     }
     private void OnDisable()
     {
@@ -21,7 +28,8 @@ public class CatchPresentationUI : MonoBehaviour
     }
     private void HandleCaught()
     {
-        gameObject.SetActive(true);
+
+        catchPanel.SetActive(true);
         Fish caughtFish = FishingManager.Instance.activeFish;
         if (caughtFish == null)
         {
@@ -32,11 +40,9 @@ public class CatchPresentationUI : MonoBehaviour
         {
             case 1:
                 catchText.text = $"You caught an NPC fish, that’s nice i guess...";
-                DebugLogger.Instance.LogWarning($"Caught a {caughtFish.fishName}");
                 break;
             case 2:
                 catchText.text = $"Yo that’s a valid fish, that lowkey goes hard.";
-                DebugLogger.Instance.LogWarning($"Caught a {caughtFish.fishName}");
                 break;
             case 3:
                 catchText.text = $"Damn that fish is built different! You ate and left no crumbs.";
@@ -48,6 +54,6 @@ public class CatchPresentationUI : MonoBehaviour
     }
     private void HandleReturnToGameplay()
     {
-        gameObject.SetActive(false);
+        catchPanel.SetActive(false);
     }
 }

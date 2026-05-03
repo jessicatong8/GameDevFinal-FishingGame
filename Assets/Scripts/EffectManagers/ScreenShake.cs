@@ -12,12 +12,17 @@ public class ScreenShake : MonoBehaviour
     {
         originalPos = transform.localPosition;
     }
-
     public void TriggerLargeShake(float duration, float intensity)
     {
+        Debug.Log($"Triggering large shake with duration={duration} and intensity={intensity}");
         StartCoroutine(Shake(duration, intensity));
     }
-
+    public void SetConstantShake(bool active, float strength = 0.05f)
+    {
+        Debug.Log($"SetConstantShake called with active={active}, strength={strength}");
+        isConstantShaking = active;
+        constantStrength = strength;
+    }
     public IEnumerator Shake(float duration, float intensity)
     {
         float elapsed = 0.0f;
@@ -33,25 +38,17 @@ public class ScreenShake : MonoBehaviour
         }
         transform.localPosition = originalPos;
     }
-
-    public void SetConstantShake(bool active, float strength = 0.05f)
+    private void ApplyShake(float strength)
     {
-        isConstantShaking = active;
-        constantStrength = strength;
+        float x = Random.Range(-1f, 1f) * strength;
+        float y = Random.Range(-1f, 1f) * strength;
+        transform.localPosition = originalPos + new Vector3(x, y, 0);
     }
-
     void Update()
     {
         if (isConstantShaking)
         {
             ApplyShake(constantStrength);
         }
-    }
-
-    private void ApplyShake(float strength)
-    {
-        float x = Random.Range(-1f, 1f) * strength;
-        float y = Random.Range(-1f, 1f) * strength;
-        transform.localPosition = originalPos + new Vector3(x, y, 0);
     }
 }
