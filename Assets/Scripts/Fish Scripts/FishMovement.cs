@@ -48,9 +48,22 @@ public class FishMovement : MonoBehaviour
         FishingManager.OnHook += HandleHooked;
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnReturnToGameplay += HandleResetToGameplay;
+
         PlayerInputState.ReelLeftPerformed += TurnLeft;
         PlayerInputState.ReelRightPerformed += TurnRight;
         PlayerInputState.CatchConfirmPerformed += HandleCatchConfirmation;
+    }
+
+    private void OnDisable()
+    {
+        FishingManager.OnBite -= HandleBite;
+        FishingManager.OnHook -= HandleHooked;
+        FishingManager.OnCaught -= HandleCaught;
+        FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
+
+        PlayerInputState.ReelLeftPerformed -= TurnLeft;
+        PlayerInputState.ReelRightPerformed -= TurnRight;
+        PlayerInputState.CatchConfirmPerformed -= HandleCatchConfirmation;
     }
     void Start()
     {
@@ -74,15 +87,7 @@ public class FishMovement : MonoBehaviour
         ApplySpeedVariation();
         IdleSetTargetPosition(position);
     }
-    private void OnDisable()
-    {
-        FishingManager.OnHook -= HandleHooked;
-        FishingManager.OnCaught -= HandleCaught;
-        FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
-        PlayerInputState.ReelLeftPerformed -= TurnLeft;
-        PlayerInputState.ReelRightPerformed -= TurnRight;
-        PlayerInputState.CatchConfirmPerformed -= HandleCatchConfirmation;
-    }
+
     private void Update()
     {
         if (GetComponent<Fish>().isActiveFish && FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
@@ -231,7 +236,7 @@ public class FishMovement : MonoBehaviour
         if (!GetComponent<Fish>().isActiveFish) return;
         position = originalPosition;
         transform.eulerAngles = new Vector3(0, direction * 90f, 0);
-        transform.position = position;
+        transform.position = originalPosition;
 
         baseSwimmingSpeed = GetComponent<Fish>().swimmingSpeed; // reset the base speed
         speedNoiseOffset = Random.Range(0f, 100f);
@@ -244,7 +249,7 @@ public class FishMovement : MonoBehaviour
         if (!GetComponent<Fish>().isActiveFish) return;
         position = originalPosition;
         transform.eulerAngles = new Vector3(0, direction * 90f, 0);
-        transform.position = position;
+        transform.position = originalPosition;
         transform.localScale = originalScale;
 
         baseSwimmingSpeed = GetComponent<Fish>().swimmingSpeed; // reset the base speed
