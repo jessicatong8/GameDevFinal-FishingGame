@@ -48,8 +48,8 @@ public class FishingTutorialManager : MonoBehaviour
         FishingAreaTrigger.OnPlayerExitFishingArea -= HandleAreaExit;
         
         //ensures tutorial is hidden when completed
-        canvasGroup.alpha = 0;
         StopAllCoroutines();
+        canvasGroup.alpha = 0;
     }
 
     private void HandleAreaEntrance(bool isInArea)
@@ -98,11 +98,11 @@ public class FishingTutorialManager : MonoBehaviour
     {
         if (canvasGroup.alpha > 0)
         {
-            yield return StartCoroutine(FadeUI(0f, fadeOutSpeed));
+            yield return FadeUI(0f, fadeOutSpeed);
         }
         tutorialText.text = newMessage;
 
-        yield return StartCoroutine(FadeUI(1f, fadeInSpeed));
+        yield return FadeUI(1f, fadeInSpeed);
     }
     private IEnumerator FadeUI(float targetAlpha, float speed)
     {
