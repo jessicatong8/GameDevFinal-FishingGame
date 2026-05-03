@@ -6,6 +6,7 @@ public class FishMovement : MonoBehaviour
     private Vector3 position;
     private Vector3 originalPosition;
     private Vector3 targetPosition;
+    private Vector3 originalScale;
 
     private float swimmingSpeed;
 
@@ -244,6 +245,7 @@ public class FishMovement : MonoBehaviour
         position = originalPosition;
         transform.eulerAngles = new Vector3(0, direction * 90f, 0);
         transform.position = position;
+        transform.localScale = originalScale;
 
         baseSwimmingSpeed = GetComponent<Fish>().swimmingSpeed; // reset the base speed
         speedNoiseOffset = Random.Range(0f, 100f);
@@ -254,6 +256,8 @@ public class FishMovement : MonoBehaviour
     {
         Transform targetAnchor = playerCamera.transform;
         Vector3 targetPosition = targetAnchor.position + targetAnchor.forward;
+        originalScale = transform.localScale;
+        transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         transform.position = targetPosition + targetAnchor.TransformVector(localOffset);
         transform.LookAt(playerCamera.transform.position);
     }
