@@ -48,7 +48,7 @@ public class FishMovement : MonoBehaviour
         FishingManager.OnReturnToGameplay += HandleResetToGameplay;
         PlayerInputState.ReelLeftPerformed += TurnLeft;
         PlayerInputState.ReelRightPerformed += TurnRight;
-        PlayerInputState.CatchConfirmPerformed += HandleConfirmation;
+        PlayerInputState.CatchConfirmPerformed += HandleCatchConfirmation;
     }
     void Start()
     {
@@ -74,7 +74,7 @@ public class FishMovement : MonoBehaviour
         FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
         PlayerInputState.ReelLeftPerformed -= TurnLeft;
         PlayerInputState.ReelRightPerformed -= TurnRight;
-        PlayerInputState.CatchConfirmPerformed -= HandleConfirmation;
+        PlayerInputState.CatchConfirmPerformed -= HandleCatchConfirmation;
     }
     private void Update()
     {
@@ -247,7 +247,7 @@ public class FishMovement : MonoBehaviour
         IdleSetTargetPosition(position);
 
     }
-    private void HandleConfirmation()
+    private void HandleCatchConfirmation()
     {
         if (!GetComponent<Fish>().isActiveFish) return;
         // currentFishingGameState = FishingGameState.Idle;
@@ -259,8 +259,6 @@ public class FishMovement : MonoBehaviour
         speedNoiseOffset = Random.Range(0f, 100f);
         ApplySpeedVariation();
         IdleSetTargetPosition(position);
-
-
     }
     private void PlaceFishInFrontOfCamera()
     {

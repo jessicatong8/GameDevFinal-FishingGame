@@ -71,14 +71,6 @@ public class FishingManager : MonoBehaviour
         SetFishingGameState(FishingGameState.Reeling);
         OnHook?.Invoke();
     }
-    public void InvokeLevelUp(int newLevel)
-    {
-        SetFishingGameState(FishingGameState.LevelUpPresentation);
-        // playerLeveledUpFromLastCatch = true;
-        OnLevelUp?.Invoke();
-    }
-
-
     public void InvokeGameWin()
     {
         OnGameWin?.Invoke();

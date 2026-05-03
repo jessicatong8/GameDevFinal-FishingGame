@@ -2635,6 +2635,8 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - BEVEL_ON
+  - GLOW_ON
   - UNDERLAY_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -2683,9 +2685,9 @@ Material:
     - _FaceDilate: 0
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
-    - _GlowInner: 0.05
-    - _GlowOffset: 0.62
-    - _GlowOuter: 0.129
+    - _GlowInner: 0
+    - _GlowOffset: -0.03
+    - _GlowOuter: 1
     - _GlowPower: 1
     - _GradientScale: 11
     - _LightAngle: 3.1416
@@ -2724,7 +2726,7 @@ Material:
     - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
     - _EnvMatrixRotation: {r: 0, g: 0, b: 0, a: 0}
     - _FaceColor: {r: 1, g: 1, b: 1, a: 1}
-    - _GlowColor: {r: 0, g: 0, b: 0, a: 1}
+    - _GlowColor: {r: 0.20784314, g: 0.48821262, b: 0.57254905, a: 0.5254902}
     - _MaskCoord: {r: 0, g: 0, b: 32767, a: 32767}
     - _OutlineColor: {r: 0.4956761, g: 0.4740566, b: 0.5, a: 1}
     - _ReflectFaceColor: {r: 0, g: 0, b: 0, a: 1}
