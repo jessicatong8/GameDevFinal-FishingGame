@@ -26,12 +26,16 @@ public class TensionManager : MonoBehaviour
         FishingManager.OnHook += HandleHooked;
         PlayerInputState.MashPerformed += HandleMashPerformed;
         FishingManager.OnCaught += HandleReset;
+        FishingManager.OnEscaped += HandleReset;
+        FishingManager.OnReturnToGameplay += HandleReset;
     }
     private void OnDisable()
     {
         FishingManager.OnHook -= HandleHooked;
         PlayerInputState.MashPerformed -= HandleMashPerformed;
         FishingManager.OnCaught -= HandleReset;
+        FishingManager.OnEscaped -= HandleReset;
+        FishingManager.OnReturnToGameplay -= HandleReset;
     }
 
     void Update()
