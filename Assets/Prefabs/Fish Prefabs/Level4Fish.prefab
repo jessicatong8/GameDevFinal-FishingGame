@@ -70,6 +70,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd26c1534d63b45d98abf54f84e7ca2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishMovement
+  xLeftBoundary: -50
+  xRightBoundary: 50
   idleHeight: -5.4
   reelingHeight: 1
   idleSpeedVariation: 0.2

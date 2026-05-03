@@ -9,8 +9,8 @@ public class FishMovement : MonoBehaviour
 
     private float swimmingSpeed;
 
-    private float xLeftBoundary = -12f;
-    private float xRightBoundary = 12f;
+    [SerializeField] private float xLeftBoundary = -12f;
+    [SerializeField] private float xRightBoundary = 12f;
 
     private float xLineLeftWarningRange;
     private float xLineRightWarningRange;
