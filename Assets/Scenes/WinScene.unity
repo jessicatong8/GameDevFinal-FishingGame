@@ -1664,13 +1664,13 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1340814336}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -130}
+  m_AnchoredPosition: {x: 0, y: -138}
   m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2108340024
@@ -1693,7 +1693,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Congrats! You are now the drippiest fisher in the world!
+  m_text: Congrats! You are now the \n <color=#4ebbd8>drippiest</color>            
+    <color=#4ebbd8>fisher</color> in the                world!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 995ed4b21ea96f942a913002230ca264, type: 2}
   m_sharedMaterial: {fileID: 3998772062047758403, guid: 995ed4b21ea96f942a913002230ca264, type: 2}
@@ -1759,7 +1760,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -120, y: 0, z: -120, w: -35}
+  m_margin: {x: -89.91327, y: 0, z: -72.19867, w: -35}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
