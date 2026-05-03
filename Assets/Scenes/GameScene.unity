@@ -10651,18 +10651,17 @@ MonoBehaviour:
   - {fileID: 262265230}
   - {fileID: 1000430930}
   - {fileID: 420660827}
-  - {fileID: 0}
+  - {fileID: 749808209}
   - {fileID: 1369816884}
   - {fileID: 87280593}
-  - {fileID: 0}
+  - {fileID: 2134137907}
   - {fileID: 417212392}
   - {fileID: 8619124962086250684}
   prototypeFishSequence:
-  - {fileID: 749808209}
-  - {fileID: 1369816884}
-  - {fileID: 2134137907}
-  - {fileID: 417212392}
-  usePrototypeFishSequence: 1
+  - {fileID: 2074694865}
+  - {fileID: 2074694865}
+  - {fileID: 1196392398}
+  usePrototypeFishSequence: 0
 --- !u!1 &989545184
 GameObject:
   m_ObjectHideFlags: 0
@@ -13940,7 +13939,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091020698784567842, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: reelingProgressRate
-      value: 8
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8091020698784567842, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: tensionIncreaseRate
@@ -17563,7 +17562,7 @@ MonoBehaviour:
   maxBiteDelay: 4
   minHookWindow: 2
   maxHookWindow: 3
-  disableDripCheck: 1
+  disableDripCheck: 0
 --- !u!1 &1557498333
 GameObject:
   m_ObjectHideFlags: 0

@@ -25,12 +25,10 @@ public class FishingManager : MonoBehaviour
     public static event Action OnEscaped; // when fish escapes due to hook window timing out, player drip being too low, line breaking from high tension, or fish moving out of line range
     public static event Action OnCaught; // when player successfully catches the fish by reeling to 100% progress, the fish will be presented to camera and player can interact to confirm catch (via !OnCatchConfirmationEnd) to return to idle
     public static event Action OnReturnToGameplay;
-    public static event Action<int> OnLevelUp; // when player levels up by catching a certain number of fish
-    public static event Action OnGameWin; // when player catches all fish and wins the game
+
     public static event Action<FishingGameState> OnFishingGameStateChanged; // for triggering state-specific animations TODO: get rid of this, referenced in BasicUI
 
     public Fish activeFish;
-    public int currentDrip; // will get from player or overarching score'
     public string escapeReason;
 
 
@@ -130,14 +128,5 @@ public class FishingManager : MonoBehaviour
         }
         OnReturnToGameplay?.Invoke();
     }
-    public void InvokeLevelUp(int currentLevel)
-    {
-        DebugLogger.Instance.LogMethodCall($"Player leveled up to {currentLevel}!");
-        OnLevelUp?.Invoke(currentLevel);
-    }
-    public void InvokeGameWin()
-    {
-        OnGameWin?.Invoke();
-        SceneManager.LoadScene("WinScene");
-    }
+
 }

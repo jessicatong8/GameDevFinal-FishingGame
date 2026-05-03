@@ -13,7 +13,7 @@ public class StatusUIText : MonoBehaviour
         FishingManager.OnHook += HandleHook;
         // FishingManager.OnCaught += HandleCaught;
         FishingManager.OnReturnToGameplay += HandleReturnToGameplay;
-        FishingManager.OnLevelUp += HandleLevelUp;
+        LevelManager.OnLevelUp += HandleLevelUp;
     }
 
     void OnDisable()
@@ -23,7 +23,7 @@ public class StatusUIText : MonoBehaviour
         FishingManager.OnHook -= HandleHook;
         // FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnReturnToGameplay -= HandleReturnToGameplay;
-        FishingManager.OnLevelUp -= HandleLevelUp;
+        LevelManager.OnLevelUp -= HandleLevelUp;
     }
     void Start()
     {

@@ -11,12 +11,12 @@ public class Hats : MonoBehaviour
     }
     public void OnEnable()
     {
-        FishingManager.OnLevelUp += HandleLevelUp;
+        LevelManager.OnLevelUp += HandleLevelUp;
         PlayerInputState.CycleHatPerformed += CycleHat;
     }
     public void OnDisable()
     {
-        FishingManager.OnLevelUp -= HandleLevelUp;
+        LevelManager.OnLevelUp -= HandleLevelUp;
         PlayerInputState.CycleHatPerformed -= CycleHat;
     }
     public void CycleHat()
