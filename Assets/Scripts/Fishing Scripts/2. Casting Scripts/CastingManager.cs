@@ -90,10 +90,10 @@ public class CastingManager : MonoBehaviour
             {
                 DebugLogger.Instance.LogMethodCall("CastingManager.HandleHookPerformed", "-> !OnHook\nHook failed. You are not drippy enough for this fish.");
                 fishSequenceManager.IncrementFishSequenceIndex();
-                fishingManager.EscapeFishing("DripLevelTooLow");
+                fishingManager.InvokeEscaped("DripLevelTooLow");
             }
         }
-    } 
+    }
     private bool IsPlayerDrippyEnough()
     {
         if (disableDripCheck)
@@ -116,7 +116,7 @@ public class CastingManager : MonoBehaviour
         hookTimer -= Time.deltaTime;
         if (hookTimer <= 0)
         {
-            FishingManager.Instance.EscapeFishing("HookWindowTimedOut");
+            FishingManager.Instance.InvokeEscaped("HookWindowTimedOut");
         }
     }
     private void Update()
