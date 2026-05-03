@@ -8286,6 +8286,10 @@ MonoBehaviour:
   catchShinePrefab: {fileID: 7938384439400024403, guid: b6e54acc881a03c4a9719b161a25a3e3, type: 3}
   levelUpSparklePrefab: {fileID: 4033412786151888123, guid: fc7474cd8e6370948a443770a9d77880, type: 3}
   levelUpShinePrefab: {fileID: 245581523800709616, guid: 9442d241d2d8ecc47b49f256b55325c6, type: 3}
+  levelUpHats:
+  - {fileID: 8237289945794540689, guid: 2fd0ea39196044706b62e5e00e737008, type: 3}
+  - {fileID: 8201553781272233500, guid: da1281386655c46e4ab0b702f58d6e1a, type: 3}
+  - {fileID: 3408534238412726557, guid: 3a6ea674fa525498eae27630c24967d3, type: 3}
 --- !u!4 &838503646
 Transform:
   m_ObjectHideFlags: 0

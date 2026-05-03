@@ -27,6 +27,8 @@ public class VisualEffectManager : MonoBehaviour
     [Header("Level Up VFX Prefabs")]
     [SerializeField] private GameObject levelUpSparklePrefab;
     [SerializeField] private GameObject levelUpShinePrefab;
+    [SerializeField] private GameObject [] levelUpHats;
+    private GameObject currentHat;
     private GameObject catchSparkleInstance;
     private GameObject catchShineInstance;
     private GameObject levelUpSparkleInstance;
@@ -109,13 +111,22 @@ public class VisualEffectManager : MonoBehaviour
             Debug.LogWarning("No catch shine instance found to destroy.");
         }
     }
-    void SpawnLevelUpPresentationVFX(int newLevel)
+
+    void SpawnLevelUpPresentationVFX()
     {
         levelUpSparkleInstance = Instantiate(levelUpSparklePrefab, VFXposition, Quaternion.identity);
         levelUpShineInstance = Instantiate(levelUpShinePrefab, VFXposition, Quaternion.identity);
         levelUpSparkleInstance.transform.localScale = VFXscale;
         levelUpShineInstance.transform.localScale = VFXscale;
+
+        Transform targetAnchor = PlayerCamera.Instance.transform;
+        int newLevel = LevelManager.Instance.GetPlayerLevel();
+        Vector3 targetPosition = targetAnchor.position + targetAnchor.forward;
+        Vector3 localOffset = new Vector3(0f, -0.5f, 2.5f);
+        currentHat = levelUpHats[newLevel-2];
+        Instantiate(currentHat, targetPosition + targetAnchor.TransformVector(localOffset), Quaternion.identity);
     }
+
     void DestroyLevelUpPresentationVFX()
     {
         if (levelUpSparkleInstance != null)
@@ -134,5 +145,6 @@ public class VisualEffectManager : MonoBehaviour
         {
             Debug.LogWarning("No level up shine instance found to destroy.");
         }
+        Destroy(currentHat);
     }
 }
