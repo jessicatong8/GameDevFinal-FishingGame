@@ -7830,11 +7830,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: reelingSpeed
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: safeZoneWidth
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: safeZoneCenter
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: startingTension
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: tensionDropRate
@@ -7842,7 +7850,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: reelingProgressRate
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: tensionIncreaseRate
@@ -7851,6 +7859,10 @@ PrefabInstance:
     - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: idleHeight
       value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: localOffset.z
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: reelingHeight
@@ -8580,7 +8592,7 @@ MonoBehaviour:
   mashSplash2: {fileID: 8866987181904549775, guid: 8c8d8385f96bd054a88a3df780d77bcc, type: 3}
   bobPoint: {fileID: 1426164025}
   mashPoint: {fileID: 380576127}
-  screenShake: {fileID: 0}
+  screenShake: {fileID: 330585549}
 --- !u!4 &838503646
 Transform:
   m_ObjectHideFlags: 0
@@ -10675,10 +10687,9 @@ MonoBehaviour:
   - {fileID: 417212392}
   - {fileID: 8619124962086250684}
   prototypeFishSequence:
-  - {fileID: 2074694865}
-  - {fileID: 2074694865}
-  - {fileID: 1196392398}
-  usePrototypeFishSequence: 0
+  - {fileID: 420660827}
+  - {fileID: 749808209}
+  usePrototypeFishSequence: 1
 --- !u!1 &989545184
 GameObject:
   m_ObjectHideFlags: 0
@@ -17579,7 +17590,7 @@ MonoBehaviour:
   maxBiteDelay: 4
   minHookWindow: 2
   maxHookWindow: 3
-  disableDripCheck: 0
+  disableDripCheck: 1
 --- !u!1 &1557498333
 GameObject:
   m_ObjectHideFlags: 0
@@ -18492,7 +18503,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1632286579
 MonoBehaviour:
   m_ObjectHideFlags: 0
