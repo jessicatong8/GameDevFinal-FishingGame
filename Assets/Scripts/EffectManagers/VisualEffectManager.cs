@@ -15,10 +15,14 @@ public class VisualEffectManager : MonoBehaviour
     public Transform bobPoint;
     public Transform mashPoint;
 
+    [Header("Screen Shake Reference")]
+    [SerializeField] private ScreenShake screenShake;
+
     private void OnEnable()
     {
         FishingManager.OnCast += PlayCastSplash;
         FishingManager.OnBite += PlayBiteSplash;
+        FishingManager.OnEscaped += PlayEscapeShake;
         PlayerInputState.MashPerformed += PlayMashSplash;
     }
 
@@ -26,6 +30,7 @@ public class VisualEffectManager : MonoBehaviour
     {
         FishingManager.OnCast -= PlayCastSplash;
         FishingManager.OnBite -= PlayBiteSplash;
+        FishingManager.OnEscaped -= PlayEscapeShake;
         PlayerInputState.MashPerformed -= PlayMashSplash;
     }
 
@@ -44,6 +49,11 @@ public class VisualEffectManager : MonoBehaviour
         SpawnSplash(Random.Range(0, 2) == 0 ? mashSplash1 : mashSplash2, 1f, mashPoint.position);
     }
 
+    void PlayEscapeShake()
+    {
+        screenShake.TriggerLargeShake(0.6f, 1.2f);
+    }
+
     private IEnumerator DelayedSpawn(GameObject prefab, float delay, float scale, Vector3 position)
     {
         yield return new WaitForSeconds(delay);
@@ -60,4 +70,5 @@ public class VisualEffectManager : MonoBehaviour
     {
         return FishingManager.Instance.activeFish.transform.position;
     }
+    
 }

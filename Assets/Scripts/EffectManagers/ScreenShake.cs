@@ -3,37 +3,55 @@ using System.Collections;
 
 public class ScreenShake : MonoBehaviour
 {
-    public bool start = false;
     public AnimationCurve shakeCurve;
-    public float duration = 0.5f;
+    private Vector3 originalPos;
+    private bool isConstantShaking = false;
+    private float constantStrength = 0f;
 
-    void Update()
+    void Start()
     {
-        if (start)
-        {
-            start = false;
-            StartCoroutine(Shake(duration));
-        }
+        originalPos = transform.localPosition;
     }
-    public IEnumerator Shake(float duration)
-    {
-        Vector3 originalPos = transform.localPosition;
-        float elapsed = 0.0f;
 
+    public void TriggerLargeShake(float duration, float intensity)
+    {
+        StartCoroutine(Shake(duration, intensity));
+    }
+
+    public IEnumerator Shake(float duration, float intensity)
+    {
+        float elapsed = 0.0f;
         while (elapsed < duration)
         {
             float normalizedTime = elapsed / duration;
-            float currentStrength = shakeCurve.Evaluate(normalizedTime);
+            float currentStrength = shakeCurve.Evaluate(normalizedTime) * intensity;
 
-            float x = Random.Range(-1f, 1f) * currentStrength;
-            float y = Random.Range(-1f, 1f) * currentStrength;
-
-            transform.localPosition = originalPos + new Vector3(x, y, 0);
+            ApplyShake(currentStrength);
 
             elapsed += Time.deltaTime;
             yield return null;
         }
-
         transform.localPosition = originalPos;
+    }
+
+    public void SetConstantShake(bool active, float strength = 0.05f)
+    {
+        isConstantShaking = active;
+        constantStrength = strength;
+    }
+
+    void Update()
+    {
+        if (isConstantShaking)
+        {
+            ApplyShake(constantStrength);
+        }
+    }
+
+    private void ApplyShake(float strength)
+    {
+        float x = Random.Range(-1f, 1f) * strength;
+        float y = Random.Range(-1f, 1f) * strength;
+        transform.localPosition = originalPos + new Vector3(x, y, 0);
     }
 }
