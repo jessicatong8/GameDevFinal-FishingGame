@@ -3,6 +3,7 @@ using UnityEngine;
 public class CatchPresentationUI : MonoBehaviour
 {
     [SerializeField] private GameObject catchPanel;
+    [SerializeField] private GameObject catchTextObject;
     private TextMeshProUGUI catchText;
     private void Awake()
     {
@@ -10,7 +11,10 @@ public class CatchPresentationUI : MonoBehaviour
         {
             DebugLogger.Instance.LogError("CatchPresentationUI: CatchPanel reference is not set in the inspector.");
         }
-        catchText = GetComponentInChildren<TextMeshProUGUI>();
+        if (catchText == null)
+        {
+            catchText = catchTextObject.GetComponent<TextMeshProUGUI>();
+        }
     }
     private void OnEnable()
     {
@@ -34,6 +38,11 @@ public class CatchPresentationUI : MonoBehaviour
         if (caughtFish == null)
         {
             DebugLogger.Instance.LogWarning("StatusUIText.HandleCaught called but activeFish is null.");
+            return;
+        }
+        if (catchText == null)
+        {
+            DebugLogger.Instance.LogError("CatchPresentationUI: catchText reference is not set.");
             return;
         }
         switch (caughtFish.level)

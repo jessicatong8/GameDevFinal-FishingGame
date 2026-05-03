@@ -1767,7 +1767,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &166365971
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4377,6 +4377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CatchPresentationUI
   catchPanel: {fileID: 166365970}
+  catchTextObject: {fileID: 1740249213}
 --- !u!1 &356036557
 GameObject:
   m_ObjectHideFlags: 0
@@ -4451,9 +4452,9 @@ Transform:
   m_GameObject: {fileID: 380576126}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 2.75}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: -0.15, y: 3.58, z: -3.73}
+  m_LocalScale: {x: 0.96, y: 0.96, z: 0.96}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 838503646}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7995,6 +7996,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: 7_Level3Fish
       objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: safeZoneWidth
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: safeZoneCenter
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: startingTension
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: tensionDropRate
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: tensionEscapeTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: reelingProgressRate
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8705,13 +8730,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e36fb58538fa4a219220290efe97e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualEffectManager
-  castSplash: {fileID: 8866987181904549775, guid: 8c8d8385f96bd054a88a3df780d77bcc, type: 3}
   biteSplash: {fileID: 8585649807550039280, guid: 224c4574d4d272a4b92df19ede61b338, type: 3}
   mashSplash1: {fileID: 6042243990886550057, guid: af44cbf49172b8d42b452221c9638892, type: 3}
   mashSplash2: {fileID: 8866987181904549775, guid: 8c8d8385f96bd054a88a3df780d77bcc, type: 3}
   bobPoint: {fileID: 1426164025}
   mashPoint: {fileID: 380576127}
   screenShake: {fileID: 330585549}
+  sparklePrefab: {fileID: 4033412786151888123, guid: 49057b33ea71fbb4da4e8f02a8db9f28, type: 3}
+  shinePrefab: {fileID: 7938384439400024403, guid: b6e54acc881a03c4a9719b161a25a3e3, type: 3}
+  VFXposition: {x: -0.15, y: 3.58, z: -3.73}
+  VFXscale: {x: 0.9, y: 0.9, z: 0.9}
 --- !u!4 &838503646
 Transform:
   m_ObjectHideFlags: 0
@@ -10807,10 +10835,10 @@ MonoBehaviour:
   - {fileID: 417212392}
   - {fileID: 8619124962086250684}
   prototypeFishSequence:
-  - {fileID: 1000430930}
-  - {fileID: 420660827}
   - {fileID: 749808209}
-  usePrototypeFishSequence: 0
+  - {fileID: 1369816884}
+  - {fileID: 2134137907}
+  usePrototypeFishSequence: 1
 --- !u!1 &989545184
 GameObject:
   m_ObjectHideFlags: 0
@@ -13401,7 +13429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d63a22c1fdf8d4d599d58557de606008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressManager
-  startingProgress: 0
+  startingProgress: 70
 --- !u!4 &1152363079
 Transform:
   m_ObjectHideFlags: 0
@@ -15695,6 +15723,30 @@ PrefabInstance:
       propertyPath: fishName
       value: parrot fish
       objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: safeZoneWidth
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: safeZoneCenter
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: tensionDropRate
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: tensionEscapeTime
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: reelingProgressRate
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: tensionIncreaseRate
+      value: 35
+      objectReference: {fileID: 0}
     - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: idleHeight
       value: -2.1
@@ -15702,6 +15754,10 @@ PrefabInstance:
     - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: reelingHeight
       value: 0.68
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: reelingSpeedVariation
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -17883,7 +17939,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1566663199}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -17891,11 +17947,11 @@ RectTransform:
   - {fileID: 1575987597}
   m_Father: {fileID: 2020516539}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 130.5, y: 0}
-  m_SizeDelta: {x: 261, y: 565.5714}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 400, y: 1500}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1566663202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21623,10 +21679,10 @@ RectTransform:
   - {fileID: 1566663200}
   m_Father: {fileID: 1739418596}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -182.42853, y: 100}
-  m_SizeDelta: {x: 261, y: -200}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2020516540
 MonoBehaviour:
@@ -22654,16 +22710,32 @@ PrefabInstance:
       value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
+      propertyPath: safeZoneWidth
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
+      propertyPath: safeZoneCenter
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
+      propertyPath: startingTension
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: tensionDropRate
-      value: 40
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
+      propertyPath: tensionEscapeTime
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: reelingProgressRate
-      value: 10
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: tensionIncreaseRate
-      value: 30
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 1950411480561426448, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: m_LocalScale.x
@@ -22735,7 +22807,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8174870239663022773, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: reelingSpeedVariation
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 8174870239663022773, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: reelingWobbleAmplitude
@@ -23163,11 +23235,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091020698784567842, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: reelingSpeed
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8091020698784567842, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: safeZoneWidth
-      value: 30
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 8091020698784567842, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: swimmingSpeed
@@ -23183,7 +23255,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091020698784567842, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: tensionDropRate
-      value: 23
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8091020698784567842, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: tensionEscapeTime
