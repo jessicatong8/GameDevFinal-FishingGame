@@ -55,7 +55,6 @@ public class DebugCanvasUI : MonoBehaviour
         tensionManager = FindFirstObjectByType<TensionManager>();
         progressManager = FindFirstObjectByType<ProgressManager>();
         levelManager = FindFirstObjectByType<LevelManager>();
-        PlayerInputState.DebugPerformed += ToggleDebugUI;
         UpdateDebugDisplay();
     }
     private void OnDestroy()
