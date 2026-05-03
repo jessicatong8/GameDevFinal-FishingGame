@@ -38,7 +38,7 @@ public class PlayerInputState : MonoBehaviour
     public static event Action HookPerformed;
     public static event Action MashPerformed;
     public static event Action CatchConfirmPerformed;
-    public static event Action LevelConfirmPerformed; 
+    public static event Action LevelConfirmPerformed;
     public static event Action ReelLeftPerformed;
     public static event Action ReelRightPerformed;
     public static event Action AbortPerformed;
