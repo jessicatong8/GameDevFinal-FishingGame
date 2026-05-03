@@ -7,13 +7,13 @@ public class VignetteController : MonoBehaviour
 {
     [Header("Volume Reference")]
     [SerializeField] private Volume globalVolume;
-    private Vignette vignette;
 
     [Header("Settings")]
     [SerializeField] private float minIntensity = 0f;
     [SerializeField] private float maxIntensity = 0.45f; 
     [SerializeField] private float transitionSpeed = 8f;
 
+    private Vignette vignette;
     
     private void Start()
     {

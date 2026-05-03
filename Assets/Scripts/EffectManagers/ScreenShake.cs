@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ScreenShake : MonoBehaviour
 {
-    public AnimationCurve shakeCurve;
+    [SerializeField] private AnimationCurve shakeCurve;
     private Vector3 originalPos;
     private bool isConstantShaking = false;
     private float constantStrength = 0f;

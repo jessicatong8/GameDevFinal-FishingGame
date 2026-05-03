@@ -8,10 +8,9 @@ public class VisualEffectManager : MonoBehaviour
     [SerializeField] private GameObject mashSplash1;
     [SerializeField] private GameObject mashSplash2;
 
-    //change based on andys line logic
     [Header("Spawn Location")]
-    public Transform bobPoint;
-    public Transform mashPoint;
+    [SerializeField] private Transform bobPoint;
+    [SerializeField] private Transform mashPoint;
 
     [Header("Screen Shake Reference")]
     [SerializeField] private ScreenShake screenShake;
@@ -43,8 +42,7 @@ public class VisualEffectManager : MonoBehaviour
         PlayerInputState.MashPerformed += PlayMashSplash;
         PlayerInputState.CatchConfirmPerformed += DestroyCatchPresentationVFX;
         PlayerInputState.LevelConfirmPerformed += DestroyLevelUpPresentationVFX;
-        FishingManager.OnLevelUp += SpawnLevelUpPresentationVFX; // also play mash splash on level up for that extra satisfying feedback
-
+        FishingManager.OnLevelUp += SpawnLevelUpPresentationVFX; 
     }
 
     private void OnDisable()
