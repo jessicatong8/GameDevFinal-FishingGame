@@ -245,6 +245,11 @@ public class FishMovement : MonoBehaviour
         speedNoiseOffset = Random.Range(0f, 100f);
         ApplySpeedVariation();
         IdleSetTargetPosition(position);
+
+    }
+    private void HandleConfirmation()
+    {
+        if (!GetComponent<Fish>().isActiveFish) return;
         // currentFishingGameState = FishingGameState.Idle;
         position = originalPosition;
         transform.eulerAngles = new Vector3(0, direction * 90f, 0);
@@ -254,10 +259,7 @@ public class FishMovement : MonoBehaviour
         speedNoiseOffset = Random.Range(0f, 100f);
         ApplySpeedVariation();
         IdleSetTargetPosition(position);
-    }
-    private void HandleConfirmation()
-    {
-        if (!GetComponent<Fish>().isActiveFish) return;
+
 
         // Handle based on current fishing state
         FishingManager.FishingGameState currentState = FishingManager.Instance.CurrentFishingGameState;
@@ -282,16 +284,6 @@ public class FishMovement : MonoBehaviour
             FishingManager.Instance.ConfirmLevelUpPresentation();
         }
     }
-    private void HandleConfirmationsDone()
-    {
-        if (!GetComponent<Fish>().isActiveFish) return;
-        // If in level up presentation state, confirm the level up and return to gameplay
-        if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.LevelUpPresentation)
-        {
-            FishingManager.Instance.ConfirmLevelUpPresentation();
-        }
-    }
-
     private void PlaceFishInFrontOfCamera()
     {
         Transform targetAnchor = PlayerCamera.Instance.transform;
