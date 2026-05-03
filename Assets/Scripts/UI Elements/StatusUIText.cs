@@ -15,6 +15,8 @@ public class StatusUIText : MonoBehaviour
 
         FishingAreaTrigger.OnPlayerEnterFishingArea += HandleExitEnter;
         FishingAreaTrigger.OnPlayerExitFishingArea += HandleExitEnter;
+        PlayerInputState.MenuTogglePerformed += HandleMenuToggle;
+
     }
 
     void OnDisable()
@@ -26,6 +28,7 @@ public class StatusUIText : MonoBehaviour
 
         FishingAreaTrigger.OnPlayerEnterFishingArea -= HandleExitEnter;
         FishingAreaTrigger.OnPlayerExitFishingArea -= HandleExitEnter;
+        PlayerInputState.MenuTogglePerformed -= HandleMenuToggle;
     }
     void Start()
     {
@@ -56,6 +59,20 @@ public class StatusUIText : MonoBehaviour
     }
     // HandleCaught() is now handled by CatchPresentationUI to show different text based on fish type
     // Mainly for a cleaner catch panel and repositioned text to be above the fish presentation
+    void HandleMenuToggle()
+    {
+        if (PlayerInputState.Instance.CurrentState == PlayerInputState.InputStates.Menu)
+        {
+            ClearText();
+        }
+        else
+        {
+            if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Gameplay || FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
+            {
+                SetGamePlayText();
+            }
+        }
+    }
     void HandleReturnToGameplay()
     {
         string reason = fishingManager.ReturnToGameplayReason;
