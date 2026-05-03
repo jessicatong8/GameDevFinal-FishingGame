@@ -28,6 +28,7 @@ public class VisualEffectManager : MonoBehaviour
     [SerializeField] private GameObject levelUpSparklePrefab;
     [SerializeField] private GameObject levelUpShinePrefab;
     [SerializeField] private GameObject[] levelUpHats; 
+
     private GameObject currentHat;
     private GameObject catchSparkleInstance;
     private GameObject catchShineInstance;
@@ -121,7 +122,7 @@ public class VisualEffectManager : MonoBehaviour
         levelUpSparkleInstance.transform.localScale = VFXscale;
         levelUpShineInstance.transform.localScale = VFXscale;
 
-         Transform targetAnchor = PlayerCamera.Instance.transform;
+        Transform targetAnchor = PlayerCamera.Instance.transform;
         int newLevel = LevelManager.Instance.GetPlayerLevel();
         Vector3 targetPosition = targetAnchor.position + targetAnchor.forward;
         Vector3 localOffset = new Vector3(0f, -0.5f, 2.5f);
