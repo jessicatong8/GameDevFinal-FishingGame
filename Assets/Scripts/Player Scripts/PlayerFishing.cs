@@ -94,6 +94,17 @@ public class PlayerFishing : MonoBehaviour
             DebugLogger.Instance.LogWarning("HandleFishingEnded called but player is not in fishing state.");
             return;
         }
+        
+        // Keep player in fishing mode while presentations (catch and level up) are being shown
+        FishingManager.FishingGameState currentState = FishingManager.Instance.CurrentFishingGameState;
+        
+        if (currentState == FishingManager.FishingGameState.CatchPresentation || currentState == FishingManager.FishingGameState.LevelUpPresentation)
+        {
+            DebugLogger.Instance.Log($"HandleFishingEnded called during {currentState}, ignoring to keep player in fishing mode for presentation.");
+            return;
+        }
+        // Only exit fishing mode when returning to Gameplay after all presentations are confirmed
+        DebugLogger.Instance.Log("HandleFishingEnded: Returning to Gameplay state and exiting fishing mode.");
         SetFishingActive(false);
         animator.SetBool("isReeling", false);
         animator.SetBool("isFishing", false);

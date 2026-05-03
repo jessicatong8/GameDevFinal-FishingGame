@@ -37,7 +37,7 @@ public class PlayerInputState : MonoBehaviour
     // Fishing Input Events
     public static event Action HookPerformed;
     public static event Action MashPerformed;
-    public static event Action ConfirmCatchPerformed;
+    public static event Action ConfirmPerformed;
     public static event Action ReelLeftPerformed;
     public static event Action ReelRightPerformed;
     public static event Action AbortPerformed;
@@ -160,10 +160,10 @@ public class PlayerInputState : MonoBehaviour
         if (!value.isPressed) return;
         if (currentState != InputStates.Fishing) return;
 
-        if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
+        if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation || fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.LevelUpPresentation)
         {
             // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnConfirmCatch", "-> !ConfirmCatchPerformed");
-            ConfirmCatchPerformed?.Invoke();
+            ConfirmPerformed?.Invoke();
         }
     }
     public void OnHook(InputValue value)
@@ -216,10 +216,10 @@ public class PlayerInputState : MonoBehaviour
         if (currentState != InputStates.Fishing) return;
 
         // acts as confirm catch during catch presentation, otherwise abort for any fishing state (casting, hook window, reeling)
-        if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
+        if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation || fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.LevelUpPresentation)
         {
             // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !ConfirmCatchPerformed");
-            ConfirmCatchPerformed?.Invoke();
+            ConfirmPerformed?.Invoke();
         }
         else
         {

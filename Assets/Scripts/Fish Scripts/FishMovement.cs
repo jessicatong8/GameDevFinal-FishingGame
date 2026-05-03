@@ -46,24 +46,10 @@ public class FishMovement : MonoBehaviour
         FishingManager.OnHook += HandleHooked;
         FishingManager.OnCaught += HandleCaught;
         FishingManager.OnReturnToGameplay += HandleResetToGameplay;
-
         PlayerInputState.ReelLeftPerformed += TurnLeft;
         PlayerInputState.ReelRightPerformed += TurnRight;
-        PlayerInputState.ConfirmCatchPerformed += HandleCatchConfirmation;
+        PlayerInputState.ConfirmPerformed += HandleConfirmation;
     }
-
-    private void OnDisable()
-    {
-        FishingManager.OnBite -= HandleBite;
-        FishingManager.OnHook -= HandleHooked;
-        FishingManager.OnCaught -= HandleCaught;
-        FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
-        PlayerInputState.ReelLeftPerformed -= TurnLeft;
-        PlayerInputState.ReelRightPerformed -= TurnRight;
-        PlayerInputState.ConfirmCatchPerformed -= HandleCatchConfirmation;
-    }
-
-
     void Start()
     {
         xLineLeftWarningRange = LineRangeManager.Instance.xLineLeftWarningRange;
@@ -81,16 +67,15 @@ public class FishMovement : MonoBehaviour
         ApplySpeedVariation();
         IdleSetTargetPosition(position);
     }
-    // private void OnValidate()
-    // {
-    //     // Update position when adjusting local offset in the inspector
-    //     localOffset = new Vector3(localOffset.x, localOffset.y, localOffset.z);
-    //     if (FishingManager.Instance != null && FishingManager.Instance.activeFish == GetComponent<Fish>())
-    //     {
-    //         PlaceFishInFrontOfCamera();
-    //     }
-    // }
-
+    private void OnDisable()
+    {
+        FishingManager.OnHook -= HandleHooked;
+        FishingManager.OnCaught -= HandleCaught;
+        FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
+        PlayerInputState.ReelLeftPerformed -= TurnLeft;
+        PlayerInputState.ReelRightPerformed -= TurnRight;
+        PlayerInputState.ConfirmPerformed -= HandleConfirmation;
+    }
     private void Update()
     {
         if (GetComponent<Fish>().isActiveFish && FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
@@ -244,6 +229,22 @@ public class FishMovement : MonoBehaviour
     }
     private void HandleResetToGameplay()
     {
+        if (!GetComponent<Fish>().isActiveFish) return;
+        if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation || FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.LevelUpPresentation)
+        {
+            // DebugLogger.Instance.Log("HandleResetToGameplay called during presentation state, ignoring to keep player in fishing mode for presentation.");
+            return;
+        }
+
+        // currentFishingGameState = FishingGameState.Idle;
+        position = originalPosition;
+        transform.eulerAngles = new Vector3(0, direction * 90f, 0);
+        transform.position = position;
+
+        baseSwimmingSpeed = GetComponent<Fish>().swimmingSpeed; // reset the base speed
+        speedNoiseOffset = Random.Range(0f, 100f);
+        ApplySpeedVariation();
+        IdleSetTargetPosition(position);
         // currentFishingGameState = FishingGameState.Idle;
         position = originalPosition;
         transform.eulerAngles = new Vector3(0, direction * 90f, 0);
@@ -254,11 +255,43 @@ public class FishMovement : MonoBehaviour
         ApplySpeedVariation();
         IdleSetTargetPosition(position);
     }
-    private void HandleCatchConfirmation()
+    private void HandleConfirmation()
     {
         if (!GetComponent<Fish>().isActiveFish) return;
-        FishingManager.Instance.ReturnToGameplay("FishCaughtConfirmed");
+
+        // Handle based on current fishing state
+        FishingManager.FishingGameState currentState = FishingManager.Instance.CurrentFishingGameState;
+
+        if (currentState == FishingManager.FishingGameState.CatchPresentation)
+        {
+            // Check if player should level up from this catch (deterministic check based on fish count, not event-dependent)
+            if (LevelManager.Instance.ShouldPlayerLevelUp())
+            {
+                // Transition to level up presentation instead of returning to gameplay
+                FishingManager.Instance.TransitionToLevelUpPresentation();
+            }
+            else
+            {
+                // No level up, return to gameplay immediately
+                FishingManager.Instance.ReturnToGameplay("FishCaughtConfirmed");
+            }
+        }
+        else if (currentState == FishingManager.FishingGameState.LevelUpPresentation)
+        {
+            // Confirm the level up presentation and return to gameplay
+            FishingManager.Instance.ConfirmLevelUpPresentation();
+        }
     }
+    private void HandleConfirmationsDone()
+    {
+        if (!GetComponent<Fish>().isActiveFish) return;
+        // If in level up presentation state, confirm the level up and return to gameplay
+        if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.LevelUpPresentation)
+        {
+            FishingManager.Instance.ConfirmLevelUpPresentation();
+        }
+    }
+
     private void PlaceFishInFrontOfCamera()
     {
         Transform targetAnchor = PlayerCamera.Instance.transform;

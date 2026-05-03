@@ -15,14 +15,22 @@ public class VisualEffectManager : MonoBehaviour
 
     [Header("Screen Shake Reference")]
     [SerializeField] private ScreenShake screenShake;
-    [Header("Sparkle Effect Prefab")]
-    [SerializeField] private GameObject sparklePrefab;
-    [SerializeField] private GameObject shinePrefab;
-    [Header("Catch Presentation VFX Offsets")]
-    [SerializeField] private Vector3 VFXposition = new Vector3(-0.150000006f, 3.57999992f, -3.73000002f);     
-    [SerializeField] private Vector3 VFXscale = new Vector3(0.9f, 0.9f, 0.9f); 
-    private GameObject sparkleInstance;
-    private GameObject shineInstance;
+
+    [Header("VFX Offsets")]
+    [SerializeField] private Vector3 VFXposition = new Vector3(-0.150000006f, 3.57999992f, -3.73000002f);
+    [SerializeField] private Vector3 VFXscale = new Vector3(0.9f, 0.9f, 0.9f);
+
+    [Header("Catch Presentation VFX Prefabs")]
+    [SerializeField] private GameObject catchSparklePrefab;
+    [SerializeField] private GameObject catchShinePrefab;
+
+    [Header("Level Up VFX Prefabs")]
+    [SerializeField] private GameObject levelUpSparklePrefab;
+    [SerializeField] private GameObject levelUpShinePrefab;
+    private GameObject catchSparkleInstance;
+    private GameObject catchShineInstance;
+    private GameObject levelUpSparkleInstance;
+    private GameObject levelUpShineInstance;
 
     private void OnEnable()
     {
@@ -30,7 +38,8 @@ public class VisualEffectManager : MonoBehaviour
         FishingManager.OnCaught += SpawnCatchPresentationVFX;
         FishingManager.OnEscaped += PlayEscapeShake;
         PlayerInputState.MashPerformed += PlayMashSplash;
-        PlayerInputState.ConfirmCatchPerformed += DestroyCatchPresentationVFX;
+        PlayerInputState.ConfirmPerformed += DestroyCatchPresentationVFX;
+        LevelManager.OnLevelUp += SpawnLevelUpPresentationVFX; // also play mash splash on level up for that extra satisfying feedback
     }
 
     private void OnDisable()
@@ -39,7 +48,8 @@ public class VisualEffectManager : MonoBehaviour
         FishingManager.OnCaught -= SpawnCatchPresentationVFX;
         FishingManager.OnEscaped -= PlayEscapeShake;
         PlayerInputState.MashPerformed -= PlayMashSplash;
-        PlayerInputState.ConfirmCatchPerformed -= DestroyCatchPresentationVFX;
+        PlayerInputState.ConfirmPerformed -= DestroyCatchPresentationVFX;
+        LevelManager.OnLevelUp -= SpawnLevelUpPresentationVFX;
     }
     void PlayBiteSplash()
     {
@@ -74,28 +84,54 @@ public class VisualEffectManager : MonoBehaviour
     }
     void SpawnCatchPresentationVFX()
     {
-        sparkleInstance = Instantiate(sparklePrefab, VFXposition, Quaternion.identity);
-        shineInstance = Instantiate(shinePrefab, VFXposition, Quaternion.identity);
-        sparkleInstance.transform.localScale = VFXscale;
-        shineInstance.transform.localScale = VFXscale;
+        catchSparkleInstance = Instantiate(catchSparklePrefab, VFXposition, Quaternion.identity);
+        catchShineInstance = Instantiate(catchShinePrefab, VFXposition, Quaternion.identity);
+        catchSparkleInstance.transform.localScale = VFXscale;
+        catchShineInstance.transform.localScale = VFXscale;
     }
     void DestroyCatchPresentationVFX()
     {
-        if (sparkleInstance != null)
+        if (catchSparkleInstance != null)
         {
-            Destroy(sparkleInstance);
+            Destroy(catchSparkleInstance);
         }
         else
         {
-            Debug.LogWarning("No sparkle instance found to destroy.");
+            Debug.LogWarning("No catch sparkle instance found to destroy.");
         }
-        if (shineInstance != null)
+        if (catchShineInstance != null)
         {
-            Destroy(shineInstance);
+            Destroy(catchShineInstance);
         }
         else
         {
-            Debug.LogWarning("No shine instance found to destroy.");
+            Debug.LogWarning("No catch shine instance found to destroy.");
+        }
+    }
+    void SpawnLevelUpPresentationVFX(int newLevel)
+    {
+        levelUpSparkleInstance = Instantiate(levelUpSparklePrefab, VFXposition, Quaternion.identity);
+        levelUpShineInstance = Instantiate(levelUpShinePrefab, VFXposition, Quaternion.identity);
+        levelUpSparkleInstance.transform.localScale = VFXscale;
+        levelUpShineInstance.transform.localScale = VFXscale;
+    }
+    void DestroyLevelUpPresentationVFX()
+    {
+        if (levelUpSparkleInstance != null)
+        {
+            Destroy(levelUpSparkleInstance);
+        }
+        else
+        {
+            Debug.LogWarning("No level up sparkle instance found to destroy.");
+        }
+        if (levelUpShineInstance != null)
+        {
+            Destroy(levelUpShineInstance);
+        }
+        else
+        {
+            Debug.LogWarning("No level up shine instance found to destroy.");
         }
     }
 }

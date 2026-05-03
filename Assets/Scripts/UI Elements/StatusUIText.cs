@@ -11,7 +11,6 @@ public class StatusUIText : MonoBehaviour
         FishingManager.OnCast += HandleCast;
         FishingManager.OnBite += HandleBite;
         FishingManager.OnHook += HandleHook;
-        // FishingManager.OnCaught += HandleCaught;
         FishingManager.OnReturnToGameplay += HandleReturnToGameplay;
         LevelManager.OnLevelUp += HandleLevelUp;
         FishingAreaTrigger.OnPlayerEnterFishingArea += HandleExitEnter;
@@ -23,7 +22,6 @@ public class StatusUIText : MonoBehaviour
         FishingManager.OnCast -= HandleCast;
         FishingManager.OnBite -= HandleBite;
         FishingManager.OnHook -= HandleHook;
-        // FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnReturnToGameplay -= HandleReturnToGameplay;
         LevelManager.OnLevelUp -= HandleLevelUp;
         FishingAreaTrigger.OnPlayerEnterFishingArea -= HandleExitEnter;
@@ -60,7 +58,7 @@ public class StatusUIText : MonoBehaviour
     // Mainly for a cleaner catch panel and repositioned text to be above the fish presentation
     void HandleReturnToGameplay()
     {
-        string reason = fishingManager.escapeReason;
+        string reason = fishingManager.ReturnToGameplayReason;
         switch (reason)
         {
             case "HookWindowTimedOut":

@@ -24,12 +24,12 @@ public class FishingManager : MonoBehaviour
     public static event Action OnHook; // when player successfully hooks the fish within the hook window
     public static event Action OnEscaped; // when fish escapes due to hook window timing out, player drip being too low, line breaking from high tension, or fish moving out of line range
     public static event Action OnCaught; // when player successfully catches the fish by reeling to 100% progress, the fish will be presented to camera and player can interact to confirm catch (via !OnCatchConfirmationEnd) to return to idle
+    public static event Action OnLevelUpPresentation; // when player confirms catch and levels up, the level up presentation is shown and player must confirm before returning to gameplay
     public static event Action OnReturnToGameplay;
-
     public static event Action<FishingGameState> OnFishingGameStateChanged; // for triggering state-specific animations TODO: get rid of this, referenced in BasicUI
-
     public Fish activeFish;
-    public string escapeReason;
+    public string ReturnToGameplayReason;
+    private bool playerLeveledUpFromLastCatch = false; // tracks if player leveled up from the most recent catch confirmation
 
 
     public enum FishingGameState
@@ -38,17 +38,15 @@ public class FishingManager : MonoBehaviour
         Casting, // After player initiates fishing by casting but before the fish bites
         HookWindow, // After fish bites and is within the window where player can hook, but hasn't successfully hooked yet
         Reeling, // After player successfully hooks and is trying to reel the fish in but hasn't caught the fish yet
-        CatchPresentation // After player successfully reels to 100% progress and the fish is caught and presented to the camera, waiting for player to confirm catch before returning to idle
+        CatchPresentation, // After player successfully reels to 100% progress and the fish is caught and presented to the camera, waiting for player to confirm catch before returning to idle
+        LevelUpPresentation // After player confirms catch and levels up, waiting for player to acknowledge level up before returning to idle
     }
-
-
     public FishingGameState CurrentFishingGameState => currentFishingGameState;
     private FishingGameState currentFishingGameState = FishingGameState.Gameplay;
     private void Awake()
     {
         Instance = this;
     }
-
     private void SetFishingGameState(FishingGameState requestedState)
     {
         if (currentFishingGameState == requestedState) return;
@@ -78,7 +76,6 @@ public class FishingManager : MonoBehaviour
     // Used in TensionManager, LineRangeManager, and CastingManager
     public void EscapeFishing(string reason)
     {
-        // Debug.Log("Fish Escaped: " + escapeReason);
         DebugLogger.Instance.LogMethodCall("FishingManager.EscapeFishing", "-> !OnEscaped");
         OnEscaped?.Invoke();
         ReturnToGameplay(reason);
@@ -89,15 +86,38 @@ public class FishingManager : MonoBehaviour
         string fishName = activeFish != null ? activeFish.fishName : "Unknown fish";
         DebugLogger.Instance.LogMethodCall("FishingManager.CaughtFish", fishName);
         SetFishingGameState(FishingGameState.CatchPresentation);
+        playerLeveledUpFromLastCatch = false; // reset for new catch
         OnCaught?.Invoke();
         // Wait for player to interact before advancing sequence and returning to idle
+    }
+
+    // Called when player confirms a catch and has leveled up; transitions to LevelUpPresentation state
+    public void TransitionToLevelUpPresentation()
+    {
+        DebugLogger.Instance.LogMethodCall("FishingManager.TransitionToLevelUpPresentation", "CatchPresentation -> LevelUpPresentation");
+        SetFishingGameState(FishingGameState.LevelUpPresentation);
+        playerLeveledUpFromLastCatch = true;
+        OnLevelUpPresentation?.Invoke();
+    }
+
+    // Called when player confirms the level up presentation; returns to idle gameplay
+    public void ConfirmLevelUpPresentation()
+    {
+        DebugLogger.Instance.LogMethodCall("FishingManager.ConfirmLevelUpPresentation", "LevelUpPresentation -> Gameplay");
+        ReturnToGameplay("LevelUpConfirmed");
+    }
+
+    // Returns true if player leveled up from the last catch confirmation
+    public bool DidPlayerLevelUpFromLastCatch()
+    {
+        return playerLeveledUpFromLastCatch;
     }
 
     // All fishing outcomes (abort, escape, successful catch) resolve here to reset states and trigger animations
     public void ReturnToGameplay(string reason)
     {
-        escapeReason = reason;
         if (currentFishingGameState == FishingGameState.Gameplay) return;
+        ReturnToGameplayReason = reason;
         DebugLogger.Instance.LogMethodCall("FishingManager.ReturnToGameplay", reason);
 
         SetFishingGameState(FishingGameState.Gameplay);
