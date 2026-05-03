@@ -4752,7 +4752,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: startingTension
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: tensionDropRate
@@ -10426,12 +10426,10 @@ MonoBehaviour:
   - {fileID: 1369816884}
   - {fileID: 8619124962086250684}
   prototypeFishSequence:
-  - {fileID: 749808209}
-  - {fileID: 2134137907}
-  - {fileID: 417212392}
-  - {fileID: 1369816884}
-  - {fileID: 8619124962086250684}
-  usePrototypeFishSequence: 0
+  - {fileID: 262265230}
+  - {fileID: 87280593}
+  - {fileID: 2074694865}
+  usePrototypeFishSequence: 1
 --- !u!1 &989545184
 GameObject:
   m_ObjectHideFlags: 0
@@ -10672,7 +10670,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1430605049871976209, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: m_Name
-      value: 5_Level1Fish_YellowTang_Escapes
+      value: 5_Level1Fish_YellowTang
       objectReference: {fileID: 0}
     - target: {fileID: 6934182710573912601, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12942,7 +12940,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d63a22c1fdf8d4d599d58557de606008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressManager
-  startingProgress: 0
+  startingProgress: 80
 --- !u!4 &1152363079
 Transform:
   m_ObjectHideFlags: 0
@@ -17195,7 +17193,7 @@ MonoBehaviour:
   maxBiteDelay: 4
   minHookWindow: 2
   maxHookWindow: 3
-  disableDripCheck: 1
+  disableDripCheck: 0
 --- !u!1 &1557498333
 GameObject:
   m_ObjectHideFlags: 0
@@ -22141,7 +22139,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2329344339266163818, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.85
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2329344339266163818, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -22149,23 +22147,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2329344339266163818, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0.70441604
       objectReference: {fileID: 0}
     - target: {fileID: 2329344339266163818, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: -0.06162845
       objectReference: {fileID: 0}
     - target: {fileID: 2329344339266163818, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7071068
+      value: 0.70441604
       objectReference: {fileID: 0}
     - target: {fileID: 2329344339266163818, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.06162845
       objectReference: {fileID: 0}
     - target: {fileID: 2329344339266163818, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 2329344339266163818, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
