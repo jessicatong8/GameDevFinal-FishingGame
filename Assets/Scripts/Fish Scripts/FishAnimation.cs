@@ -3,7 +3,6 @@ using UnityEngine;
 public class FishAnimation : MonoBehaviour
 {
     private Animator animator;
-    // public FishingManager fishManager;
 
     void Start()
     {
@@ -21,12 +20,8 @@ public class FishAnimation : MonoBehaviour
         FishingManager.OnBite -= HandleBite;
         FishingManager.OnHook -= HandleHooked;
         FishingManager.OnCaught -= HandleCaught;
-        FishingManager.OnEscaped -= HandleEscaped; // can include optional escape animation instead
+        FishingManager.OnEscaped -= HandleEscaped;
         FishingManager.OnReturnToGameplay -= HandleResetToIdle;
-    }
-
-    void Update()
-    {
     }
 
     void HandleBite()
@@ -48,7 +43,7 @@ public class FishAnimation : MonoBehaviour
 
     void HandleCaught()
     {
-        animator.SetBool("IsCaught", true);     // makes fish static for catch presentation
+        animator.SetBool("IsCaught", true); // makes fish static for catch presentation
     }
 
     void HandleResetToIdle()
