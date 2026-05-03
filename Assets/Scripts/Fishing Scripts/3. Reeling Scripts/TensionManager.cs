@@ -5,6 +5,7 @@ public class TensionManager : MonoBehaviour
     public bool IsInSafeZone() => tension >= safeZoneLower && tension <= safeZoneUpper;
     public bool IsTensionTooHigh() => tension > safeZoneUpper;
     public bool IsTensionTooLow() => tension < safeZoneLower;
+
     private Fish activeFish;
     private const float TARGET_MASH_RATE = 3f; // expected mashes per second
     private bool isReeling;
@@ -12,16 +13,17 @@ public class TensionManager : MonoBehaviour
     // TENSION VARIABLES
     private float tension;
     private float maxTension = 100;
+    private float startingTension;
     private float tensionDropRate;
     // TENSION ZONES
-    public float safeZoneLower;
-    public float safeZoneUpper;
+    private float safeZoneLower;
+    private float safeZoneUpper;
     // ESCAPE VARIABLES
     private float outOfZoneTimer; // counts how long tension has been out of the safe zone
     private float escapeTime; // if outOfZoneTimer exceeds escapeTime, fish escapes
     void Start()
     {
-        tension = 50f;
+
     }
     private void OnEnable()
     {
@@ -55,7 +57,8 @@ public class TensionManager : MonoBehaviour
         }
         isReeling = true;
         tensionDropRate = activeFish.tensionDropRate;
-        tension = activeFish.safeZoneCenter; // start in the middle of the safe zone
+        tension = activeFish.startingTension;
+        // start in the middle of the safe zone
 
         safeZoneLower = activeFish.safeZoneCenter - activeFish.safeZoneWidth / 2f;
         safeZoneUpper = activeFish.safeZoneCenter + activeFish.safeZoneWidth / 2f;
@@ -98,7 +101,7 @@ public class TensionManager : MonoBehaviour
     {
         // DebugLogger.Instance.LogMethodCall("TensionManager: HandleResetToGameplay");
         mashTriggeredThisFrame = false;
-        tension = 50f;
+        tension = 0f;
         outOfZoneTimer = 0f;
         isReeling = false;
         activeFish = null;
