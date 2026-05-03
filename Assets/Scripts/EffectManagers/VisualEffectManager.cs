@@ -51,7 +51,7 @@ public class VisualEffectManager : MonoBehaviour
 
     void PlayEscapeShake()
     {
-        screenShake.TriggerLargeShake(0.6f, 1f);
+        screenShake.TriggerLargeShake(0.8f, 1f);
     }
 
     private IEnumerator DelayedSpawn(GameObject prefab, float delay, float scale, Vector3 position)
