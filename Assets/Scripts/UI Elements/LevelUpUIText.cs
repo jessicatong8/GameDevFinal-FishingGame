@@ -21,7 +21,7 @@ public class LevelUpUIText : MonoBehaviour
 
     private void OnEnable()
     {
-        FishingManager.OnLevelUpPresentation += HandleLevelUpPresentation;
+        FishingManager.OnLevelUp += HandleLevelUpPresentation;
         FishingManager.OnReturnToGameplay += HandleReturnToGameplay;
     }
 
@@ -32,7 +32,7 @@ public class LevelUpUIText : MonoBehaviour
 
     private void OnDisable()
     {
-        FishingManager.OnLevelUpPresentation -= HandleLevelUpPresentation;
+        FishingManager.OnLevelUp -= HandleLevelUpPresentation;
         FishingManager.OnReturnToGameplay -= HandleReturnToGameplay;
     }
 
@@ -47,6 +47,7 @@ public class LevelUpUIText : MonoBehaviour
 
     private void HandleReturnToGameplay()
     {
+        DebugLogger.Instance.Log("Returning to gameplay.");
         levelUpPanel.SetActive(false);
     }
 }

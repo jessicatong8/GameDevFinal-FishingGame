@@ -39,7 +39,9 @@ public class VisualEffectManager : MonoBehaviour
         FishingManager.OnEscaped += PlayEscapeShake;
         PlayerInputState.MashPerformed += PlayMashSplash;
         PlayerInputState.ConfirmPerformed += DestroyCatchPresentationVFX;
-        LevelManager.OnLevelUp += SpawnLevelUpPresentationVFX; // also play mash splash on level up for that extra satisfying feedback
+        PlayerInputState.ConfirmPerformed += DestroyLevelUpPresentationVFX;
+        FishingManager.OnLevelUp += SpawnLevelUpPresentationVFX; // also play mash splash on level up for that extra satisfying feedback
+
     }
 
     private void OnDisable()
@@ -49,7 +51,8 @@ public class VisualEffectManager : MonoBehaviour
         FishingManager.OnEscaped -= PlayEscapeShake;
         PlayerInputState.MashPerformed -= PlayMashSplash;
         PlayerInputState.ConfirmPerformed -= DestroyCatchPresentationVFX;
-        LevelManager.OnLevelUp -= SpawnLevelUpPresentationVFX;
+        PlayerInputState.ConfirmPerformed -= DestroyLevelUpPresentationVFX;
+        FishingManager.OnLevelUp -= SpawnLevelUpPresentationVFX;
     }
     void PlayBiteSplash()
     {
@@ -109,7 +112,7 @@ public class VisualEffectManager : MonoBehaviour
             Debug.LogWarning("No catch shine instance found to destroy.");
         }
     }
-    void SpawnLevelUpPresentationVFX(int newLevel)
+    void SpawnLevelUpPresentationVFX()
     {
         levelUpSparkleInstance = Instantiate(levelUpSparklePrefab, VFXposition, Quaternion.identity);
         levelUpShineInstance = Instantiate(levelUpShinePrefab, VFXposition, Quaternion.identity);

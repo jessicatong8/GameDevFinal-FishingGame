@@ -11,12 +11,12 @@ public class Hats : MonoBehaviour
     }
     public void OnEnable()
     {
-        LevelManager.OnLevelUp += HandleLevelUp;
+        FishingManager.OnLevelUp += HandleLevelUp;
         PlayerInputState.CycleHatPerformed += CycleHat;
     }
     public void OnDisable()
     {
-        LevelManager.OnLevelUp -= HandleLevelUp;
+        FishingManager.OnLevelUp -= HandleLevelUp;
         PlayerInputState.CycleHatPerformed -= CycleHat;
     }
     public void CycleHat()
@@ -50,8 +50,8 @@ public class Hats : MonoBehaviour
         }
     }
 
-    private void HandleLevelUp(int playerLevel)
+    private void HandleLevelUp()
     {
-        ShowHats(playerLevel - 1);
+        ShowHats(LevelManager.Instance.GetPlayerLevel() - 1); // playerLevel is 1-based and numHats is 0-based, so subtract 1 to get correct index
     }
 }

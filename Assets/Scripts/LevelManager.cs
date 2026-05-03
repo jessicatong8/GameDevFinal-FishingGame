@@ -16,12 +16,7 @@ public class LevelManager : MonoBehaviour
         }
         private set => instance = value;
     }
-
-    public static event Action<int> OnLevelUp; // after a catch is confirmed, when player levels up by catching a certain number of fish
-    public static event Action OnGameWin; // after a catch is confirmed, when player catches all fish and wins the game
-
     private bool playerLeveledUpThisCatch = false; // tracks if player leveled up on this catch before confirming level up presentation
-
     void Awake()
     {
         ResetPlayerLevel();
@@ -34,6 +29,7 @@ public class LevelManager : MonoBehaviour
     private void OnDisable()
     {
         FishingManager.OnCaught -= HandleCaught;
+        PlayerInputState.ConfirmPerformed -= HandleCatchConfirmed;
     }
     public int GetPlayerLevel()
     {
@@ -44,7 +40,6 @@ public class LevelManager : MonoBehaviour
         PlayerData.playerLevel++;
         playerLeveledUpThisCatch = true;
         DebugLogger.Instance.LogMethodCall($"Player leveled up to {PlayerData.playerLevel}!");
-        OnLevelUp?.Invoke(PlayerData.playerLevel);
     }
     private void ResetPlayerLevel()
     {
@@ -72,11 +67,11 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    // Returns true if player leveled up from the most recent catch
-    public bool DidPlayerLevelUp()
-    {
-        return playerLeveledUpThisCatch;
-    }
+    // // Returns true if player leveled up from the most recent catch
+    // public bool DidPlayerLevelUp()
+    // {
+    //     return playerLeveledUpThisCatch;
+    // }
 
     // Checks if player SHOULD level up based on current fish count (deterministic, not event-dependent)
     public bool ShouldPlayerLevelUp()
@@ -88,7 +83,7 @@ public class LevelManager : MonoBehaviour
     private void HandleGameWin()
     {
         Debug.Log("All fish in sequence have been caught, invoking game win.");
-        OnGameWin?.Invoke();
+        FishingManager.Instance.InvokeGameWin();
         SceneManager.LoadScene("WinScene");
     }
 }
