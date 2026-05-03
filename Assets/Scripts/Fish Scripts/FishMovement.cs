@@ -36,13 +36,15 @@ public class FishMovement : MonoBehaviour
     private float wobbleOffset;
     private Vector3 basePosition;
     private float arrivalThreshold = 0.1f;
-    private int direction = 1; // 1 for right, -1 for left
+    private int direction = 1; // 1 for right, -1 for left\
+    private PlayerCamera playerCamera;
     private LineRangeManager lineRangeManager;
     [Header("Fish Placement")]
     [SerializeField] private Vector3 localOffset = new Vector3(0f, -0.5f, 2.5f);
     [SerializeField] private float rotationSpeed = 40f;
     private void OnEnable()
     {
+        playerCamera = FindFirstObjectByType<PlayerCamera>();
         FishingManager.OnBite += HandleBite;
         FishingManager.OnHook += HandleHooked;
         FishingManager.OnCaught += HandleCaught;
@@ -267,10 +269,10 @@ public class FishMovement : MonoBehaviour
     }
     private void PlaceFishInFrontOfCamera()
     {
-        Transform targetAnchor = PlayerCamera.Instance.transform;
+        Transform targetAnchor = playerCamera.transform;
         Vector3 targetPosition = targetAnchor.position + targetAnchor.forward;
         transform.position = targetPosition + targetAnchor.TransformVector(localOffset);
-        transform.LookAt(PlayerCamera.Instance.transform.position);
+        transform.LookAt(playerCamera.transform.position);
     }
     private void RotateFish()
     {
