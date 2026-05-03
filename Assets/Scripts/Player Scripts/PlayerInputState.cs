@@ -248,11 +248,10 @@ public class PlayerInputState : MonoBehaviour
     public void OnMenuToggle(InputValue value)
     {
         if (!value.isPressed) return;
-        if (currentState != InputStates.Gameplay) return;
 
-        if (currentState == InputStates.Menu)
+        // Allow toggle if we are in Gameplay (to open) or Menu (to close)
+        if (currentState == InputStates.Gameplay || currentState == InputStates.Menu)
         {
-            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnMenu", "-> !MenuTogglePerformed");
             MenuTogglePerformed?.Invoke();
         }
     }
