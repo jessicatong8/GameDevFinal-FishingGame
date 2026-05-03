@@ -36,7 +36,7 @@ public class DebugCanvasUI : MonoBehaviour
         tensionManager = FindFirstObjectByType<TensionManager>();
         progressManager = FindFirstObjectByType<ProgressManager>();
         levelManager = FindFirstObjectByType<LevelManager>();
-        debugPanel = transform.Find("Debug Panel").gameObject;
+        debugPanel = GetComponentInChildren<Image>(true).gameObject;
         if (debugPanel == null)
         {
             DebugLogger.Instance.LogError("DebugCanvasUI: No Image component found on the GameObject!");
