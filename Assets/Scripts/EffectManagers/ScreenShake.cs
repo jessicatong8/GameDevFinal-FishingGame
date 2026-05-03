@@ -14,12 +14,12 @@ public class ScreenShake : MonoBehaviour
     }
     public void TriggerLargeShake(float duration, float intensity)
     {
-        Debug.Log($"Triggering large shake with duration={duration} and intensity={intensity}");
+        // Debug.Log($"Triggering large shake with duration={duration} and intensity={intensity}");
         StartCoroutine(Shake(duration, intensity));
     }
     public void SetConstantShake(bool active, float strength = 0.05f)
     {
-        Debug.Log($"SetConstantShake called with active={active}, strength={strength}");
+        // Debug.Log($"SetConstantShake called with active={active}, strength={strength}");
         isConstantShaking = active;
         constantStrength = strength;
     }
