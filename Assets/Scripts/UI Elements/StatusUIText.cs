@@ -12,6 +12,7 @@ public class StatusUIText : MonoBehaviour
         FishingManager.OnBite += HandleBite;
         FishingManager.OnHook += HandleHook;
         FishingManager.OnReturnToGameplay += HandleReturnToGameplay;
+
         FishingAreaTrigger.OnPlayerEnterFishingArea += HandleExitEnter;
         FishingAreaTrigger.OnPlayerExitFishingArea += HandleExitEnter;
     }
@@ -22,6 +23,7 @@ public class StatusUIText : MonoBehaviour
         FishingManager.OnBite -= HandleBite;
         FishingManager.OnHook -= HandleHook;
         FishingManager.OnReturnToGameplay -= HandleReturnToGameplay;
+
         FishingAreaTrigger.OnPlayerEnterFishingArea -= HandleExitEnter;
         FishingAreaTrigger.OnPlayerExitFishingArea -= HandleExitEnter;
     }
@@ -81,7 +83,10 @@ public class StatusUIText : MonoBehaviour
             case "PlayerAborted":
                 SetGamePlayText();
                 break;
-            case "FishCaughtConfirmed":
+            case "LevelUpConfirmed":
+                SetGamePlayText();
+                break;
+            case "CatchConfirmed":
                 SetGamePlayText();
                 break;
         }
