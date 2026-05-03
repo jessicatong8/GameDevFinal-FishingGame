@@ -1767,7 +1767,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &166365971
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4169,7 +4169,7 @@ MonoBehaviour:
   reelingSound: {fileID: 2068396189}
   caughtFishSound: {fileID: 1145134698}
   escapedFishSound: {fileID: 1550894570}
-  levelUpSound: {fileID: 1550894570}
+  levelUpSound: {fileID: 1344574863}
   winSound: {fileID: 589165433}
   plopDelay: 0.8
 --- !u!4 &342227306
@@ -4377,6 +4377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CatchPresentationUI
   catchPanel: {fileID: 166365970}
+  catchTextObject: {fileID: 1740249213}
 --- !u!1 &356036557
 GameObject:
   m_ObjectHideFlags: 0
@@ -4451,9 +4452,9 @@ Transform:
   m_GameObject: {fileID: 380576126}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 2.75}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: -0.15, y: 3.58, z: -3.73}
+  m_LocalScale: {x: 0.96, y: 0.96, z: 0.96}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 838503646}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6114,7 +6115,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: f198c82294c1e45e8a0bd6ee0681a264, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -8729,13 +8730,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e36fb58538fa4a219220290efe97e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualEffectManager
-  castSplash: {fileID: 8866987181904549775, guid: 8c8d8385f96bd054a88a3df780d77bcc, type: 3}
   biteSplash: {fileID: 8585649807550039280, guid: 224c4574d4d272a4b92df19ede61b338, type: 3}
   mashSplash1: {fileID: 6042243990886550057, guid: af44cbf49172b8d42b452221c9638892, type: 3}
   mashSplash2: {fileID: 8866987181904549775, guid: 8c8d8385f96bd054a88a3df780d77bcc, type: 3}
   bobPoint: {fileID: 1426164025}
   mashPoint: {fileID: 380576127}
   screenShake: {fileID: 330585549}
+  sparklePrefab: {fileID: 4033412786151888123, guid: 49057b33ea71fbb4da4e8f02a8db9f28, type: 3}
+  shinePrefab: {fileID: 7938384439400024403, guid: b6e54acc881a03c4a9719b161a25a3e3, type: 3}
+  VFXposition: {x: -0.15, y: 3.58, z: -3.73}
+  VFXscale: {x: 0.9, y: 0.9, z: 0.9}
 --- !u!4 &838503646
 Transform:
   m_ObjectHideFlags: 0
@@ -10001,8 +10005,8 @@ MonoBehaviour:
   castTxt: Let's start fishing! Press [F] to cast your line!
   waitTxt: Now we wait for a fish to come along...
   biteTxt: You've got a fish on the line! Press [SPACE] to hook it!
-  reelTxt: "Keep the fish icon in the green! Press [SPACE] to reel. \n\nUse [LEFT/RIGHT]
-    arrows to keep the fish in the circle!"
+  reelTxt: "Keep the fish in the green! [SPACE] to reel. \nUse [LEFT/RIGHT] arrows
+    to keep the fish in the circle!"
 --- !u!114 &926891666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13425,7 +13429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d63a22c1fdf8d4d599d58557de606008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressManager
-  startingProgress: 0
+  startingProgress: 70
 --- !u!4 &1152363079
 Transform:
   m_ObjectHideFlags: 0
@@ -15499,7 +15503,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 71e9202f43ced4b53804fbb9322bf6e2, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -16507,7 +16511,7 @@ Transform:
   m_GameObject: {fileID: 1426164024}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.55, y: 1, z: 5.67}
+  m_LocalPosition: {x: 0, y: 1, z: 0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17641,7 +17645,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 26559a9f3ee9e4c4696f42d70d002900, type: 3}
+  m_Resource: {fileID: 8300000, guid: 7cbb4d162e1b04fbbb5b45e8abbcdd33, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.85
   m_Pitch: 1
@@ -17790,7 +17794,7 @@ MonoBehaviour:
   maxBiteDelay: 4
   minHookWindow: 2
   maxHookWindow: 3
-  disableDripCheck: 1
+  disableDripCheck: 0
 --- !u!1 &1557498333
 GameObject:
   m_ObjectHideFlags: 0
@@ -17935,7 +17939,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1566663199}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -17943,11 +17947,11 @@ RectTransform:
   - {fileID: 1575987597}
   m_Father: {fileID: 2020516539}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 130.5, y: 0}
-  m_SizeDelta: {x: 261, y: 565.5714}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 400, y: 1500}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1566663202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21411,17 +21415,17 @@ RectTransform:
   m_GameObject: {fileID: 2001369990}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1030449159}
   m_Father: {fileID: 926891664}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 150, y: 45}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 60}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!225 &2001369992
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -21675,10 +21679,10 @@ RectTransform:
   - {fileID: 1566663200}
   m_Father: {fileID: 1739418596}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -182.42853, y: 100}
-  m_SizeDelta: {x: 261, y: -200}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2020516540
 MonoBehaviour:

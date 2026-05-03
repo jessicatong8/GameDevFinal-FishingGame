@@ -1,14 +1,13 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
+using System.Collections;
 
 public class VisualEffectManager : MonoBehaviour
 {
     [Header("Effect Prefabs")]
-    public GameObject castSplash; //less necesary 
-    public GameObject biteSplash;
-    public GameObject mashSplash1;
-    public GameObject mashSplash2;
+    // [SerializeField] private GameObject castSplash;           //less necessary 
+    [SerializeField] private GameObject biteSplash;
+    [SerializeField] private GameObject mashSplash1;
+    [SerializeField] private GameObject mashSplash2;
 
     //change based on andys line logic
     [Header("Spawn Location")]
@@ -17,28 +16,39 @@ public class VisualEffectManager : MonoBehaviour
 
     [Header("Screen Shake Reference")]
     [SerializeField] private ScreenShake screenShake;
+    [Header("Sparkle Effect Prefab")]
+    [SerializeField] private GameObject sparklePrefab;
+    [SerializeField] private GameObject shinePrefab;
+    [Header("Catch Presentation VFX Offsets")]
+    [SerializeField] private Vector3 VFXposition = new Vector3(-0.150000006f, 3.57999992f, -3.73000002f);     
+    [SerializeField] private Vector3 VFXscale = new Vector3(0.9f, 0.9f, 0.9f); 
+    private GameObject sparkleInstance;
+    private GameObject shineInstance;
 
     private void OnEnable()
     {
         FishingManager.OnCast += PlayCastSplash;
         FishingManager.OnBite += PlayBiteSplash;
+        FishingManager.OnCaught += SpawnCatchPresentationVFX;
         FishingManager.OnEscaped += PlayEscapeShake;
         PlayerInputState.MashPerformed += PlayMashSplash;
+        PlayerInputState.ConfirmCatchPerformed += DestroyCatchPresentationVFX;
     }
 
     private void OnDisable()
     {
         FishingManager.OnCast -= PlayCastSplash;
         FishingManager.OnBite -= PlayBiteSplash;
+        FishingManager.OnCaught -= SpawnCatchPresentationVFX;
         FishingManager.OnEscaped -= PlayEscapeShake;
         PlayerInputState.MashPerformed -= PlayMashSplash;
+        PlayerInputState.ConfirmCatchPerformed -= DestroyCatchPresentationVFX;
     }
-
     void PlayCastSplash()
     {
-        StartCoroutine(DelayedSpawn(castSplash, 3.5f, 0.3f, bobPoint.position));
+        // StartCoroutine(DelayedSpawn(castSplash, 3.5f, 0.3f, bobPoint.position));
     }
-    
+
     void PlayBiteSplash()
     {
         SpawnSplash(biteSplash, 1, bobPoint.position);
@@ -53,20 +63,40 @@ public class VisualEffectManager : MonoBehaviour
     {
         screenShake.TriggerLargeShake(0.6f, 1f);
     }
-
-    private IEnumerator DelayedSpawn(GameObject prefab, float delay, float scale, Vector3 position)
-    {
-        yield return new WaitForSeconds(delay);
-        SpawnSplash(prefab, scale, position);
-    }
-
+    // private IEnumerator DelayedSpawn(GameObject prefab, float delay, float scale, Vector3 position)
+    // {
+    //     yield return new WaitForSeconds(delay);
+    //     SpawnSplash(prefab, scale, position);
+    // }
     void SpawnSplash(GameObject prefab, float scale, Vector3 position)
     {
         GameObject instance = Instantiate(prefab, position, Quaternion.identity);
         instance.transform.localScale = Vector3.one * scale;
     }
-    // private Vector3 GetActiveFishPosition()
-    // {
-    //     return FishingManager.Instance.activeFish.transform.position;
-    // }
+    void SpawnCatchPresentationVFX()
+    {
+        sparkleInstance = Instantiate(sparklePrefab, VFXposition, Quaternion.identity);
+        shineInstance = Instantiate(shinePrefab, VFXposition, Quaternion.identity);
+        sparkleInstance.transform.localScale = VFXscale;
+        shineInstance.transform.localScale = VFXscale;
+    }
+    void DestroyCatchPresentationVFX()
+    {
+        if (sparkleInstance != null)
+        {
+            Destroy(sparkleInstance);
+        }
+        else
+        {
+            Debug.LogWarning("No sparkle instance found to destroy.");
+        }
+        if (shineInstance != null)
+        {
+            Destroy(shineInstance);
+        }
+        else
+        {
+            Debug.LogWarning("No shine instance found to destroy.");
+        }
+    }
 }
