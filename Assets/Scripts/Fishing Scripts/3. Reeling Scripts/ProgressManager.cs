@@ -13,8 +13,15 @@ public class ProgressManager : MonoBehaviour
     private void OnEnable()
     {
         FishingManager.OnHook += HandleHooked;
+        // FishingManager.OnCaught += HandleReset;
         PlayerInputState.MashPerformed += HandleMashPerformed;
-        FishingManager.OnReturnToGameplay += HandleResetToGameplay;
+    }
+
+    private void OnDisable()
+    {
+        FishingManager.OnHook -= HandleHooked;
+        // FishingManager.OnCaught -= HandleReset;
+        PlayerInputState.MashPerformed -= HandleMashPerformed;
     }
     void Update()
     {
@@ -24,12 +31,7 @@ public class ProgressManager : MonoBehaviour
             mashTriggeredThisFrame = false;
         }
     }
-    private void OnDisable()
-    {
-        FishingManager.OnHook -= HandleHooked;
-        PlayerInputState.MashPerformed -= HandleMashPerformed;
-        FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
-    }
+
     private void HandleHooked()
     {
         activeFish = FishingManager.Instance.activeFish;
@@ -38,15 +40,17 @@ public class ProgressManager : MonoBehaviour
             DebugLogger.Instance.LogError("ProgressManager: No active fish found.");
         }
         isReeling = true;
+        progress = startingProgress;
+
     }
     private void HandleMashPerformed()
     {
         mashTriggeredThisFrame = true;
     }
-    private void HandleResetToGameplay()
+    private void HandleReset()
     {
         mashTriggeredThisFrame = false;
-        progress = startingProgress;
+        progress = 0f;
         isReeling = false;
         activeFish = null;
     }
@@ -61,6 +65,7 @@ public class ProgressManager : MonoBehaviour
         if (progress >= 100f)
         {
             FishingManager.Instance.CaughtFish();
+            HandleReset();
         }
     }
     public float GetCurrentProgress()

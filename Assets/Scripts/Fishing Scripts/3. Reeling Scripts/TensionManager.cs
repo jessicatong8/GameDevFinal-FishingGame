@@ -25,13 +25,13 @@ public class TensionManager : MonoBehaviour
     {
         FishingManager.OnHook += HandleHooked;
         PlayerInputState.MashPerformed += HandleMashPerformed;
-        FishingManager.OnReturnToGameplay += HandleResetToGameplay;
+        FishingManager.OnCaught += HandleReset;
     }
     private void OnDisable()
     {
         FishingManager.OnHook -= HandleHooked;
         PlayerInputState.MashPerformed -= HandleMashPerformed;
-        FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
+        FishingManager.OnCaught -= HandleReset;
     }
 
     void Update()
@@ -103,7 +103,7 @@ public class TensionManager : MonoBehaviour
         }
     }
 
-    private void HandleResetToGameplay()
+    private void HandleReset()
     {
         mashTriggeredThisFrame = false;
         tension = 0f;
