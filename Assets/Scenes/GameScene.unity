@@ -10386,7 +10386,7 @@ MonoBehaviour:
   - {fileID: 2074694865}
   - {fileID: 2074694865}
   - {fileID: 2074694865}
-  usePrototypeFishSequence: 1
+  usePrototypeFishSequence: 0
 --- !u!1 &989545184
 GameObject:
   m_ObjectHideFlags: 0
@@ -17263,7 +17263,7 @@ MonoBehaviour:
   maxBiteDelay: 4
   minHookWindow: 2
   maxHookWindow: 3
-  disableDripCheck: 1
+  disableDripCheck: 0
 --- !u!1 &1557498333
 GameObject:
   m_ObjectHideFlags: 0
