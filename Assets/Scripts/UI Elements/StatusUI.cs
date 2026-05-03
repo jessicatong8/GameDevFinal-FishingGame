@@ -104,7 +104,13 @@ public class StatusUI : MonoBehaviour
     private System.Collections.IEnumerator EscapedMessageDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        // ClearText();
-        SetGamePlayText();
+        if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Gameplay)
+        {
+            SetGamePlayText();
+        }
+        else
+        {
+            ClearText();
+        }
     }
 }
