@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 5}
-  m_LocalScale: {x: 0.58, y: 0.58, z: 0.58}
+  m_LocalScale: {x: 1.4999999, y: 1.4999999, z: 1.4999999}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 9005308019354151261}
@@ -50,12 +50,13 @@ MonoBehaviour:
   level: 4
   isActiveFish: 0
   swimmingSpeed: 6
-  reelingSpeed: 8
+  reelingSpeed: 10
   reelingProgressRate: 5
-  tensionIncreaseRate: 30
-  tensionDropRate: 40
-  safeZoneCenter: 50
+  tensionIncreaseRate: 50
+  tensionDropRate: 65
+  safeZoneCenter: 70
   safeZoneWidth: 20
+  startingTension: 50
   tensionEscapeTime: 1
 --- !u!114 &8765664314995135046
 MonoBehaviour:
@@ -69,14 +70,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd26c1534d63b45d98abf54f84e7ca2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishMovement
-  idleHeight: -1
-  reelingHeight: 0.35
+  idleHeight: -5.4
+  reelingHeight: 1
   idleSpeedVariation: 0.2
-  reelingSpeedVariation: 0.5
+  reelingSpeedVariation: 1.5
   speedNoiseFrequency: 0.8
   idleWobbleAmplitude: 0.01
   reelingWobbleAmplitude: 0.008
-  wobbleFrequency: 2
+  wobbleFrequency: 4
   localOffset: {x: 0, y: 2, z: 8}
   rotationSpeed: 40
 --- !u!1001 &8895733596504575670
