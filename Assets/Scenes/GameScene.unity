@@ -442,7 +442,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &57282773
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11058,7 +11058,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2104798368, guid: 9f1ed5a03cff542e78a4874b3d6d1bdb, type: 3}
+  m_Sprite: {fileID: 534121661, guid: 1e94d29150b9f452fa581f59fd288c67, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -18041,7 +18041,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1612408216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20591,7 +20591,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishingManager
   activeFish: {fileID: 0}
-  currentDrip: 10
   escapeReason: 
 --- !u!4 &1940631100
 Transform:
