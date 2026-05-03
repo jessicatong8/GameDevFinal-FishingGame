@@ -90,6 +90,7 @@ public class FishSequenceManager : MonoBehaviour
 
         if (FishData.fishSequenceIndex == sequence.Length)
         {
+            ResetFishData();
             return true;
         }
         return false;
