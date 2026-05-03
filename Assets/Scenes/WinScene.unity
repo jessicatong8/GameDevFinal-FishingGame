@@ -2724,8 +2724,8 @@ MonoBehaviour:
   m_text: Congrats! You are now the \n <color=#4ebbd8>drippiest</color>            
     <color=#4ebbd8>fisher</color> in\n    the            world!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 995ed4b21ea96f942a913002230ca264, type: 2}
-  m_sharedMaterial: {fileID: 3998772062047758403, guid: 995ed4b21ea96f942a913002230ca264, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 11990e8eda78b5c46b8d4ff40e246cef, type: 2}
+  m_sharedMaterial: {fileID: 3998772062047758403, guid: 11990e8eda78b5c46b8d4ff40e246cef, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
