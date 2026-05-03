@@ -225,6 +225,7 @@ public class PlayerInputState : MonoBehaviour
         {
             // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !AbortPerformed");
             AbortPerformed?.Invoke();
+            FishingManager.Instance.ReturnToGameplay("PlayerAborted");
         }
     }
     public void OnMenuToggle(InputValue value)

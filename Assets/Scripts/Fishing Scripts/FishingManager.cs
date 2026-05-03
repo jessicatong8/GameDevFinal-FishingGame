@@ -48,14 +48,6 @@ public class FishingManager : MonoBehaviour
     {
         Instance = this;
     }
-    private void OnEnable()
-    {
-        PlayerInputState.AbortPerformed += HandleAbortPerformed;
-    }
-    private void OnDisable()
-    {
-        PlayerInputState.AbortPerformed -= HandleAbortPerformed;
-    }
 
     private void SetFishingGameState(FishingGameState requestedState)
     {
@@ -81,13 +73,6 @@ public class FishingManager : MonoBehaviour
     {
         SetFishingGameState(FishingGameState.Reeling);
         OnHook?.Invoke();
-    }
-    private void HandleAbortPerformed()
-    {
-        if (currentFishingGameState != FishingGameState.Gameplay)
-        {
-            ReturnToGameplay("PlayerAborted");
-        }
     }
 
     // Used in TensionManager, LineRangeManager, and CastingManager
