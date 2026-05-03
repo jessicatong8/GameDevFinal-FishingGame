@@ -24,12 +24,12 @@ public class LevelManager : MonoBehaviour
     private void OnEnable()
     {
         FishingManager.OnCaught += HandleCaught;
-        PlayerInputState.ConfirmPerformed += HandleCatchConfirmed;
+        PlayerInputState.CatchConfirmPerformed += HandleCatchConfirmed;
     }
     private void OnDisable()
     {
         FishingManager.OnCaught -= HandleCaught;
-        PlayerInputState.ConfirmPerformed -= HandleCatchConfirmed;
+        PlayerInputState.CatchConfirmPerformed -= HandleCatchConfirmed;
     }
     public int GetPlayerLevel()
     {

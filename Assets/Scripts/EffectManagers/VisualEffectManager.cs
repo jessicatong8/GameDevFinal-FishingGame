@@ -38,8 +38,8 @@ public class VisualEffectManager : MonoBehaviour
         FishingManager.OnCaught += SpawnCatchPresentationVFX;
         FishingManager.OnEscaped += PlayEscapeShake;
         PlayerInputState.MashPerformed += PlayMashSplash;
-        PlayerInputState.ConfirmPerformed += DestroyCatchPresentationVFX;
-        PlayerInputState.ConfirmPerformed += DestroyLevelUpPresentationVFX;
+        PlayerInputState.CatchConfirmPerformed += DestroyCatchPresentationVFX;
+        PlayerInputState.LevelConfirmPerformed += DestroyLevelUpPresentationVFX;
         FishingManager.OnLevelUp += SpawnLevelUpPresentationVFX; // also play mash splash on level up for that extra satisfying feedback
 
     }
@@ -50,8 +50,8 @@ public class VisualEffectManager : MonoBehaviour
         FishingManager.OnCaught -= SpawnCatchPresentationVFX;
         FishingManager.OnEscaped -= PlayEscapeShake;
         PlayerInputState.MashPerformed -= PlayMashSplash;
-        PlayerInputState.ConfirmPerformed -= DestroyCatchPresentationVFX;
-        PlayerInputState.ConfirmPerformed -= DestroyLevelUpPresentationVFX;
+        PlayerInputState.CatchConfirmPerformed -= DestroyCatchPresentationVFX;
+        PlayerInputState.LevelConfirmPerformed -= DestroyLevelUpPresentationVFX;
         FishingManager.OnLevelUp -= SpawnLevelUpPresentationVFX;
     }
     void PlayBiteSplash()

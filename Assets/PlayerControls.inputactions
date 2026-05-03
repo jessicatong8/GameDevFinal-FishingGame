@@ -356,7 +356,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Confirm Catch",
+                    "name": "Confirm",
                     "type": "Button",
                     "id": "5f661519-b4fd-47eb-908f-1494a85c08c0",
                     "expectedControlType": "",
@@ -433,7 +433,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Confirm Catch",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

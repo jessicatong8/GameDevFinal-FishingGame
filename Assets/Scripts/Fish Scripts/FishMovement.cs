@@ -48,7 +48,7 @@ public class FishMovement : MonoBehaviour
         FishingManager.OnReturnToGameplay += HandleResetToGameplay;
         PlayerInputState.ReelLeftPerformed += TurnLeft;
         PlayerInputState.ReelRightPerformed += TurnRight;
-        PlayerInputState.ConfirmPerformed += HandleConfirmation;
+        PlayerInputState.CatchConfirmPerformed += HandleConfirmation;
     }
     void Start()
     {
@@ -74,7 +74,7 @@ public class FishMovement : MonoBehaviour
         FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
         PlayerInputState.ReelLeftPerformed -= TurnLeft;
         PlayerInputState.ReelRightPerformed -= TurnRight;
-        PlayerInputState.ConfirmPerformed -= HandleConfirmation;
+        PlayerInputState.CatchConfirmPerformed -= HandleConfirmation;
     }
     private void Update()
     {
@@ -260,7 +260,7 @@ public class FishMovement : MonoBehaviour
         ApplySpeedVariation();
         IdleSetTargetPosition(position);
 
-
+        // TODO REMOVE 
         // Handle based on current fishing state
         FishingManager.FishingGameState currentState = FishingManager.Instance.CurrentFishingGameState;
 

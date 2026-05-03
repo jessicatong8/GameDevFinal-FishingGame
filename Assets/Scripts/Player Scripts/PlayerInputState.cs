@@ -37,7 +37,8 @@ public class PlayerInputState : MonoBehaviour
     // Fishing Input Events
     public static event Action HookPerformed;
     public static event Action MashPerformed;
-    public static event Action ConfirmPerformed;
+    public static event Action CatchConfirmPerformed;
+    public static event Action LevelConfirmPerformed; 
     public static event Action ReelLeftPerformed;
     public static event Action ReelRightPerformed;
     public static event Action AbortPerformed;
@@ -155,15 +156,24 @@ public class PlayerInputState : MonoBehaviour
             InteractPerformed?.Invoke();
         }
     }
-    public void OnConfirmCatch(InputValue value)
+    public void OnConfirm(InputValue value)
     {
         if (!value.isPressed) return;
         if (currentState != InputStates.Fishing) return;
 
-        if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation || fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.LevelUpPresentation)
+        if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
         {
-            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnConfirmCatch", "-> !ConfirmCatchPerformed");
-            ConfirmPerformed?.Invoke();
+            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnConfirm", "-> !ConfirmCatchPerformed");
+            CatchConfirmPerformed?.Invoke();
+        }
+        else if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.LevelUpPresentation)
+        {
+            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnConfirmLevelUp", "-> !ConfirmLevelUpPerformed");
+            LevelConfirmPerformed?.Invoke();
+        }
+        else
+        {
+            DebugLogger.Instance.LogWarning("PlayerInputState.OnConfirm: Confirm input received but not in a presentation state.");
         }
     }
     public void OnHook(InputValue value)
@@ -216,10 +226,15 @@ public class PlayerInputState : MonoBehaviour
         if (currentState != InputStates.Fishing) return;
 
         // acts as confirm catch during catch presentation, otherwise abort for any fishing state (casting, hook window, reeling)
-        if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation || fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.LevelUpPresentation)
+        if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
         {
             // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !ConfirmCatchPerformed");
-            ConfirmPerformed?.Invoke();
+            CatchConfirmPerformed?.Invoke();
+        }
+        else if (fishingManager.CurrentFishingGameState == FishingManager.FishingGameState.LevelUpPresentation)
+        {
+            // DebugLogger.Instance.LogMethodCall("PlayerInputState.OnAbort", "-> !ConfirmLevelUpPerformed");
+            LevelConfirmPerformed?.Invoke();
         }
         else
         {
