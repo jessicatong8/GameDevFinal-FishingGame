@@ -10807,9 +10807,10 @@ MonoBehaviour:
   - {fileID: 417212392}
   - {fileID: 8619124962086250684}
   prototypeFishSequence:
-  - {fileID: 1000430930}
-  - {fileID: 420660827}
   - {fileID: 749808209}
+  - {fileID: 1369816884}
+  - {fileID: 2134137907}
+  - {fileID: 417212392}
   usePrototypeFishSequence: 1
 --- !u!1 &989545184
 GameObject:
@@ -22654,16 +22655,32 @@ PrefabInstance:
       value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
+      propertyPath: safeZoneWidth
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
+      propertyPath: safeZoneCenter
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
+      propertyPath: startingTension
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: tensionDropRate
-      value: 40
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
+      propertyPath: tensionEscapeTime
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: reelingProgressRate
-      value: 10
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1179416442214671309, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: tensionIncreaseRate
-      value: 30
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 1950411480561426448, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: m_LocalScale.x
@@ -22735,7 +22752,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8174870239663022773, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: reelingSpeedVariation
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8174870239663022773, guid: fbbe9a67cc5964d3a921c5d56257051d, type: 3}
       propertyPath: reelingWobbleAmplitude
@@ -23163,11 +23180,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091020698784567842, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: reelingSpeed
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8091020698784567842, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: safeZoneWidth
-      value: 30
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 8091020698784567842, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: swimmingSpeed
@@ -23183,7 +23200,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091020698784567842, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: tensionDropRate
-      value: 23
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8091020698784567842, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: tensionEscapeTime
