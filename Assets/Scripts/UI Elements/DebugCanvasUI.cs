@@ -1,12 +1,6 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using System;
-
-/// <summary>
-/// Debug UI Canvas that displays all fishing states and method call logs
-/// Attach this to a Canvas in the scene
-/// </summary>
 public class DebugCanvasUI : MonoBehaviour
 {
     private PlayerInputState inputState;
@@ -15,11 +9,15 @@ public class DebugCanvasUI : MonoBehaviour
     private LineRangeManager lineRangeManager;
     private FishingManager fishingManager;
     private LevelManager levelManager;
-    private GameObject debugPanel;
-    private TextMeshProUGUI debugTextDisplay;
 
+    [Header("Debug UI References")]
+    [SerializeField] private GameObject debugPanel;
+    [SerializeField] private TextMeshProUGUI debugTextDisplay;
+
+    [Header("Debug Display Settings")]
     [SerializeField] private bool showDebugUI = false;
     [SerializeField] private float updateRate = 0.1f; // Update every 0.1 seconds
+
     [Header("Section Visibility")]
     [SerializeField] private bool showPlayerStateSection = true;
     [SerializeField] private bool showFishingSection = true;
@@ -28,6 +26,27 @@ public class DebugCanvasUI : MonoBehaviour
     [SerializeField] private int recentCallsToDisplay = 3;
     [SerializeField] private float recentCallsWindowSeconds = 3f;
     private float updateTimer;
+
+    private void Awake()
+    {
+        // Attempt to find references if not set in inspector
+        if (debugPanel == null)
+        {
+            debugPanel = GetComponentInChildren<Image>(true)?.gameObject;
+        }
+        if (debugTextDisplay == null)
+        {
+            debugTextDisplay = GetComponentInChildren<TextMeshProUGUI>(true);
+        }
+    }
+    private void OnEnable()
+    {
+        PlayerInputState.DebugPerformed += ToggleDebugUI;
+    }
+    private void OnDisable()
+    {
+        PlayerInputState.DebugPerformed -= ToggleDebugUI;
+    }
     private void Start()
     {
         inputState = PlayerInputState.Instance;
@@ -36,16 +55,6 @@ public class DebugCanvasUI : MonoBehaviour
         tensionManager = FindFirstObjectByType<TensionManager>();
         progressManager = FindFirstObjectByType<ProgressManager>();
         levelManager = FindFirstObjectByType<LevelManager>();
-        debugPanel = GetComponentInChildren<Image>(true).gameObject;
-        if (debugPanel == null)
-        {
-            DebugLogger.Instance.LogError("DebugCanvasUI: No Image component found on the GameObject!");
-        }
-        debugTextDisplay = GetComponentInChildren<TextMeshProUGUI>(true);
-        if (debugTextDisplay == null)
-        {
-            DebugLogger.Instance.LogError("DebugCanvasUI: No TextMeshProUGUI assigned!");
-        }
         PlayerInputState.DebugPerformed += ToggleDebugUI;
         UpdateDebugDisplay();
     }
@@ -60,7 +69,10 @@ public class DebugCanvasUI : MonoBehaviour
     {
         showDebugUI = !showDebugUI;
         Debug.Log($"Debug UI {(showDebugUI ? "shown" : "hidden")}");
-        debugPanel.SetActive(showDebugUI);
+        if (debugPanel != null)
+        {
+            debugPanel.SetActive(showDebugUI);
+        }
     }
 
     private void Update()
