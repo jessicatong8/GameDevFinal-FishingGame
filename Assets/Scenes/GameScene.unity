@@ -4107,14 +4107,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e60d0ee5fed4044b98ee6c5c289e2c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScreenShake
-  start: 0
   shakeCurve:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  duration: 0.5
 --- !u!1 &342227304
 GameObject:
   m_ObjectHideFlags: 0
@@ -4152,6 +4150,8 @@ MonoBehaviour:
   reelingSound: {fileID: 2068396189}
   caughtFishSound: {fileID: 1145134698}
   escapedFishSound: {fileID: 1550894570}
+  levelUpSound: {fileID: 0}
+  winSound: {fileID: 0}
   plopDelay: 0.8
 --- !u!4 &342227306
 Transform:
@@ -8554,6 +8554,7 @@ GameObject:
   m_Component:
   - component: {fileID: 838503646}
   - component: {fileID: 838503645}
+  - component: {fileID: 838503647}
   m_Layer: 0
   m_Name: VisualEffectManager
   m_TagString: Untagged
@@ -8579,6 +8580,7 @@ MonoBehaviour:
   mashSplash2: {fileID: 8866987181904549775, guid: 8c8d8385f96bd054a88a3df780d77bcc, type: 3}
   bobPoint: {fileID: 1426164025}
   mashPoint: {fileID: 380576127}
+  screenShake: {fileID: 0}
 --- !u!4 &838503646
 Transform:
   m_ObjectHideFlags: 0
@@ -8596,6 +8598,21 @@ Transform:
   - {fileID: 380576127}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &838503647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838503644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b93d2bd7162164eff91efa4685fe6aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TensionShakeController
+  tensionManager: {fileID: 1419121292}
+  screenShake: {fileID: 330585549}
+  shakeIntensity: 0.05
 --- !u!1 &841225664
 GameObject:
   m_ObjectHideFlags: 0
