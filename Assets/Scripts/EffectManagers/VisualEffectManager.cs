@@ -33,10 +33,12 @@ public class VisualEffectManager : MonoBehaviour
     private GameObject catchShineInstance;
     private GameObject levelUpSparkleInstance;
     private GameObject levelUpShineInstance;
+    private PlayerCamera playerCamera;
     private LineRangeManager lineRangeManager;
 
     private void OnEnable()
     {
+        playerCamera = FindFirstObjectByType<PlayerCamera>();
         lineRangeManager = FindFirstObjectByType<LineRangeManager>();
         FishingManager.OnBite += PlayBiteSplash;
         FishingManager.OnCaught += SpawnCatchPresentationVFX;
@@ -122,7 +124,7 @@ public class VisualEffectManager : MonoBehaviour
         levelUpSparkleInstance.transform.localScale = VFXscale;
         levelUpShineInstance.transform.localScale = VFXscale;
 
-        Transform targetAnchor = PlayerCamera.Instance.transform;
+        Transform targetAnchor = playerCamera.transform;
         int newLevel = LevelManager.Instance.GetPlayerLevel();
         Vector3 targetPosition = targetAnchor.position + targetAnchor.forward;
         Vector3 localOffset = new Vector3(0f, -0.5f, 2.5f);
