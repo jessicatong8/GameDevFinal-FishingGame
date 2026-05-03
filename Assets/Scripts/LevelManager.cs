@@ -16,7 +16,7 @@ public class LevelManager : MonoBehaviour
         }
         private set => instance = value;
     }
-    private bool playerLeveledUpThisCatch = false; // tracks if player leveled up on this catch before confirming level up presentation
+    // private bool playerLeveledUpThisCatch = false; // tracks if player leveled up on this catch before confirming level up presentation
     void Awake()
     {
         ResetPlayerLevel();
@@ -25,11 +25,14 @@ public class LevelManager : MonoBehaviour
     {
         FishingManager.OnCaught += HandleCaught;
         PlayerInputState.CatchConfirmPerformed += HandleCatchConfirmed;
+        PlayerInputState.LevelConfirmPerformed += HandleLevelConfirmed;
     }
     private void OnDisable()
     {
         FishingManager.OnCaught -= HandleCaught;
         PlayerInputState.CatchConfirmPerformed -= HandleCatchConfirmed;
+        PlayerInputState.LevelConfirmPerformed -= HandleLevelConfirmed;
+
     }
     public int GetPlayerLevel()
     {
@@ -38,7 +41,7 @@ public class LevelManager : MonoBehaviour
     private void IncrementPlayerLevel()
     {
         PlayerData.playerLevel++;
-        playerLeveledUpThisCatch = true;
+        // playerLeveledUpThisCatch = true;
         DebugLogger.Instance.LogMethodCall($"Player leveled up to {PlayerData.playerLevel}!");
     }
     private void ResetPlayerLevel()
@@ -47,7 +50,7 @@ public class LevelManager : MonoBehaviour
     }
     private void HandleCaught()
     {
-        playerLeveledUpThisCatch = false; // reset flag at start of catch
+        // playerLeveledUpThisCatch = false; // reset flag at start of catch
         FishSequenceManager.Instance.IncrementFishCaught();
     }
 
@@ -60,25 +63,25 @@ public class LevelManager : MonoBehaviour
         if (numFishCaught == 2 || numFishCaught == 5 || numFishCaught == 9 || numFishCaught == 10) // according to our preset fish sequence
         {
             IncrementPlayerLevel();
+            FishingManager.Instance.TransitionToLevelUpPresentation();
         }
-        if (FishSequenceManager.Instance.CheckGameWin()) //TODO move checkGameWin here
+
+        else if (FishSequenceManager.Instance.CheckGameWin()) //TODO move checkGameWin here
         {
             HandleGameWin();
         }
+        else
+        {
+            FishingManager.Instance.ReturnToGameplay("CatchConfirmed");
+        }
+
     }
 
-    // // Returns true if player leveled up from the most recent catch
-    // public bool DidPlayerLevelUp()
-    // {
-    //     return playerLeveledUpThisCatch;
-    // }
-
-    // Checks if player SHOULD level up based on current fish count (deterministic, not event-dependent)
-    public bool ShouldPlayerLevelUp()
+    private void HandleLevelConfirmed()
     {
-        int numFishCaught = FishSequenceManager.Instance.GetNumFishCaught();
-        return numFishCaught == 2 || numFishCaught == 5 || numFishCaught == 9 || numFishCaught == 10;
+        FishingManager.Instance.ReturnToGameplay("LevelUpConfirmed");
     }
+
 
     private void HandleGameWin()
     {
