@@ -41,13 +41,18 @@ public class Hats : MonoBehaviour
                 hats[i].SetActive(false);
             }
         }
-        else                    // hats 1,2,3
+
+        else            // hats 1,2,3
         {
             for (int i = 0; i <= numHats - 1; i++) // 
             {
-                // Debug.Log($"ManualHatPicker.ShowOnlyThisHat: Setting hat {i} active: {i == hatIndex + 1}");
-                // hats[] has 0,1,2 but maps to hatIndex 1,2,3. both i and hatIndex are 1-based to skip the hatless option at index 0.
-                hats[i].SetActive(true);
+                if (i < hats.Count)
+                {
+                    // Debug.Log($"ManualHatPicker.ShowOnlyThisHat: Setting hat {i} active: {i == hatIndex + 1}");
+                    // hats[] has 0,1,2 but maps to hatIndex 1,2,3. both i and hatIndex are 1-based to skip the hatless option at index 0.
+                    hats[i].SetActive(true);
+                }
+
             }
         }
     }
