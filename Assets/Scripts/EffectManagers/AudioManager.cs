@@ -31,7 +31,7 @@ public class FishingAudioManager : MonoBehaviour
         FishingManager.OnCaught += PlayCatchSound;
         FishingManager.OnEscaped += PlayEscapeSound;
         LevelManager.OnLevelUp += PlayLevelUpSound;
-        LevelManager.OnGameWin += PlayWinSound; //do i need to change this
+        LevelManager.OnGameWin += PlayWinSound; 
         PlayerInputState.MashPerformed += PlayReelingSound;
     }
 
@@ -42,8 +42,8 @@ public class FishingAudioManager : MonoBehaviour
         FishingManager.OnHook -= PlayHookSound;
         FishingManager.OnCaught -= PlayCatchSound;
         FishingManager.OnEscaped -= PlayEscapeSound;
-        LevelManager.OnLevelUp -= PlayLevelUpSound;
-        LevelManager.OnGameWin -= PlayWinSound;
+        FishingManager.OnLevelUp -= PlayLevelUpSound; 
+        FishingManager.OnGameWin -= PlayWinSound;
         PlayerInputState.MashPerformed -= PlayReelingSound;
     }
 
