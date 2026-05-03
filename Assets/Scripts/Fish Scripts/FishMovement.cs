@@ -10,15 +10,16 @@ public class FishMovement : MonoBehaviour
 
     private float swimmingSpeed;
 
-    private float xLeftBoundary = -12f;
-    private float xRightBoundary = 12f;
+    private float xIdleBoundaryDistance = 25f;
+    // private float xDistanceRightIdleBoundary = 25f;
 
-    private float xLineLeftWarningRange;
-    private float xLineRightWarningRange;
-    private float xLineLeftRange;
-    private float xLineRightRange;
+    // private float xLineLeftWarningRange;
+    // private float xLineRightWarningRange;
+    // private float xLineLeftRange;
+    // private float xLineRightRange;
 
     private float baseSwimmingSpeed;
+
 
     [SerializeField] private float idleHeight = -1f;
     [SerializeField] private float reelingHeight = 0f;
@@ -62,15 +63,34 @@ public class FishMovement : MonoBehaviour
         PlayerInputState.ReelRightPerformed -= TurnRight;
         PlayerInputState.ConfirmCatchPerformed -= HandleCatchConfirmation;
     }
+    // Public methods that check fish position, used by LineRangeManager
+    public bool IsInInnerLineRange()
+    {
+        return transform.position.x > LineRangeManager.Instance.xLineLeftWarningRange && transform.position.x < LineRangeManager.Instance.xLineRightWarningRange;
+    }
+    public bool IsInLeftWarningRange()
+    {
+
+        return transform.position.x <= LineRangeManager.Instance.xLineLeftWarningRange && transform.position.x >= LineRangeManager.Instance.xLineLeftRange;
+    }
+    public bool IsInRightWarningRange()
+    {
+        return transform.position.x >= LineRangeManager.Instance.xLineRightWarningRange && transform.position.x <= LineRangeManager.Instance.xLineRightRange;
+    }
+    public bool IsOutOfLineRange()
+    {
+        return transform.position.x < LineRangeManager.Instance.xLineLeftRange || transform.position.x > LineRangeManager.Instance.xLineRightRange;
+    }
 
 
     void Start()
     {
-        xLineLeftWarningRange = LineRangeManager.Instance.xLineLeftWarningRange;
-        xLineRightWarningRange = LineRangeManager.Instance.xLineRightWarningRange;
-        xLineLeftRange = LineRangeManager.Instance.xLineLeftRange;
-        xLineRightRange = LineRangeManager.Instance.xLineRightRange;
+        // xLineLeftWarningRange = LineRangeManager.Instance.xLineLeftWarningRange;
+        // xLineRightWarningRange = LineRangeManager.Instance.xLineRightWarningRange;
+        // xLineLeftRange = LineRangeManager.Instance.xLineLeftRange;
+        // xLineRightRange = LineRangeManager.Instance.xLineRightRange;
 
+        // Set fish to idle movement on start
         position = new Vector3(transform.position.x, idleHeight, transform.position.z);
         transform.position = position;
         originalPosition = position;
@@ -79,88 +99,127 @@ public class FishMovement : MonoBehaviour
         speedNoiseOffset = Random.Range(0f, 100f);
         wobbleOffset = Random.Range(0f, 100f);
         ApplySpeedVariation();
-        IdleSetTargetPosition(position);
+        IdleSetTargetPosition();
     }
-    // private void OnValidate()
-    // {
-    //     // Update position when adjusting local offset in the inspector
-    //     localOffset = new Vector3(localOffset.x, localOffset.y, localOffset.z);
-    //     if (FishingManager.Instance != null && FishingManager.Instance.activeFish == GetComponent<Fish>())
-    //     {
-    //         PlaceFishInFrontOfCamera();
-    //     }
-    // }
 
     private void Update()
     {
+        switch (FishingManager.Instance.CurrentFishingGameState)
+        {
+            case FishingManager.FishingGameState.Gameplay:
+                break;
+            case FishingManager.FishingGameState.HookWindow:
+                break;
+            case FishingManager.FishingGameState.Reeling:
+                break;
+
+        }
         if (GetComponent<Fish>().isActiveFish && FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
         {
             RotateFish();
             return;
         }
         UpdateSwimmingSpeed();
-        SwimTowardTarget(FishingManager.Instance.CurrentFishingGameState);
+        // IdleSetTargetPosition();
+        SwimTowardTarget();
     }
 
-    public Vector3 IdleSetTargetPosition(Vector3 position)
+    private void IdleSetTargetPosition()
     {
-        if (position.x <= 0)
+        SetTargetPosition(idleHeight, LineRangeManager.Instance.xLineRightRange, xIdleBoundaryDistance); //Idle
+
+    }
+    private void ReelingSetTargetPosition()
+    {
+        SetTargetPosition(reelingHeight, LineRangeManager.Instance.xLineRightRange, LineRangeManager.Instance.xLineRightRange + 5); //Reeling
+    }
+
+
+    // public Vector3 IdleSetTargetPosition(Vector3 position)
+    // {
+    //     if (position.x <= 0)
+    //     {
+    //         direction = 1; // Move right
+    //         targetPosition = new Vector3(UnityEngine.Random.Range(LineRangeManager.Instance.xLineRightRange, xIdleBoundaryDistance), idleHeight, position.z);
+    //     }
+    //     else if (position.x > 0)
+    //     {
+    //         direction = -1; // Move left
+    //         targetPosition = new Vector3(UnityEngine.Random.Range(-xIdleBoundaryDistance, LineRangeManager.Instance.xLineLeftRange), idleHeight, position.z);
+    //     }
+    //     transform.eulerAngles = new Vector3(transform.eulerAngles.x, direction * 90f, transform.eulerAngles.z); // Flip the fish to face the right direction
+
+    //     // Debug.Log("Target Position: " + targetPosition);
+    //     return targetPosition;
+    // }
+    // public Vector3 ReelingSetTargetPosition(Vector3 position)
+    // {
+    //     if (position.x <= 0)
+    //     {
+    //         direction = 1; // Move right
+    //         targetPosition = new Vector3(UnityEngine.Random.Range(LineRangeManager.Instance.xLineRightRange, LineRangeManager.Instance.xLineRightRange + 5), reelingHeight, position.z);
+    //     }
+    //     else if (position.x > 0)
+    //     {
+    //         direction = -1; // Move left
+    //         targetPosition = new Vector3(UnityEngine.Random.Range(LineRangeManager.Instance.xLineLeftRange - 5, LineRangeManager.Instance.xLineLeftRange), reelingHeight, position.z);
+    //     }
+    //     transform.eulerAngles = new Vector3(transform.eulerAngles.x, direction * 90f, transform.eulerAngles.z); // Flip the fish to face the right direction
+
+    //     // Debug.Log("Target Position: " + targetPosition);
+    //     return targetPosition;
+    // }
+
+
+    public Vector3 SetTargetPosition(float targetPositionY, float xDistanceStart, float xDistanceEnd)
+    {
+        if (transform.position.x <= 0)
         {
             direction = 1; // Move right
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLineRightRange, xRightBoundary), idleHeight, position.z);
+            targetPosition = new Vector3(Random.Range(xDistanceStart, xDistanceEnd), targetPositionY, position.z);
         }
-        else if (position.x > 0)
+        else if (transform.position.x > 0)
         {
             direction = -1; // Move left
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLeftBoundary, xLineLeftRange), idleHeight, position.z);
+            targetPosition = new Vector3(Random.Range(-xDistanceEnd, -xDistanceStart), targetPositionY, position.z);
         }
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, direction * 90f, transform.eulerAngles.z); // Flip the fish to face the right direction
 
         // Debug.Log("Target Position: " + targetPosition);
         return targetPosition;
     }
-    public Vector3 ReelingSetTargetPosition(Vector3 position)
-    {
-        if (position.x <= 0)
-        {
-            direction = 1; // Move right
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLineRightRange, xLineRightRange + 5), reelingHeight, position.z);
-        }
-        else if (position.x > 0)
-        {
-            direction = -1; // Move left
-            targetPosition = new Vector3(UnityEngine.Random.Range(xLineLeftRange - 5, xLineLeftRange), reelingHeight, position.z);
-        }
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, direction * 90f, transform.eulerAngles.z); // Flip the fish to face the right direction
-
-        // Debug.Log("Target Position: " + targetPosition);
-        return targetPosition;
-    }
-    private void SwimTowardTarget(FishingManager.FishingGameState state)
+    private void SwimTowardTarget()
     {
         float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
 
         if (distanceToTarget <= arrivalThreshold)
         {
             transform.position = targetPosition;
-            if (GetComponent<Fish>().isActiveFish && (state == FishingManager.FishingGameState.Reeling || state == FishingManager.FishingGameState.HookWindow))
+            if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Reeling)
             {
-                ReelingSetTargetPosition(transform.position);
+                ReelingSetTargetPosition();
             }
             else
             {
-                IdleSetTargetPosition(transform.position);
+                IdleSetTargetPosition();
             }
             return;
         }
         transform.LookAt(targetPosition);
         basePosition = Vector3.MoveTowards(transform.position, targetPosition, swimmingSpeed * Time.deltaTime);
 
+        ApplyVerticalWobble();
+
+    }
+    private void ApplyVerticalWobble()
+    {
         // Written using AI: Apply subtle vertical wobble
-        float wobbleAmplitude = state == FishingManager.FishingGameState.Gameplay ? idleWobbleAmplitude : reelingWobbleAmplitude;
+        float wobbleAmplitude = FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Gameplay ? idleWobbleAmplitude : reelingWobbleAmplitude;
         float wobble = Mathf.Sin(Time.time * wobbleFrequency + wobbleOffset) * wobbleAmplitude;
         transform.position = basePosition + Vector3.forward * wobble;
+
     }
+
 
     // Written using AI: Adding noise to the swimming speed
     private void UpdateSwimmingSpeed()
@@ -194,7 +253,7 @@ public class FishMovement : MonoBehaviour
         {
             // Debug.Log("Turning Left");
             direction = -1;
-            ReelingSetTargetPosition(transform.position);
+            ReelingSetTargetPosition();
             transform.LookAt(targetPosition);
         }
     }
@@ -209,7 +268,7 @@ public class FishMovement : MonoBehaviour
         if (direction != 1)
         {
             direction = 1;
-            ReelingSetTargetPosition(transform.position);
+            ReelingSetTargetPosition();
             transform.LookAt(targetPosition);
         }
     }
@@ -220,7 +279,7 @@ public class FishMovement : MonoBehaviour
         position = new Vector3(0, reelingHeight, 5f);
         transform.position = position;
         transform.eulerAngles = new Vector3(-10, transform.eulerAngles.y, transform.eulerAngles.z); //tilt fish up
-        ReelingSetTargetPosition(position);
+        ReelingSetTargetPosition();
 
     }
     private void HandleHooked()
@@ -235,7 +294,7 @@ public class FishMovement : MonoBehaviour
         baseSwimmingSpeed = GetComponent<Fish>().reelingSpeed;
         speedNoiseOffset = Random.Range(0f, 100f);
         ApplySpeedVariation();
-        ReelingSetTargetPosition(position);
+        ReelingSetTargetPosition();
     }
     private void HandleCaught()
     {
@@ -252,7 +311,7 @@ public class FishMovement : MonoBehaviour
         baseSwimmingSpeed = GetComponent<Fish>().swimmingSpeed; // reset the base speed
         speedNoiseOffset = Random.Range(0f, 100f);
         ApplySpeedVariation();
-        IdleSetTargetPosition(position);
+        IdleSetTargetPosition();
     }
     private void HandleCatchConfirmation()
     {
@@ -270,25 +329,5 @@ public class FishMovement : MonoBehaviour
     {
         transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime, Space.World);
     }
-    public bool IsInInnerLineRange()
-    {
-        return transform.position.x > xLineLeftWarningRange && transform.position.x < xLineRightWarningRange;
-    }
-    public bool IsInLeftWarningRange()
-    {
 
-        return transform.position.x <= xLineLeftWarningRange && transform.position.x >= xLineLeftRange;
-    }
-    public bool IsInRightWarningRange()
-    {
-        return transform.position.x >= xLineRightWarningRange && transform.position.x <= xLineRightRange;
-    }
-    public bool IsOutOfLineRange()
-    {
-        return transform.position.x < xLineLeftRange || transform.position.x > xLineRightRange;
-    }
-    public Vector3 GetFishPosition()
-    {
-        return transform.position;
-    }
 }
