@@ -12,6 +12,7 @@ public class DebugCanvasUI : MonoBehaviour
     private PlayerInputState inputState;
     private TensionManager tensionManager;
     private ProgressManager progressManager;
+    private LineRangeManager lineRangeManager;
     private FishingManager fishingManager;
     private GameObject debugPanel;
     private TextMeshProUGUI debugTextDisplay;
@@ -30,6 +31,7 @@ public class DebugCanvasUI : MonoBehaviour
     {
         inputState = PlayerInputState.Instance;
         fishingManager = FishingManager.Instance;
+        lineRangeManager = FindFirstObjectByType<LineRangeManager>();
         tensionManager = FindFirstObjectByType<TensionManager>();
         progressManager = FindFirstObjectByType<ProgressManager>();
         debugPanel = transform.Find("Debug Panel").gameObject;
@@ -124,7 +126,7 @@ public class DebugCanvasUI : MonoBehaviour
                     debugText += $"Tension Zone?: {tensionSafeZoneIndicator}\n";
 
                     // LINE RANGE
-                    debugText += $"Line?: <color=#00FFFF>{(LineRangeManager.Instance.isInLineRange ? "IN RANGE" : "OUT OF RANGE")}</color>\n";
+                    debugText += $"Line?: <color=#00FFFF>{(lineRangeManager != null && lineRangeManager.isInLineRange ? "IN RANGE" : "OUT OF RANGE")}</color>\n";
 
                     // PROGRESS
                     debugText += $"Reeling Progress: {progressManager.GetCurrentProgress():F2} / 100.00%\n";
@@ -170,7 +172,7 @@ public class DebugCanvasUI : MonoBehaviour
                 debugText += $"Tension Escape Time: {activeFish.tensionEscapeTime:F2}\n";
 
                 // LINE RANGE
-                debugText += $"IsInLineRange?: {(LineRangeManager.Instance.isInLineRange ? "<color=#00FF00>Yes</color>" : "<color=#FF0000>No</color>")}\n";
+                debugText += $"IsInLineRange?: {(lineRangeManager != null && lineRangeManager.isInLineRange ? "<color=#00FF00>Yes</color>" : "<color=#FF0000>No</color>")}\n";
 
                 // ACTIVE FISH
                 debugText += $"Is Active Fish?: {(activeFish.isActiveFish ? "<color=#00FF00>Yes</color>" : "<color=#FF0000>No</color>")}\n";

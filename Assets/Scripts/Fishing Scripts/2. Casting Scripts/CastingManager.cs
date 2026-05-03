@@ -8,17 +8,6 @@ public class CastingManager : MonoBehaviour
     // Coordinates the timing for when the fish bites and window during which the player must hook the fish
     // Does a drip check to determine if player succcessfully hooks the fish
 
-    private static CastingManager instance;
-    public static CastingManager Instance
-    {
-        get
-        {
-            if (instance != null) return instance;
-            instance = FindFirstObjectByType<CastingManager>();
-            return instance;
-        }
-        private set => instance = value;
-    } // Singleton instance for easy access from other scripts (StatusUI)
     public float minBiteDelay = 0.25f;
     public float maxBiteDelay = 2f;
     public float minHookWindow = 1.5f;
@@ -29,14 +18,12 @@ public class CastingManager : MonoBehaviour
     [SerializeField] private bool disableDripCheck = false;     // for testing purposes, allows player to hook fish regardless of drip level
     private FishingManager fishingManager;
     private FishSequenceManager fishSequenceManager;
+    private GroundChecker groundChecker;
     private void Awake()
     {
-        Instance = this;
-    }
-    private void Start()
-    {
-        fishingManager = FishingManager.Instance;
-        fishSequenceManager = FishSequenceManager.Instance;
+        fishingManager = FindFirstObjectByType<FishingManager>();
+        fishSequenceManager = FindFirstObjectByType<FishSequenceManager>();
+        groundChecker = FindFirstObjectByType<GroundChecker>();
     }
     private void OnEnable()
     {
@@ -63,6 +50,11 @@ public class CastingManager : MonoBehaviour
         if (!IsPlayerInFishingArea())
         {
             DebugLogger.Instance.Log("Player is not in a fishing area and cannot start fishing.");
+            return false;
+        }
+        if (groundChecker != null && !groundChecker.IsGrounded)
+        {
+            DebugLogger.Instance.Log("Player is not grounded and cannot start fishing.");
             return false;
         }
         if (fishingManager.CurrentFishingGameState != FishingManager.FishingGameState.Gameplay)

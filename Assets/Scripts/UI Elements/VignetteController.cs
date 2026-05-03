@@ -14,9 +14,11 @@ public class VignetteController : MonoBehaviour
     [SerializeField] private float transitionSpeed = 8f;
 
     private Vignette vignette;
+    private LineRangeManager lineRangeManager;
     
     private void Start()
     {
+        lineRangeManager = FindFirstObjectByType<LineRangeManager>();
         if (globalVolume.profile.TryGet(out vignette))
         {
             vignette.intensity.value = minIntensity;
@@ -32,7 +34,7 @@ public class VignetteController : MonoBehaviour
         }
 
         float fishX = FishingManager.Instance.activeFish.transform.position.x;
-        float xLimit = LineRangeManager.Instance.xLineLeftRange; 
+        float xLimit = lineRangeManager != null ? lineRangeManager.xLineLeftRange : -8f; 
         
         float distanceRatio = Math.Abs(fishX/xLimit);
         

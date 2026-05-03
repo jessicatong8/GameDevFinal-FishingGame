@@ -4,19 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public static PlayerMovement Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindFirstObjectByType<PlayerMovement>();
-            }
-            return instance;
-        }
-        private set => instance = value;
-    } // Singleton instance for easy access from other scripts.
-
     [Header("Camera Reference")]
     public Transform cameraTransform;
     [Header("Movement Settings")]
@@ -25,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     public float gravity = -20f;
     [SerializeField] private float rotationSharpness = 12f;
     private GroundChecker groundChecker;
-    private static PlayerMovement instance;
     private CharacterController characterController;
     private Animator animator;
     private Vector3 lastMoveDirection = Vector3.forward;
@@ -36,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
         characterController = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
         groundChecker = GetComponent<GroundChecker>();

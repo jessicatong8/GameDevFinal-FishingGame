@@ -2,17 +2,6 @@ using UnityEngine;
 
 public class LineRangeManager : MonoBehaviour
 {
-    public static LineRangeManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindFirstObjectByType<LineRangeManager>();
-            }
-            return instance;
-        }
-    }
     public float xLineLeftWarningRange = -6f;
     public float xLineRightWarningRange = 6f;
     public float xLineLeftRange = -8f;
@@ -20,18 +9,10 @@ public class LineRangeManager : MonoBehaviour
     private bool isInReelingState;
     public bool isInLineRange;
 
-    private static LineRangeManager instance;
     private FishMovement activeFishMovement;
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Debug.LogWarning("Duplicate LineRangeManager found. Destroying extra instance.");
-            Destroy(gameObject);
-            return;
-        }
-        instance = this;
     }
 
     private void OnEnable()
