@@ -10837,7 +10837,7 @@ MonoBehaviour:
   - {fileID: 749808209}
   - {fileID: 1369816884}
   - {fileID: 2134137907}
-  usePrototypeFishSequence: 1
+  usePrototypeFishSequence: 0
 --- !u!1 &989545184
 GameObject:
   m_ObjectHideFlags: 0
