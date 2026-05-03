@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class FishingAudioManager : MonoBehaviour
@@ -11,6 +12,8 @@ public class FishingAudioManager : MonoBehaviour
     [SerializeField] private AudioSource reelingSound;
     [SerializeField] private AudioSource caughtFishSound;
     [SerializeField] private AudioSource escapedFishSound;
+    [SerializeField] private AudioSource levelUpSound;
+    [SerializeField] private AudioSource winSound;
 
     [Header("Timing Specification")]
     [SerializeField] private float plopDelay = 0.8f;
@@ -27,6 +30,8 @@ public class FishingAudioManager : MonoBehaviour
         FishingManager.OnHook += PlayHookSound;
         FishingManager.OnCaught += PlayCatchSound;
         FishingManager.OnEscaped += PlayEscapeSound;
+        FishingManager.OnLevelUp += PlayLevelUpSound;
+        FishingManager.OnGameWin += PlayWinSound; //do i need to change this
         PlayerInputState.MashPerformed += PlayReelingSound;
     }
 
@@ -37,6 +42,8 @@ public class FishingAudioManager : MonoBehaviour
         FishingManager.OnHook -= PlayHookSound;
         FishingManager.OnCaught -= PlayCatchSound;
         FishingManager.OnEscaped -= PlayEscapeSound;
+        FishingManager.OnLevelUp -= PlayLevelUpSound; 
+        FishingManager.OnGameWin -= PlayWinSound;
         PlayerInputState.MashPerformed -= PlayReelingSound;
     }
 
@@ -81,5 +88,13 @@ public class FishingAudioManager : MonoBehaviour
     {
         StopReelingSound();
         escapedFishSound.Play();
+    }
+    private void PlayLevelUpSound(int level)
+    {
+        levelUpSound.Play();
+    }
+    private void PlayWinSound()
+    {
+        winSound.Play();
     }
 }

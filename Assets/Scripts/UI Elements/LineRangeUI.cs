@@ -29,11 +29,6 @@ public class LineRangeUI : MonoBehaviour
         {
             DebugLogger.Instance.LogError("LineRangeUI: LineRangeManager instance not found in scene.");
         }
-        WarningZone = LineRangeWaterOverlay.transform.Find("WarningZone")?.gameObject;
-        if (WarningZone == null)
-        {
-            DebugLogger.Instance.LogError("LineRangeUI: WarningZone child not found under LineRangeWaterOverlay.");
-        }
         LeftArrow = LineRangeIndicators.transform.Find("LeftArrow")?.gameObject;
         if (LeftArrow == null)
         {
@@ -44,9 +39,8 @@ public class LineRangeUI : MonoBehaviour
         {
             DebugLogger.Instance.LogError("LineRangeUI: RightArrow child not found under LineRangeIndicators.");
         }
-        
+        warningCanvasGroup.gameObject.SetActive(true);
         warningCanvasGroup.alpha = 0;
-        WarningZone.SetActive(true);
 
         HandleDisableUI();
     }

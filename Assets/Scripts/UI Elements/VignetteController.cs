@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal; // Use this for URP
+using UnityEngine.Rendering.Universal; 
 
 public class VignetteController : MonoBehaviour
 {
@@ -14,7 +14,7 @@ public class VignetteController : MonoBehaviour
     [SerializeField] private float maxIntensity = 0.45f; 
     [SerializeField] private float transitionSpeed = 8f;
 
-
+    
     private void Start()
     {
         if (globalVolume.profile.TryGet(out vignette))
