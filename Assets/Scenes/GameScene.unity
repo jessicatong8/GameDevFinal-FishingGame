@@ -1779,14 +1779,15 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1740249214}
   m_Father: {fileID: 354399512}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -275}
+  m_SizeDelta: {x: 0, y: 300}
+  m_Pivot: {x: 0, y: 0}
 --- !u!114 &166365972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1807,7 +1808,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1107182067, guid: 4a0455abc9908494da54708a38e7f6b7, type: 3}
+  m_Sprite: {fileID: 1638335979, guid: 4a0455abc9908494da54708a38e7f6b7, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4109,7 +4110,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScreenShake
   shakeCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -4279,6 +4298,7 @@ GameObject:
   - component: {fileID: 354399512}
   - component: {fileID: 354399514}
   - component: {fileID: 354399513}
+  - component: {fileID: 354399515}
   m_Layer: 5
   m_Name: Catch Presentation UI
   m_TagString: Untagged
@@ -4299,7 +4319,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 166365971}
-  - {fileID: 1740249214}
   m_Father: {fileID: 1739418596}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4345,6 +4364,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 354399511}
   m_CullTransparentMesh: 1
+--- !u!114 &354399515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354399511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1386ade2596d454eb5b0004b87068c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CatchPresentationUI
+  catchPanel: {fileID: 166365970}
 --- !u!1 &356036557
 GameObject:
   m_ObjectHideFlags: 0
@@ -7961,11 +7993,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: reelingSpeed
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: safeZoneWidth
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: safeZoneCenter
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: startingTension
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: tensionDropRate
@@ -7973,7 +8013,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: reelingProgressRate
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8633716806847750974, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: tensionIncreaseRate
@@ -7982,6 +8022,10 @@ PrefabInstance:
     - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: idleHeight
       value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: localOffset.z
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: reelingHeight
@@ -9972,6 +10016,7 @@ MonoBehaviour:
   tutorialText: {fileID: 802838066}
   fadeInSpeed: 3
   fadeOutSpeed: 5
+  currentAlpha: 0
   promptTxt: Walk to the dock to start fishing!
   castTxt: Let's start fishing! Press [F] to cast your line!
   waitTxt: Now we wait for a fish to come along...
@@ -10806,10 +10851,9 @@ MonoBehaviour:
   - {fileID: 417212392}
   - {fileID: 8619124962086250684}
   prototypeFishSequence:
-  - {fileID: 2074694865}
-  - {fileID: 2074694865}
-  - {fileID: 1196392398}
-  usePrototypeFishSequence: 0
+  - {fileID: 420660827}
+  - {fileID: 749808209}
+  usePrototypeFishSequence: 1
 --- !u!1 &989545184
 GameObject:
   m_ObjectHideFlags: 0
@@ -17839,7 +17883,7 @@ MonoBehaviour:
   maxBiteDelay: 4
   minHookWindow: 2
   maxHookWindow: 3
-  disableDripCheck: 0
+  disableDripCheck: 1
 --- !u!1 &1557498333
 GameObject:
   m_ObjectHideFlags: 0
@@ -18752,7 +18796,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1632286579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19663,7 +19707,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 354399512}
+  m_Father: {fileID: 166365971}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -23105,11 +23149,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2608195185711172662, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: localOffset.y
-      value: 2
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2608195185711172662, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: localOffset.z
-      value: 8
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 2608195185711172662, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: reelingSpeedVariation

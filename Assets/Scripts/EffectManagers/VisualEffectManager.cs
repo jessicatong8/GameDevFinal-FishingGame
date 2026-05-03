@@ -65,10 +65,8 @@ public class VisualEffectManager : MonoBehaviour
         GameObject instance = Instantiate(prefab, position, Quaternion.identity);
         instance.transform.localScale = Vector3.one * scale;
     }
-
-    private Vector3 GetActiveFishPosition()
-    {
-        return FishingManager.Instance.activeFish.transform.position;
-    }
-    
+    // private Vector3 GetActiveFishPosition()
+    // {
+    //     return FishingManager.Instance.activeFish.transform.position;
+    // }
 }

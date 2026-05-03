@@ -74,7 +74,6 @@ public class ProgressManager : MonoBehaviour
     public bool IsProgressComplete()
     {
         return progress >= 100f;
-
     }
     void Update()
     {
