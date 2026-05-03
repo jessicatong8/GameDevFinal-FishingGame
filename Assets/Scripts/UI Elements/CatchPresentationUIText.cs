@@ -19,8 +19,8 @@ public class CatchPresentationUI : MonoBehaviour
     private void OnEnable()
     {
         FishingManager.OnCaught += HandleCaught;
-        FishingManager.OnLevelUpPresentation += HandleLevelUpPresentation; // hide catch panel when level up presentation starts
-        FishingManager.OnReturnToGameplay += HandleReturnToGameplay; // when player confirms catch or abort/escape 
+        FishingManager.OnLevelUp += HideCatchPanel; // hide catch panel when level up presentation starts
+        FishingManager.OnReturnToGameplay += HideCatchPanel; // when player confirms catch or abort/escape 
     }
     private void Start()
     {
@@ -29,8 +29,8 @@ public class CatchPresentationUI : MonoBehaviour
     private void OnDisable()
     {
         FishingManager.OnCaught -= HandleCaught;
-        FishingManager.OnLevelUpPresentation -= HandleLevelUpPresentation;
-        FishingManager.OnReturnToGameplay -= HandleReturnToGameplay;
+        FishingManager.OnLevelUp -= HideCatchPanel;
+        FishingManager.OnReturnToGameplay -= HideCatchPanel;
     }
     private void HandleCaught()
     {
@@ -63,12 +63,7 @@ public class CatchPresentationUI : MonoBehaviour
                 break;
         }
     }
-    private void HandleLevelUpPresentation()
-    {
-        // Hide catch panel when transitioning to level up presentation
-        catchPanel.SetActive(false);
-    }
-    private void HandleReturnToGameplay()
+    private void HideCatchPanel()
     {
         catchPanel.SetActive(false);
     }

@@ -12,7 +12,6 @@ public class StatusUIText : MonoBehaviour
         FishingManager.OnBite += HandleBite;
         FishingManager.OnHook += HandleHook;
         FishingManager.OnReturnToGameplay += HandleReturnToGameplay;
-        LevelManager.OnLevelUp += HandleLevelUp;
         FishingAreaTrigger.OnPlayerEnterFishingArea += HandleExitEnter;
         FishingAreaTrigger.OnPlayerExitFishingArea += HandleExitEnter;
     }
@@ -23,7 +22,6 @@ public class StatusUIText : MonoBehaviour
         FishingManager.OnBite -= HandleBite;
         FishingManager.OnHook -= HandleHook;
         FishingManager.OnReturnToGameplay -= HandleReturnToGameplay;
-        LevelManager.OnLevelUp -= HandleLevelUp;
         FishingAreaTrigger.OnPlayerEnterFishingArea -= HandleExitEnter;
         FishingAreaTrigger.OnPlayerExitFishingArea -= HandleExitEnter;
     }
@@ -87,11 +85,6 @@ public class StatusUIText : MonoBehaviour
                 SetGamePlayText();
                 break;
         }
-    }
-    private void HandleLevelUp(int playerLevel)
-    {
-        // Debug.Log(playerLevel);
-        statusText.text = "Congrats, you just got DRIPPED OUT! Maybe you're finally cool enough for drippier fish...";
     }
     private void HandleExitEnter(bool isInFishingArea)
     {
