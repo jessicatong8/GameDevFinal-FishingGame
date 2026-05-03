@@ -19,6 +19,7 @@ public class FishMovement : MonoBehaviour
     private float xLineRightRange;
 
     private float baseSwimmingSpeed;
+    private bool isActiveFish;
 
     [SerializeField] private float idleHeight = -1f;
     [SerializeField] private float reelingHeight = 0f;
@@ -42,16 +43,22 @@ public class FishMovement : MonoBehaviour
     [Header("Fish Placement")]
     [SerializeField] private Vector3 localOffset = new Vector3(0f, -0.5f, 2.5f);
     [SerializeField] private float rotationSpeed = 40f;
+
+
     private void OnEnable()
     {
         FishingManager.OnBite += HandleBite;
         FishingManager.OnHook += HandleHooked;
         FishingManager.OnCaught += HandleCaught;
-        FishingManager.OnReturnToGameplay += HandleResetToGameplay;
+        FishingManager.OnEscaped += HandleResetToGameplay;
+
 
         PlayerInputState.ReelLeftPerformed += TurnLeft;
         PlayerInputState.ReelRightPerformed += TurnRight;
+
         PlayerInputState.CatchConfirmPerformed += HandleCatchConfirmation;
+        PlayerInputState.AbortPerformed += HandleResetToGameplay;
+
     }
 
     private void OnDisable()
@@ -59,10 +66,12 @@ public class FishMovement : MonoBehaviour
         FishingManager.OnBite -= HandleBite;
         FishingManager.OnHook -= HandleHooked;
         FishingManager.OnCaught -= HandleCaught;
-        FishingManager.OnReturnToGameplay -= HandleResetToGameplay;
+        FishingManager.OnEscaped -= HandleResetToGameplay;
 
         PlayerInputState.ReelLeftPerformed -= TurnLeft;
         PlayerInputState.ReelRightPerformed -= TurnRight;
+
+        PlayerInputState.AbortPerformed += HandleResetToGameplay;
         PlayerInputState.CatchConfirmPerformed -= HandleCatchConfirmation;
     }
     void Start()
@@ -132,6 +141,8 @@ public class FishMovement : MonoBehaviour
 
         return targetPosition;
     }
+
+    // Written Using AI
     private void SwimTowardTarget(FishingManager.FishingGameState state)
     {
         float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
@@ -210,6 +221,8 @@ public class FishMovement : MonoBehaviour
     private void HandleBite()
     {
         if (!GetComponent<Fish>().isActiveFish) return;
+        isActiveFish = true;
+
         position = new Vector3(0, reelingHeight, 5f);
         transform.position = position;
         transform.eulerAngles = new Vector3(-10, transform.eulerAngles.y, transform.eulerAngles.z); //tilt fish up
@@ -218,7 +231,8 @@ public class FishMovement : MonoBehaviour
     }
     private void HandleHooked()
     {
-        if (!GetComponent<Fish>().isActiveFish) return;
+        if (!isActiveFish) return;
+
         transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z);
 
         baseSwimmingSpeed = GetComponent<Fish>().reelingSpeed;
@@ -228,15 +242,17 @@ public class FishMovement : MonoBehaviour
     }
     private void HandleCaught()
     {
-        if (!GetComponent<Fish>().isActiveFish) return;
+        if (!isActiveFish) return;
         PlaceFishInFrontOfCamera();
     }
+
+    // fish gradually transitions back to idle speed and idle hieght under the water
     private void HandleResetToGameplay()
     {
-        if (!GetComponent<Fish>().isActiveFish) return;
-        position = originalPosition;
-        transform.eulerAngles = new Vector3(0, direction * 90f, 0);
-        transform.position = originalPosition;
+        if (!isActiveFish) return;
+        isActiveFish = false;
+
+        // Debug.Log("FM: HandleResetToGameplay");
 
         baseSwimmingSpeed = GetComponent<Fish>().swimmingSpeed; // reset the base speed
         speedNoiseOffset = Random.Range(0f, 100f);
@@ -244,13 +260,20 @@ public class FishMovement : MonoBehaviour
         IdleSetTargetPosition(position);
 
     }
+
+    // fish immediately teleports back to its original idle position under the water
     private void HandleCatchConfirmation()
     {
-        if (!GetComponent<Fish>().isActiveFish) return;
+        if (!isActiveFish) return;
+        isActiveFish = false;
+
         position = originalPosition;
         transform.eulerAngles = new Vector3(0, direction * 90f, 0);
-        transform.position = originalPosition;
+        transform.position = position;
         transform.localScale = originalScale;
+
+        // Debug.Log("FM: HandleCatchCofirmed" + transform.position);
+
 
         baseSwimmingSpeed = GetComponent<Fish>().swimmingSpeed; // reset the base speed
         speedNoiseOffset = Random.Range(0f, 100f);
@@ -286,9 +309,5 @@ public class FishMovement : MonoBehaviour
     public bool IsOutOfLineRange()
     {
         return transform.position.x < xLineLeftRange || transform.position.x > xLineRightRange;
-    }
-    public Vector3 GetFishPosition()
-    {
-        return transform.position;
     }
 }
