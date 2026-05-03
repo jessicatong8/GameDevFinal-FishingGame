@@ -48,7 +48,19 @@ public class VisualEffectManager : MonoBehaviour
 
     void PlayMashSplash()
     {
-        SpawnSplash(Random.Range(0, 2) == 0 ? mashSplash1 : mashSplash2, 1f, mashPoint.position);
+        //line range is an oval so we spawn mash effects within the oval using two radii
+        float xRadius = LineRangeManager.Instance.xLineRightRange; 
+        float zRadius = 4f; 
+
+        float angle = Random.Range(0f, Mathf.PI * 2f);
+        float distance = Random.Range(0f, 1f);
+
+        float offsetX = Mathf.Cos(angle) * distance * xRadius;
+        float offsetZ = Mathf.Sin(angle) * distance * zRadius;
+
+        Vector3 spawnPos = new Vector3(mashPoint.position.x + offsetX, mashPoint.position.y, mashPoint.position.z + offsetZ);
+        
+        SpawnSplash(Random.Range(0, 2) == 0 ? mashSplash1 : mashSplash2, 1f, spawnPos);
     }
 
     void PlayEscapeShake()
