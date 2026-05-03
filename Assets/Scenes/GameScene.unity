@@ -669,15 +669,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6197005950305113567, guid: 7361a0a4066014b73aec58c26427b5a9, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6197005950305113567, guid: 7361a0a4066014b73aec58c26427b5a9, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6197005950305113567, guid: 7361a0a4066014b73aec58c26427b5a9, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6197005950305113567, guid: 7361a0a4066014b73aec58c26427b5a9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -21179,6 +21179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7efe73f7d5db2c64daf4a2107299584f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebugCanvasUI
+  debugPanel: {fileID: 0}
+  debugTextDisplay: {fileID: 0}
   showDebugUI: 0
   updateRate: 0.1
   showPlayerStateSection: 1
