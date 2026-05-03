@@ -20,6 +20,7 @@ public class ScreenShake : MonoBehaviour
 
     public IEnumerator Shake(float duration, float intensity)
     {
+        originalPos = transform.localPosition;
         float elapsed = 0.0f;
         while (elapsed < duration)
         {
@@ -36,6 +37,7 @@ public class ScreenShake : MonoBehaviour
 
     public void SetConstantShake(bool active, float strength = 0.05f)
     {
+        originalPos = transform.localPosition;
         isConstantShaking = active;
         constantStrength = strength;
     }

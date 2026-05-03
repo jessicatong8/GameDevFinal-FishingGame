@@ -112,5 +112,6 @@ public class FishingTutorialManager : MonoBehaviour
             canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, targetAlpha, speed * Time.deltaTime);
             yield return null;
         }
+        canvasGroup.alpha = targetAlpha;
     }
 }
