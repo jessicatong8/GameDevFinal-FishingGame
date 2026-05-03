@@ -24,7 +24,7 @@ public class LineRangeUI : MonoBehaviour
     }
     private void Start()
     {
-        lineRangeManager = LineRangeManager.Instance;
+        lineRangeManager = FindFirstObjectByType<LineRangeManager>();
         if (lineRangeManager == null)
         {
             DebugLogger.Instance.LogError("LineRangeUI: LineRangeManager instance not found in scene.");

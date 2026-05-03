@@ -33,9 +33,11 @@ public class VisualEffectManager : MonoBehaviour
     private GameObject catchShineInstance;
     private GameObject levelUpSparkleInstance;
     private GameObject levelUpShineInstance;
+    private LineRangeManager lineRangeManager;
 
     private void OnEnable()
     {
+        lineRangeManager = FindFirstObjectByType<LineRangeManager>();
         FishingManager.OnBite += PlayBiteSplash;
         FishingManager.OnCaught += SpawnCatchPresentationVFX;
         FishingManager.OnEscaped += PlayEscapeShake;
@@ -63,7 +65,7 @@ public class VisualEffectManager : MonoBehaviour
     void PlayMashSplash()
     {
         //line range is an oval so we spawn mash effects within the oval using two radii
-        float xRadius = LineRangeManager.Instance.xLineRightRange; 
+        float xRadius = lineRangeManager.xLineRightRange; 
         float zRadius = 4f; 
 
         float angle = Random.Range(0f, Mathf.PI * 2f);

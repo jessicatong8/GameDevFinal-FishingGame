@@ -37,6 +37,7 @@ public class FishMovement : MonoBehaviour
     private Vector3 basePosition;
     private float arrivalThreshold = 0.1f;
     private int direction = 1; // 1 for right, -1 for left
+    private LineRangeManager lineRangeManager;
     [Header("Fish Placement")]
     [SerializeField] private Vector3 localOffset = new Vector3(0f, -0.5f, 2.5f);
     [SerializeField] private float rotationSpeed = 40f;
@@ -52,10 +53,14 @@ public class FishMovement : MonoBehaviour
     }
     void Start()
     {
-        xLineLeftWarningRange = LineRangeManager.Instance.xLineLeftWarningRange;
-        xLineRightWarningRange = LineRangeManager.Instance.xLineRightWarningRange;
-        xLineLeftRange = LineRangeManager.Instance.xLineLeftRange;
-        xLineRightRange = LineRangeManager.Instance.xLineRightRange;
+        lineRangeManager = FindFirstObjectByType<LineRangeManager>();
+        if (lineRangeManager != null)
+        {
+            xLineLeftWarningRange = lineRangeManager.xLineLeftWarningRange;
+            xLineRightWarningRange = lineRangeManager.xLineRightWarningRange;
+            xLineLeftRange = lineRangeManager.xLineLeftRange;
+            xLineRightRange = lineRangeManager.xLineRightRange;
+        }
 
         position = new Vector3(transform.position.x, idleHeight, transform.position.z);
         transform.position = position;

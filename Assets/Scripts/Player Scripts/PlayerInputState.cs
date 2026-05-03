@@ -49,6 +49,7 @@ public class PlayerInputState : MonoBehaviour
     [SerializeField] private InputStates currentState = InputStates.Gameplay;
     private static PlayerInputState instance;
     private FishingManager fishingManager;
+    private PlayerMovement playerMovement;
 
     public void Awake()
     {
@@ -59,6 +60,7 @@ public class PlayerInputState : MonoBehaviour
         }
         Instance = this;
         SetState(InputStates.Gameplay);
+        playerMovement = GetComponent<PlayerMovement>();
         fishingManager = FishingManager.Instance;
         if (fishingManager == null)
         {
@@ -91,15 +93,15 @@ public class PlayerInputState : MonoBehaviour
         switch (currentState)
         {
             case InputStates.Gameplay:
-                PlayerMovement.Instance.enabled = true;
+                if (playerMovement != null) playerMovement.enabled = true;
                 LockCursor(true);
                 break;
             case InputStates.Fishing:
-                PlayerMovement.Instance.enabled = false;
+                if (playerMovement != null) playerMovement.enabled = false;
                 LockCursor(true);
                 break;
             case InputStates.Menu:
-                PlayerMovement.Instance.enabled = false;
+                if (playerMovement != null) playerMovement.enabled = false;
                 LockCursor(false);
                 break;
             default:
