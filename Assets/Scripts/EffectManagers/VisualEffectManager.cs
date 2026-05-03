@@ -4,7 +4,6 @@ using System.Collections;
 public class VisualEffectManager : MonoBehaviour
 {
     [Header("Effect Prefabs")]
-    // [SerializeField] private GameObject castSplash;           //less necessary 
     [SerializeField] private GameObject biteSplash;
     [SerializeField] private GameObject mashSplash1;
     [SerializeField] private GameObject mashSplash2;
@@ -27,7 +26,6 @@ public class VisualEffectManager : MonoBehaviour
 
     private void OnEnable()
     {
-        FishingManager.OnCast += PlayCastSplash;
         FishingManager.OnBite += PlayBiteSplash;
         FishingManager.OnCaught += SpawnCatchPresentationVFX;
         FishingManager.OnEscaped += PlayEscapeShake;
@@ -37,18 +35,12 @@ public class VisualEffectManager : MonoBehaviour
 
     private void OnDisable()
     {
-        FishingManager.OnCast -= PlayCastSplash;
         FishingManager.OnBite -= PlayBiteSplash;
         FishingManager.OnCaught -= SpawnCatchPresentationVFX;
         FishingManager.OnEscaped -= PlayEscapeShake;
         PlayerInputState.MashPerformed -= PlayMashSplash;
         PlayerInputState.ConfirmCatchPerformed -= DestroyCatchPresentationVFX;
     }
-    void PlayCastSplash()
-    {
-        // StartCoroutine(DelayedSpawn(castSplash, 3.5f, 0.3f, bobPoint.position));
-    }
-
     void PlayBiteSplash()
     {
         SpawnSplash(biteSplash, 1, bobPoint.position);
@@ -63,11 +55,6 @@ public class VisualEffectManager : MonoBehaviour
     {
         screenShake.TriggerLargeShake(0.8f, 1f);
     }
-    // private IEnumerator DelayedSpawn(GameObject prefab, float delay, float scale, Vector3 position)
-    // {
-    //     yield return new WaitForSeconds(delay);
-    //     SpawnSplash(prefab, scale, position);
-    // }
     void SpawnSplash(GameObject prefab, float scale, Vector3 position)
     {
         GameObject instance = Instantiate(prefab, position, Quaternion.identity);

@@ -4452,7 +4452,7 @@ Transform:
   m_GameObject: {fileID: 380576126}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.15, y: 3.58, z: -3.73}
+  m_LocalPosition: {x: 0, y: 1, z: 3.3}
   m_LocalScale: {x: 0.96, y: 0.96, z: 0.96}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -10000,7 +10000,6 @@ MonoBehaviour:
   tutorialText: {fileID: 802838066}
   fadeInSpeed: 3
   fadeOutSpeed: 5
-  currentAlpha: 0
   promptTxt: Walk to the dock to start fishing!
   castTxt: Let's start fishing! Press [F] to cast your line!
   waitTxt: Now we wait for a fish to come along...
