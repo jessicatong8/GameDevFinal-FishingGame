@@ -4703,7 +4703,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: idleHeight
-      value: -2
+      value: -1.29
       objectReference: {fileID: 0}
     - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: localOffset.y
@@ -7680,6 +7680,10 @@ PrefabInstance:
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
+      propertyPath: idleHeight
+      value: -1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674105308135432752, guid: b8e54e88bfb204e9c939cf27bf10749a, type: 3}
       propertyPath: localOffset.y
       value: -0.5
       objectReference: {fileID: 0}
@@ -10645,6 +10649,10 @@ PrefabInstance:
       value: 5_Level1Fish_YellowTang
       objectReference: {fileID: 0}
     - target: {fileID: 2608195185711172662, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
+      propertyPath: idleHeight
+      value: -1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608195185711172662, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: localOffset.y
       value: -0.5
       objectReference: {fileID: 0}
@@ -13103,7 +13111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d63a22c1fdf8d4d599d58557de606008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProgressManager
-  startingProgress: 0
+  startingProgress: 95
 --- !u!4 &1152363079
 Transform:
   m_ObjectHideFlags: 0
@@ -13351,7 +13359,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1181546974
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15458,7 +15466,7 @@ RectTransform:
   m_Father: {fileID: 1249423003}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -19389,7 +19397,7 @@ RectTransform:
   m_Father: {fileID: 399604304}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -22765,7 +22773,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6197005950305113567, guid: 7361a0a4066014b73aec58c26427b5a9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 34.2
+      value: 41.52
       objectReference: {fileID: 0}
     - target: {fileID: 6197005950305113567, guid: 7361a0a4066014b73aec58c26427b5a9, type: 3}
       propertyPath: m_LocalRotation.w
@@ -22839,6 +22847,10 @@ PrefabInstance:
     - target: {fileID: 1430605049871976209, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: m_Name
       value: 1_Level1Fish_YellowTang
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608195185711172662, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
+      propertyPath: idleHeight
+      value: -1.1
       objectReference: {fileID: 0}
     - target: {fileID: 2608195185711172662, guid: 3df8c5ae59f6446e2863e8b5d92dc9a4, type: 3}
       propertyPath: localOffset.y
