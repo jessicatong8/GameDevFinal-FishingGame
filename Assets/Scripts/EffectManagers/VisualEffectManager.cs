@@ -27,7 +27,7 @@ public class VisualEffectManager : MonoBehaviour
     [Header("Level Up VFX Prefabs")]
     [SerializeField] private GameObject levelUpSparklePrefab;
     [SerializeField] private GameObject levelUpShinePrefab;
-    [SerializeField] private GameObject[] levelUpHats;
+    [SerializeField] private GameObject[] levelUpHats; 
 
     private GameObject currentHat;
     private GameObject catchSparkleInstance;
@@ -65,8 +65,8 @@ public class VisualEffectManager : MonoBehaviour
     void PlayMashSplash()
     {
         //line range is an oval so we spawn mash effects within the oval using two radii
-        float xRadius = LineRangeManager.Instance.xLineRightRange;
-        float zRadius = 4f;
+        float xRadius = LineRangeManager.Instance.xLineRightRange; 
+        float zRadius = 4f; 
 
         float angle = Random.Range(0f, Mathf.PI * 2f);
         float distance = Random.Range(0f, 1f);
@@ -75,7 +75,7 @@ public class VisualEffectManager : MonoBehaviour
         float offsetZ = Mathf.Sin(angle) * distance * zRadius;
 
         Vector3 spawnPos = new Vector3(mashPoint.position.x + offsetX, mashPoint.position.y, mashPoint.position.z + offsetZ);
-
+        
         SpawnSplash(Random.Range(0, 2) == 0 ? mashSplash1 : mashSplash2, 1f, spawnPos);
     }
 
@@ -127,7 +127,8 @@ public class VisualEffectManager : MonoBehaviour
         Vector3 targetPosition = targetAnchor.position + targetAnchor.forward;
         Vector3 localOffset = new Vector3(0f, -0.5f, 2.5f);
         currentHat = levelUpHats[newLevel - 1];
-        Instantiate(currentHat, targetPosition + targetAnchor.TransformVector(localOffset), Quaternion.identity);
+        currentHat = Instantiate(currentHat, targetPosition + targetAnchor.TransformVector(localOffset), Quaternion.identity);
+        currentHat.SetActive(true);
     }
     void DestroyLevelUpPresentationVFX()
     {
