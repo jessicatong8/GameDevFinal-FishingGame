@@ -64,7 +64,7 @@ public class ProgressManager : MonoBehaviour
         }
         if (progress >= 100f)
         {
-            FishingManager.Instance.CaughtFish();
+            FishingManager.Instance.InvokeCaught();
             HandleReset();
         }
     }
