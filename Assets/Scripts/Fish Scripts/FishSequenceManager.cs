@@ -70,11 +70,11 @@ public class FishSequenceManager : MonoBehaviour
     private void HandleCaught()
     {
 
-        if (CheckGameWin())
-        {
-            return;
+        // if (CheckGameWin())
+        // {
+        //     return;
 
-        }
+        // }
         // IncrementFishCaught();
         IncrementFishSequenceIndex();
         // Debug.Log("FishSequenceManager: You've caught " + GetNumFishCaught() + " fish");
@@ -85,8 +85,10 @@ public class FishSequenceManager : MonoBehaviour
     {
         // Debug.Log("A fish was caught, checking for game win.");
         Fish[] sequence = usePrototypeFishSequence ? prototypeFishSequence : fishSequence;
+        // Debug.Log("You've caught " + GetNumFishCaught() + " fish");
+        // Debug.Log("Fish Sequence Index: " + FishData.fishSequenceIndex);
 
-        if (FishData.fishSequenceIndex == sequence.Length - 1)
+        if (FishData.fishSequenceIndex == sequence.Length)
         {
             return true;
         }
