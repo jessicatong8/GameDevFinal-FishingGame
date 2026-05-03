@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
 // using Unity.XR.CoreUtils;
-    
+
 public class FishingManager : MonoBehaviour
 {
     // Manage fishing gamestates and event broadcasting for the fishing.
@@ -24,7 +24,6 @@ public class FishingManager : MonoBehaviour
     public static event Action OnHook; // when player successfully hooks the fish within the hook window
     public static event Action OnEscaped; // when fish escapes due to hook window timing out, player drip being too low, line breaking from high tension, or fish moving out of line range
     public static event Action OnCaught; // when player successfully catches the fish by reeling to 100% progress, the fish will be presented to camera and player can interact to confirm catch (via !OnCatchConfirmationEnd) to return to idle
-    // public static event Action OnCatchConfirmationEnd; // when player confirms catch by pressing interact or clicking, which will trigger !onReturnToGameplay to reset everything for the next catch
     public static event Action OnReturnToGameplay;
     public static event Action<int> OnLevelUp; // when player levels up by catching a certain number of fish
     public static event Action OnGameWin; // when player catches all fish and wins the game

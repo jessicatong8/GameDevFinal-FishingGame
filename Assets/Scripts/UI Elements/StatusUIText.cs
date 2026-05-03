@@ -1,18 +1,17 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
 
-public class StatusUI : MonoBehaviour
+public class StatusUIText : MonoBehaviour
 {
-
     private TextMeshProUGUI statusText;
-
+    private FishingManager fishingManager;
+    // private Vector3 originalPosition;
     void OnEnable()
     {
         FishingManager.OnCast += HandleCast;
         FishingManager.OnBite += HandleBite;
         FishingManager.OnHook += HandleHook;
+        // FishingManager.OnCaught += HandleCaught;
         FishingManager.OnReturnToGameplay += HandleReturnToGameplay;
         FishingManager.OnLevelUp += HandleLevelUp;
     }
@@ -22,42 +21,42 @@ public class StatusUI : MonoBehaviour
         FishingManager.OnCast -= HandleCast;
         FishingManager.OnBite -= HandleBite;
         FishingManager.OnHook -= HandleHook;
+        // FishingManager.OnCaught -= HandleCaught;
         FishingManager.OnReturnToGameplay -= HandleReturnToGameplay;
         FishingManager.OnLevelUp -= HandleLevelUp;
     }
-
     void Start()
     {
         statusText = GetComponent<TextMeshProUGUI>();
+        fishingManager = FishingManager.Instance;
         ClearText();
     }
+
     private void ClearText()
     {
         statusText.text = "";
-
     }
-
-    void HandleCast()
-    {
-        ClearText();
-    }
-
     private void SetGamePlayText()
     {
         statusText.text = "Press F to start fishing";
     }
+    void HandleCast()
+    {
+        ClearText();
+    }
     void HandleBite()
     {
-        statusText.text = "A fish has bitten, press space to reel!";
+        statusText.text = "A fish has bitten, press SPACE to reel!";
     }
     void HandleHook()
     {
         ClearText();
     }
-
+    // HandleCaught() is now handled by CatchPresentationUI to show different text based on fish type
+    // Mainly for a cleaner catch panel and repositioned text to be above the fish presentation
     void HandleReturnToGameplay()
     {
-        string reason = FishingManager.Instance.escapeReason;
+        string reason = fishingManager.escapeReason;
         switch (reason)
         {
             case "HookWindowTimedOut":
@@ -78,7 +77,6 @@ public class StatusUI : MonoBehaviour
             case "TensionOutOfRange":
                 statusText.text = "Oops your fish got away!";
                 StartCoroutine(EscapedMessageDelay(1.5f));
-
                 break;
             case "PlayerAborted":
                 SetGamePlayText();
@@ -87,20 +85,12 @@ public class StatusUI : MonoBehaviour
                 SetGamePlayText();
                 break;
         }
-        ;
     }
-
     private void HandleLevelUp(int playerLevel)
     {
         // Debug.Log(playerLevel);
         statusText.text = "Congrats, you just got DRIPPED OUT! Maybe you're finally cool enough for drippier fish...";
     }
-
-    private void HandleCaught()
-    {
-        //TODO change text depending on level of fish caught
-    }
-
     private System.Collections.IEnumerator EscapedMessageDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
