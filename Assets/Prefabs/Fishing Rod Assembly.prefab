@@ -31,8 +31,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4492367825712901408}
-  - {fileID: 7256922119315803536}
-  - {fileID: 8156409100783418544}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &684426778433643359
@@ -80,12 +78,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5487100418549315351}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00000047683716, y: 0.00000015133429, z: 0.00000009343263, w: 1}
-  m_LocalPosition: {x: -2.1205833, y: 3.4551945, z: -4.111537}
-  m_LocalScale: {x: 0.13, y: 0.13, z: 0.13}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.0000004, y: 1.0000004, z: 1.0000004}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 6561008404023863462}
+  m_Father: {fileID: 7256922119315803536}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3092159454994725665
 MeshFilter:
@@ -333,13 +331,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7138115809967784365}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071066, y: 0.000000088782656, z: -0.00000004094264, w: 0.70710707}
-  m_LocalPosition: {x: -2.1165833, y: 4.4861946, z: -4.106538}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6561008404023863462}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_Children:
+  - {fileID: 8156409100783418544}
+  m_Father: {fileID: 4120425288822468931}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &7105439014600607092
 LineRenderer:
   serializedVersion: 3
@@ -473,36 +472,11 @@ MonoBehaviour:
   StartPoint: {fileID: 4120425288822468931}
   EndPoint: {fileID: 8156409100783418544}
   lineRenderer: {fileID: 7105439014600607092}
-  lockEndToTransform: 0
   Segments: 10
-  SegmentLength: 0.02
-  startSegmentLength: 0.02
-  currentTargetLength: 0
-  maxSegmentLength: 0.4
-  waterLayerMask:
-    serializedVersion: 2
-    m_Bits: 16
-  castFlightSpeed: 18
-  castDistanceMin: 8
-  castDistanceMax: 12
-  castAngleRange: 18
-  waterSurfaceOffset: 0.03
-  bobRadius: 0.35
-  bobMoveSpeed: 1.5
-  bobTargetArrivalThreshold: 0.05
+  SegmentLength: 1
   Gravity: {x: 0, y: -9.81, z: 0}
   Iterations: 12
-  tensionConstant: 10
-  SecondHasRigidbody: 0
-  LerpSpeed: 1.5
-  Delay: 2.5
-  hookVisual: {fileID: 5487100418549315351}
-  hideLineWhenUnequipped: 1
-  hideHookWhenUnequipped: 1
-  useSimpleLine: 0
   fishingManager: {fileID: 0}
-  fishMouthAnchorNames:
-  - Main1
 --- !u!1 &9152973535008319095
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,7 +508,8 @@ Transform:
   m_LocalPosition: {x: 0.029975418, y: 0.9659998, z: -0.02001286}
   m_LocalScale: {x: 1, y: 0.058405384, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7256922119315803536}
   m_Father: {fileID: 4492367825712901408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5710015437277937671

@@ -6,7 +6,7 @@ public class FishingRig : MonoBehaviour
     [SerializeField] private VerletFishingLine fishingLine;
     [SerializeField] private Transform lineStartPoint; // The tip of the physical rod
     [SerializeField] private GameObject fishingHook;   // The physical hook/bobber
-    [SerializeField] private GameObject bobVFX;        // Your water ripple/bobbing VFX
+    // [SerializeField] private GameObject bobVFX;        // Your water ripple/bobbing VFX
 
     [Header("Targeting")]
     [Tooltip("If assigned, the line will always land here. If null, uses random distance.")]

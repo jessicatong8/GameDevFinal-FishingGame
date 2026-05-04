@@ -63,14 +63,14 @@ public class StatusUIText : MonoBehaviour
     {
         if (PlayerInputState.Instance.CurrentState == PlayerInputState.InputStates.Menu)
         {
-            ClearText();
+            SetGamePlayText();
+            // ClearText();
+
         }
-        else
+        if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Gameplay || FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
         {
-            if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Gameplay || FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
-            {
-                SetGamePlayText();
-            }
+            ClearText();
+            // SetGamePlayText();
         }
     }
     void HandleReturnToGameplay()
@@ -98,7 +98,7 @@ public class StatusUIText : MonoBehaviour
                 StartCoroutine(EscapedMessageDelay(1.5f));
                 break;
             case "PlayerAborted":
-                SetGamePlayText();
+                // SetGamePlayText();
                 break;
             case "LevelUpConfirmed":
                 SetGamePlayText();
