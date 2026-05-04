@@ -56,6 +56,7 @@ MonoBehaviour:
   tensionDropRate: 30
   safeZoneCenter: 50
   safeZoneWidth: 30
+  startingTension: 50
   tensionEscapeTime: 2
 --- !u!114 &8174870239663022773
 MonoBehaviour:
@@ -69,6 +70,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd26c1534d63b45d98abf54f84e7ca2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishMovement
+  xLeftBoundary: -24
+  xRightBoundary: 24
   idleHeight: -1
   reelingHeight: 0.35
   idleSpeedVariation: 0.2

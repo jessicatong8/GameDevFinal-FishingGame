@@ -51,7 +51,7 @@ public class LevelManager : MonoBehaviour
 
         int numFishCaught = fishSequenceManager.GetNumFishCaught();
         Debug.Log("You've caught " + numFishCaught + " fish!");
-        if (numFishCaught == 2 || numFishCaught == 5 || numFishCaught == 9 || numFishCaught == 10) // according to our preset fish sequence
+        if (numFishCaught == 2 || numFishCaught == 5 || numFishCaught == 9) // according to our preset fish sequence
         {
             IncrementPlayerLevel();
             FishingManager.Instance.TransitionToLevelUpPresentation();

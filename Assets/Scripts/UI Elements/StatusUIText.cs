@@ -63,13 +63,13 @@ public class StatusUIText : MonoBehaviour
     {
         if (PlayerInputState.Instance.CurrentState == PlayerInputState.InputStates.Menu)
         {
-            ClearText();
+            SetGamePlayText();
         }
         else
         {
             if (FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.Gameplay || FishingManager.Instance.CurrentFishingGameState == FishingManager.FishingGameState.CatchPresentation)
             {
-                SetGamePlayText();
+                ClearText();
             }
         }
     }
