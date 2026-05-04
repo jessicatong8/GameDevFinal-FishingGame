@@ -11,33 +11,24 @@ public class FishingRig : MonoBehaviour
     [Header("Targeting")]
     [Tooltip("If assigned, the line will always land here. If null, uses random distance.")]
     [SerializeField] private Transform landingTarget;
+
     private void Awake()
     {
-        if (fishingLine == null) fishingLine = GetComponentInChildren<VerletFishingLine>(true);
+        if (fishingLine == null) 
+        {
+            fishingLine = GetComponentInChildren<VerletFishingLine>(true);
+        }
         if (fishingLine != null)
         {
             if (lineStartPoint != null) fishingLine.StartPoint = lineStartPoint;
             if (fishingHook != null) fishingLine.EndPoint = fishingHook.transform;
         }
     }
-
-    private void Update()
-    {
-        // Keep the Bob VFX stuck to the hook's position[cite: 19, 21]
-        if (fishingHook != null && bobVFX != null)
-        {
-            bobVFX.transform.position = fishingHook.transform.position;
-        }
-    }
-
     // Toggles the entire rig active/inactive and resets line physics.
     public void SetActive(bool active)
     {
         gameObject.SetActive(active);
         fishingLine?.SetEquippedFromController(active);
-        
-        // Ensure VFX only shows when the rod is out
-        if (bobVFX != null) bobVFX.SetActive(active);
     }
 
     // ANIMATION EVENT: Triggers the physics cast flight.
